@@ -1,0 +1,28 @@
+.layout-post {
+  #main-content {
+    h2 {
+        margin-top: 30px;
+    }
+  }
+  .post-header {
+    margin-bottom: 20px;
+  }
+  .post-categories {
+    @include postCategories;
+    display: inline;
+  }
+
+  .post-categories, .post-author {
+    &:before {
+      content: '\2022';
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
+  &.contrast-high {
+    .post-categories {
+      @include postCategoriesHighContrast;
+    }
+  }
+}

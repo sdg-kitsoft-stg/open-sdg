@@ -1,0 +1,32 @@
+.layout-news {
+  .post-listing {
+    clear: both;
+    margin-bottom: 25px;
+
+    .post-categories {
+      @include postCategories;
+    }
+
+    .post-title {
+      font-size: $fontSize;
+      margin-bottom: 7px !important;
+    }
+
+    .post-date {
+      float: left;
+      margin-right: 40px;
+    }
+
+    .post-excerpt {
+      p:last-child {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  &.contrast-high {
+    .post-categories {
+      @include postCategoriesHighContrast;
+    }
+  }
+}

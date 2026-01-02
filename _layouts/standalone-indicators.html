@@ -1,0 +1,30 @@
+{% include head.html %}
+{% include header.html %}
+
+<div class="container">
+  {% include components/page/breadcrumbs.html %}
+</div>
+<div id="main-content" class="container goal-indicators">
+  <h1>{{ page.title | t }}</h1>
+  {{ content }}
+  <ul class="standalone-indicator-list">
+  {% assign indicator_objects = '' | split: ',' %}
+  {% for indicator_number in page.standalone_indicators %}
+    {% assign indicator = indicator_number | sdg_lookup %}
+    {% if indicator and indicator.sort %}
+      {% assign indicator_objects = indicator_objects | push: indicator %}
+    {% endif %}
+  {% endfor %}
+  {% assign indicator_objects = indicator_objects | sort: 'sort' %}
+  {% for indicator in indicator_objects %}
+    <li>
+      <a href="{{ indicator.url }}">
+        {{ indicator.name }}
+        {% include components/indicator/tags.html tags=indicator.tags indicator=indicator %}
+      </a>
+    </li>
+	{% endfor %}
+  </ul>
+</div>
+
+{% include footer.html %}

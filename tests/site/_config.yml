@@ -1,0 +1,30 @@
+# Jekyll configuration for Open SDG platform
+
+# Replace this title as needed.
+title: custom.page_title
+
+# Replace the baseurl with the name of this repository.
+baseurl: ""
+url: ""
+
+# Build settings
+markdown: kramdown
+
+# Travis Support
+exclude: [vendor, scripts, remotedata]
+
+# Pages
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+  posts:
+    output: true
+    permalink: /news/:year/:month/:day/:title.html
+  indicators:
+    output: true
+  goals:
+    output: true
+
+plugins:
+  - jekyll-open-sdg-plugins
