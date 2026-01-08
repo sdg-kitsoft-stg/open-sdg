@@ -17,7 +17,7 @@ pipelines:
           - ssh-keyscan bitbucket.org github.com >> ~/.ssh/known_hosts
 
           # clone from Bitbucket (READ)
-          - git clone --mirror git clone git@bitbucket.org:kitsoftllc/open-sdg.git repo.git
+          - git clone --mirror git@bitbucket.org:kitsoftllc/open-sdg.git repo.git
           - cd repo.git
 
           # push to GitHub (WRITE)
