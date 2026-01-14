@@ -1,9 +1,7 @@
 {% include multilingual-js.html key="header" %}
 <a class="sr-only-focusable" id="skiplink" href="#main-content" tabindex="0">{{ page.t.header.skip_link }}</a>
+<div class="body-logo"></div>
 {% include components/header/internet-explorer-message.html %}
-<div id="disclaimer">
-    {% include components/dev-disclaimer.html %}
-</div>
 
 <header role="banner" class="">
     <div class="container">
@@ -24,7 +22,6 @@
                     {% include components/language-toggle.html %}
                     <span class="no-js-language-toggle">{% include components/language-toggle-links.html %}</span>
                     {%- endif -%}
-                    {% include components/contrast-toggle.html %}
                 </div>
             </div>
         </nav>

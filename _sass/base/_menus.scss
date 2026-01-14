@@ -1,26 +1,27 @@
 .navbar {
     .navbar-nav {
+        background-color: #F3F2F1;
+
         > .nav-item {
-            padding-right: 0.5rem;
-            padding-left: 0.5rem;
+            padding: 0 16px;
             > .nav-link {
-                color: $menu-link-color;
-                font-size: $menu-link-fontSize;
-                padding-top: 0.2rem;
-                padding-bottom: 0.2rem;
-                padding-right: 0;
-                padding-left: 0;
+                color: $color-dark;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 20px;
+                padding: 10px 0;
                 text-decoration: none;
                 border-bottom: 3px solid transparent;
                 &:hover {
-                    border-bottom: 3px solid $text-color;
+                    border-bottom: 3px solid $color-dark;
                 }
             }
 
             &.active > .nav-link {
-                border-bottom: 3px solid $text-color;
+                border-bottom: 3px solid $color-dark;
                 background: transparent;
-                color: $text-color;
+                color: $color-dark;
 
                 &:hover {
                     background: transparent;

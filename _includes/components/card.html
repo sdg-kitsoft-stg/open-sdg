@@ -3,11 +3,11 @@
     <div class="card-body">
 
     {% if include.card.title and include.card.title != '' %}
-    <h2 class="card-title"
+    <h3 class="card-title"
         {% if include.card.rule_color %}
         style="border-color: {{ include.card.rule_color }};"
         {% endif %}
-    >{{ include.card.title | t }}</h2>
+    >{{ include.card.title | t }}</h3>
     {% endif %}
   
     {% if include.card.content and include.card.content != '' %}

@@ -7,17 +7,11 @@
     <% _.each(searchResults, function(result){ %>
       <div class="row search-result">
         <div class="col col-xs-12">
-          <a href="<%= result.url %>">
-            <h3 class="title"><%= result.title %></h3>
-          </a>
-          <div class="url">
-            <ol>
-              <li><%= result.type %></li>
-              <span aria-hidden=true>&raquo;</span>
-              <li><%= result.url %></li>
-            </ol>
+          <div class="item">
+              <a href="<%= result.url %>">
+                  <h3 class="title"><%= result.title %></h3>
+              </a>
           </div>
-          <div class="content"><%= result.content %></div>
         </div>
       </div>
     <% }); %>
@@ -63,9 +57,9 @@ opensdg.searchIndexExtraFields = [];
   <div id="search-results" class="results"></div>
 </div>
 
-<script src="https://unpkg.com/lunr@2.3.9/lunr.min.js" integrity="sha384-203J0SNzyqHby3iU6hzvzltrWi/M41wOP5Gu+BiJMz5nwKykbkUx8Kp7iti0Lpli" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lunr/lunr.min.js"></script>
 {% if page.language != 'en' %}
-  <script src="https://cdn.jsdelivr.net/npm/lunr-languages@1.4.0/lunr.stemmer.support.js" integrity="sha384-cNMzF77Cs0v2yLtePgqS6A5MwbVWQjEOk/zv3e88sNiFe+opc629fFoPmfZ+6IEf" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lunr-languages@1.4.0/lunr.stemmer.support.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lunr-languages@1.4.0/lunr.{{ page.language }}.js"></script>
 {% endif %}
 {% include footer.html %}
