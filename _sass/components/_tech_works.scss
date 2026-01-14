@@ -1,0 +1,49 @@
+.tech-work {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  color: $color-dark;
+
+  &-content {
+    width: 100%;
+    max-width: 628px;
+
+    @media only screen and (max-width: 680px) {
+      padding: 0 24px;
+    }
+  }
+
+  &-image {
+    max-width: 335px;
+    width: 100%;
+    margin-bottom: 32px;
+  }
+
+  &-page-status {
+    font-size: 214px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 214px;
+    margin-bottom: 32px;
+  }
+
+  &-title {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+    margin-bottom: 16px;
+  }
+
+  &-description {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+
+    margin-bottom: 40px;
+  }
+}

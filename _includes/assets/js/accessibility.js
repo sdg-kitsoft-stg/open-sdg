@@ -20,23 +20,6 @@ var accessibilitySwitcher = function () {
         createCookie('contrast', 'high', 365);
     }
 
-    function setDefaultContrast() {
-        $('body')
-            .removeClass('contrast-high')
-            .addClass('contrast-default');
-        var title = translations.header.enable_high_contrast;
-        var gaAttributes = opensdg.autotrack('switch_contrast', 'Accessibility', 'Change contrast setting', 'high');
-        $('[data-contrast-switch-to]')
-            .attr('data-contrast-switch-to', 'high')
-            .attr('title', title)
-            .attr('aria-label', title)
-            .attr(gaAttributes);
-
-        imageFix('default');
-        createCookie('contrast', 'default', 365);
-
-    }
-
     $('[data-contrast-switch-to]').click(function () {
         var newContrast = $(this).attr('data-contrast-switch-to');
         var oldContrast = getActiveContrast();
@@ -48,7 +31,6 @@ var accessibilitySwitcher = function () {
             broadcastContrastChange('high', this);
         }
         else {
-            setDefaultContrast();
             broadcastContrastChange('default', this);
         }
 
@@ -116,9 +98,6 @@ var accessibilitySwitcher = function () {
     var contrast = cookie ? cookie : 'default';
     if (contrast === 'high') {
         setHighContrast();
-    }
-    else {
-        setDefaultContrast();
     }
 
 };

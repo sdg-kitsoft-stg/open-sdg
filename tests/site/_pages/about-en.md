@@ -1,6 +1,7 @@
 ---
-title: custom.about_title
+title: Contact us
 permalink: /about/
 layout: page
 ---
-custom.about_content
+
+If you have any questions about this site or its data, please [get in touch](https://stat.gov.ua/en/contact-us)
