@@ -1,17 +1,19 @@
-﻿computation_units: ''
+composite_breakdown_label: ''
+computation_units: ''
 copyright: ''
 data_footnote: ''
 data_non_statistical: false
-data_notice_class: success
-data_notice_heading: My data notice heading
-data_notice_text: My data notice text
+data_notice_class: ''
+data_notice_heading: ''
+data_notice_text: ''
 data_show_map: false
 data_start_values: []
 embedded_feature_footer: ''
-embedded_feature_html: 'My iframe content'
-embedded_feature_tab_title: 'My iframe tab title'
-embedded_feature_title: 'My iframe title'
+embedded_feature_html: ''
+embedded_feature_tab_title: ''
+embedded_feature_title: ''
 embedded_feature_url: ''
+expected_disaggregations: []
 graph_annotations: []
 graph_limits: []
 graph_stacked_disaggregation: ''
@@ -19,21 +21,18 @@ graph_title: global_indicators.1-2-1-title
 graph_titles: []
 graph_type: line
 indicator_name: global_indicators.1-2-1-title
-indicator_number: 1.2.1
+indicator_number: '1.2.1'
 national_geographical_coverage: ''
-page_content: >
-  This indicator is used in multiple scenarios under tests/features:
-
-
-  * DataNotice.feature
-
-  * Headline.feature (confirming that indicators with headline data display
-  that headline)
-
-  * Indicator.feature (confirming that the indicator_available field shows
-  a sub-title)
-
-  * EmbeddedFeature.feature (confirming that the embedded_feature_html
-  setting works)
+page_content: ''
+permalink: ''
+precision: []
 reporting_status: complete
+sort: ''
+standalone: false
 tags: []
+
+graph_target_lines:
+  - series: ''
+    unit: ''
+    label_content: indicator.annotation_2020_target
+    value: 65

@@ -119,7 +119,7 @@ frontpage_introduction_banner:
   title: custom.frontpage_introduction_banner_title
   description: My frontpage introduction banner description
 goal_image_base: /img/goals
-goal_image_extension: png
+goal_image_extension: svg
 goals_page:
   title: custom.goals_page_title
   description: custom.goals_page_description

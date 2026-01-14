@@ -7,17 +7,11 @@
     <% _.each(searchResults, function(result){ %>
       <div class="row search-result">
         <div class="col col-xs-12">
-          <a href="<%= result.url %>">
-            <h3 class="title"><%= result.title %></h3>
-          </a>
-          <div class="url">
-            <ol>
-              <li><%= result.type %></li>
-              <span aria-hidden=true>&raquo;</span>
-              <li><%= result.url %></li>
-            </ol>
+          <div class="item">
+              <a href="<%= result.url %>">
+                  <h3 class="title"><%= result.title %></h3>
+              </a>
           </div>
-          <div class="content"><%= result.content %></div>
         </div>
       </div>
     <% }); %>
