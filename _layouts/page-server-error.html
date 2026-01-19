@@ -1,0 +1,26 @@
+{% include head.html %}
+<div class="tech-work">
+    <div class="tech-work-content">
+        <img class="tech-work-image"
+             src="{{ '/assets/img/SDG_logo.png' | relative_url }}"
+             alt="Sustainable Development Goals logo" />
+
+        <div id="main-content" class="container" role="main">
+            <div class="tech-work-page-status">500</div>
+
+            <h1>{{ page.t.techWorks.title }}</h1>
+
+            <div class="tech-work-description">
+                {{ page.t.techWorks.description }}
+            </div>
+
+            <a href="{{ '/' | relative_url }}"
+               class="btn btn-primary btn-download">
+                {{ page.t.techWorks.toMainPage }}
+            </a>
+        </div>
+    </div>
+</div>
+{% include scripts.html %}
+</body>
+</html>

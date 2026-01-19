@@ -1,0 +1,34 @@
+.useful-links {
+  h1 {
+    margin-bottom: 48px;
+  }
+
+  p {
+    margin-bottom: 24px;
+    padding-left: 32px;
+
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzIwN180OTk4KSI+CjxwYXRoIGQ9Ik0xMi42NDggNC45OTIxOUwxMS4xNDAxIDYuNDA2MTlMMTUuNzE4OSAxMC42OTkySDEuODY3MTlWMTIuNjk5MkgxNS42MjI5TDExLjE1ODQgMTYuNjc1OEwxMi42MjcyIDE4LjEyNUwxOS44MjA5IDExLjcxODhMMTIuNjQ4IDQuOTkyMTlaIiBmaWxsPSIjNTA1QTVGIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMjA3XzQ5OTgiPgo8cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTMiIGZpbGw9IndoaXRlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0IDUpIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+    }
+
+    a {
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+      color: $link-color;
+      text-decoration: underline;
+    }
+  }
+}

@@ -96,32 +96,6 @@
                 },
                 {
                     "type": "GroupWithAccordion",
-                    "label": "Languages numbers",
-                    "documentationKey": "languages_numbers",
-                    "elements": [
-                        {
-                            "type": "ListWithDetail",
-                            "scope": "#/properties/languages_numbers",
-                            "options": {
-                                "detail": {
-                                    "type": "VerticalLayout",
-                                    "elements": [
-                                        {
-                                            "type": "Control",
-                                            "scope": "#/properties/language"
-                                        },
-                                        {
-                                            "type": "Control",
-                                            "scope": "#/properties/language_numbers"
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "GroupWithAccordion",
                     "label": "Languages public",
                     "documentationKey": "languages_public",
                     "elements": [
@@ -826,17 +800,6 @@
                             "scope": "#/properties/site_config_form/properties/github_owner"
                         }
                     ]
-                },
-                {
-                    "type": "GroupWithAccordion",
-                    "label": "Configuration form library",
-                    "documentationKey": "config_form_library_src",
-                    "elements": [
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/config_form_library_src"
-                        }
-                    ]
                 }
             ]
         },
@@ -1206,6 +1169,20 @@
                 {
                     "type": "Control",
                     "scope": "#/properties/repository_url_data"
+                },
+                {
+                    "type": "Control",
+                    "scope": "#/properties/validate_site_config",
+                    "options": {
+                        "toggle": true
+                    }
+                },
+                {
+                    "type": "Control",
+                    "scope": "#/properties/validate_indicator_config",
+                    "options": {
+                        "toggle": true
+                    }
                 }
             ]
         }

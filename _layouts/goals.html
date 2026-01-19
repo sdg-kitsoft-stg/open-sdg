@@ -11,8 +11,10 @@
         <div class="row g-2">
             {% for goal in page.goals %}
             <div class="col-4 col-md-2 goal-tile">
+                {% assign hover_icon = goal.icon | replace: '.svg', '_hover.svg' %}
+
                 <a href="{{ goal.url }}">
-                    <img src="{{ goal.icon }}" id="goal-{{ goal.number }}" alt="{{ goal.short | escape }} - {{ page.t.general.goal }} {{ goal.number }}" class="goal-icon-image goal-icon-image-{{ site.goal_image_extension }}" />
+                    <img src="{{ goal.icon }}" data-default="{{ goal.icon }}" data-hover="{{ hover_icon }}" id="goal-{{ goal.number }}" alt="{{ goal.short | escape }} - {{ page.t.general.goal }} {{ goal.number }}" class="goal-icon-image goal-icon-image-{{ site.goal_image_extension }}" />
                 </a>
             </div>
             {% endfor %}

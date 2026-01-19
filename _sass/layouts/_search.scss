@@ -32,39 +32,24 @@
   .search-result {
     margin-top: 20px;
     margin-bottom: 20px;
-    a {
-      margin-bottom: 5px;
-      margin-top: 10px;
-      .title {
-        margin-bottom: 5px;
-        font-size: $search-result-fontSize;
-        display: inline-block;
-      }
-      &:focus {
-        .title {
-          @include focus;
-          span.match {
-            background-color: transparent;
-          }
-        }
-      }
-      &:hover {
-        .title {
-          text-decoration: underline;
-        }
-      }
-    }
-    .url {
-      color: $search-resultURL-color;
-      font-size: $fontSize;
-      ol, li {
-        display: inline-block;
-        padding-left: 0;
+
+    .item {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+
+      border-bottom: 1px solid #B1B4B6;
+
+      &:last-child {
         margin-bottom: 0;
       }
-    }
-    .content {
-      margin-top: 2px;
+
+      h3 {
+        font-size: 19px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 27px;
+        text-decoration: underline;
+      }
     }
   }
 }

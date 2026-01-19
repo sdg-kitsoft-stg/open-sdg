@@ -234,19 +234,12 @@ var indicatorModel = function (options) {
         this.selectedSeries = startingSeries;
       }
 
-      // Decide on starting field values.
+      // Decide on starting field values if not changing series.
       var startingFields = this.selectedFields;
-      var useMinimumStartingFields = false;
-      if (this.hasStartValues) {
+      if (this.hasStartValues && !options.changingSeries) {
         startingFields = helpers.selectFieldsFromStartValues(this.startValues, this.selectableFields);
-        // Quick test to see if this would result in zero matches, in cases where
-        // the series is being changed and the new series would not show data.
-        if (options.changingSeries && !helpers.hasDataBySelectedFields(this.data, startingFields)) {
-          useMinimumStartingFields = true;
-          startingFields = this.selectedFields;
-        }
       }
-      if (!this.hasStartValues || useMinimumStartingFields) {
+      else {
         if (headline.length === 0) {
           startingFields = helpers.selectMinimumStartingFields(this.data, this.selectableFields, this.selectedUnit);
         }

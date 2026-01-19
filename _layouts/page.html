@@ -4,7 +4,7 @@ layout: default
 <div class="container">
     {% include components/page/breadcrumbs.html %}
 </div>
-<div id="main-content" class="container" role="main">
+<div id="main-content" class="container{% if page.page_type %} {{page.page_type }}{% endif %}" role="main">
     <div>
         <h1>{{ page.title | t }}</h1>
         {% include translated-content.html content=content %}
