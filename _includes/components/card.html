@@ -28,9 +28,9 @@
       {%- endif -%}
       {% assign button_href = page.baseurl | append: button_href %}
     {% endif %}
-        <pre>DEBUG: {{ include.card.button_label }}</pre>
+        {% assign btn_label = include.card.button_label | t %}
     <a class="btn btn-primary btn-download" href="{{ button_href }}">
-      {{ include.card.button_label | t }}
+        {{ btn_label }}
     </a>
     {% endif %}
 
