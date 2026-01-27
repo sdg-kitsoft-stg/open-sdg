@@ -27,10 +27,9 @@
       {%- endif -%}
       {% assign button_href = page.baseurl | append: button_href %}
     {% endif %}
-        {%- capture label_key -%}{{ include.card.button_label }}{%- endcapture -%}
-        <a class="btn btn-primary btn-download" href="{{ button_href }}">
-            {{ label_key | t }}
-        </a>
+    <a class="btn btn-primary btn-download" href="{{ button_href }}">
+        {{ include.card.button_label }}
+    </a>
     {% endif %}
 
     </div>
