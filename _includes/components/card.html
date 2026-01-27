@@ -1,7 +1,7 @@
 <div class="col-sm-6 col-md-4">
     <div class="card">
     <div class="card-body">
-
+TEST
     {% if include.card.title and include.card.title != '' %}
     <h3 class="card-title"
         {% if include.card.rule_color %}
@@ -28,10 +28,10 @@
       {%- endif -%}
       {% assign button_href = page.baseurl | append: button_href %}
     {% endif %}
-        {% assign btn_label = include.card.button_label | t %}
-    <a class="btn btn-primary btn-download" href="{{ button_href }}">
-        {{ btn_label }}
-    </a>
+        {%- capture label_key -%}{{ include.card.button_label }}{%- endcapture -%}
+        <a class="btn btn-primary btn-download" href="{{ button_href }}">
+            {{ label_key | t }}
+        </a>
     {% endif %}
 
     </div>
