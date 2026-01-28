@@ -20,6 +20,17 @@
   {% endfor %}
 {% endfor %}
 
+<div style="background: yellow; color: black; padding: 5px; border: 1px solid red;">
+    DEBUG: {{ indicator.SDG_INDICATOR }}
+</div>
+ <pre style="background: #f4f4f4; border: 1px solid #ccc; padding: 10px; color: black;">
+  {{ indicator | inspect }}
+</pre>
+
+<pre style="background: #eef; border: 1px solid #33c; padding: 10px; color: black;">
+  {{ page.indicator | inspect }}
+</pre>
+
 <div id="main-content" class="container" role="main">
 
   {% include components/goal/goal-content.html content=content %}
