@@ -28,7 +28,7 @@
       {% assign button_href = page.baseurl | append: button_href %}
     {% endif %}
     <a class="btn btn-primary btn-download" href="{{ button_href }}">
-        {{ include.card.button_label }}
+        {{ include.card.button_label | t }}
     </a>
     {% endif %}
 

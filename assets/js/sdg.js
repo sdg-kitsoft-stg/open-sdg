@@ -29,3 +29,4 @@
 {%- include assets/js/plugins/leaflet.searchAccessible.js -%}
 {%- include assets/js/plugins/leaflet.disaggregationControls.js -%}
 {%- include assets/js/backToTop.js -%}
+{%- include assets/js/mouse-hover.js -%}
