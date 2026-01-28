@@ -17,7 +17,7 @@
         <li>
             <div class="row">
                 <div class="col col-auto">{{ indicator.number }}:</div>
-                <div class="col"><a href="{{ indicator.url }}">{{ indicator.name }}</a></div>
+                <div class="col"><a href="{{ indicator.url }}">{{ indicator.SDG_INDICATOR | default: indicator.name }}</a></div>
             </div>
         </li>
     {% endfor %}
