@@ -38,10 +38,6 @@
     <hr class="goal-page-column-header-rule">
     {% for group in goal_indicators %}
       {% assign target = group.name | sdg_lookup %}
-      <div style="background: #eef; color: black; padding: 5px; border: 2px solid blue;">
-          TARGET DEBUG: {{ indicator.SDG_TARGET }} <br>
-          RAW TARGET FROM GROUP: {{ target }}
-      </div>
       <div class="row align-items-start goal-target">
           <div class="col-auto goal-page-target-number">
             <h3 class="goal-target">
@@ -57,12 +53,6 @@
           {% endif %}
       </div>
         {% for indicator in group.items %}
-      <div style="background: yellow; color: black; padding: 5px; border: 1px solid red;">
-          DEBUG 1.1.1: {{ indicator.SDG_INDICATOR }}
-      </div>
-      <pre style="background: #f4f4f4; border: 1px solid #ccc; padding: 10px; color: black;">
-      {{ indicator | inspect }}
-    </pre>
           {% assign tag_classes = "" | split: "," %}
           {% if indicator.tags %}
             {% for tag in indicator.tags %}
