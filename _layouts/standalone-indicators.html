@@ -19,7 +19,7 @@
   {% for indicator in indicator_objects %}
     <li>
       <a href="{{ indicator.url }}">
-        {{ indicator.SDG_INDICATOR | default: indicator.name }}
+        {{ indicator.name }}
         {% include components/indicator/tags.html tags=indicator.tags indicator=indicator %}
       </a>
     </li>

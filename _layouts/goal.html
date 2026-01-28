@@ -45,8 +45,7 @@
             </h3>
           </div>
           <div class="col goal-page-target-name">
-            {% assign first_indicator = group.items | first %}
-            <span class="target-name">{{ first_indicator.SDG_TARGET | default: target.name }}</span>
+            <span class="target-name">{{ target.name }}</span>
           </div>
           {% if show_progress %}
           <div class="col-lg-2 d-none d-lg-block"></div>
@@ -76,7 +75,7 @@
               {% if indicator.placeholder and indicator.placeholder != '' %}
               <span class="indicator-name">{{ indicator.placeholder }}</span>
               {% else %}
-              <span class="indicator-name"><a href="{{ indicator.url }}">{{ indicator.SDG_INDICATOR | default: indicator.name }}</a></span>
+              <span class="indicator-name"><a href="{{ indicator.url }}">{{ indicator.name }}</a></span>
               {% include components/indicator/tags.html tags=indicator.tags reporting_status=true indicator=indicator %}
             </div>
             {% if indicator_has_progress %}
