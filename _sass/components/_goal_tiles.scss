@@ -24,7 +24,7 @@ $goal-tile-gutter: 3px;
 #main-content {
     .goal-tiles {
         .goal-tile {
-            a {
+            a,span {
                 display: block;
                 width: calc(100% - #{$goal-tile-gutter});
                 margin-bottom: $goal-tile-gutter;
@@ -40,12 +40,6 @@ $goal-tile-gutter: 3px;
                 border: 0;
                 padding: 0;
                 margin: 0;
-
-                box-shadow: 5px 5px 5px 0px $goalTiles-tile-shadowColor;
-
-                &:hover {
-                    box-shadow: 5px 5px 5px 0px $goalTiles-tile-shadowColor-hover;
-                }
             }
         }
     }
