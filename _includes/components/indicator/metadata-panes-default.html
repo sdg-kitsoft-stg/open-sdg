@@ -2,14 +2,14 @@
     <!-- National Metadata -->
     <div>
         <article>
+            {% comment %}
             <p>
                 {% assign country_name = site.country.name | t %}
                 {% assign country_adjective = site.country.adjective | t %}
                 {{ page.t.indicator.national_metadata_blurb | t }}
             </p>
-            {% comment %}
-                {% include components/indicator/metadata.html scope='national' %}
             {% endcomment %}
+            {% include components/indicator/metadata.html scope='national' %}
         </article>
     </div>
 </div>
