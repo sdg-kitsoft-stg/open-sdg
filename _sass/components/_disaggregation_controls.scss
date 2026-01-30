@@ -37,7 +37,11 @@
         font-size: 0.875em;
         margin-right: 8px;
         &[aria-expanded="true"] {
-            margin-bottom: 9px;
+            margin-bottom: 16px;
+
+            i {
+                transform: rotate(180deg);
+            }
         }
 
         i {
@@ -71,7 +75,6 @@
 
     padding-bottom: 14px;
     font-size: 0.75em;
-    margin-top: 10px;
 
     label {
         background-color: $backgroundColor;
@@ -101,18 +104,21 @@
 
     h5,
     h6 {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding-left: 7px;
         position: relative;
         padding-right: 33px;
-        font-size: $fontSize-small;
+        color: #0B0C0C;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 24px;
 
         i {
-            font-size: 0.875em;
+            font-size: 0.675em;
             position: absolute;
-            top: 0;
+            top: 4px;
             right: 6px;
+            border-radius: 100px;
+            border: 0.5px solid #0B0C0C;
+            padding: 4px;
         }
     }
 
@@ -120,14 +126,14 @@
         position: relative;
         cursor: pointer;
         width: 100%;
-        border: 1px solid $indicator-selector-borderColor;
+        border-top: 1px solid $indicator-selector-borderColor;
         display: inline-block;
-        margin-right: 8px;
-        margin-bottom: 10px;
+        margin-top: 24px;
+        padding: 8px 0;
 
-        &:hover {
-            border-color: $indicator-selected-borderColor-hover;
-        }
+        //&:hover {
+        //    border-color: $indicator-selected-borderColor-hover;
+        //}
 
         .no-data-hint,
         .variable-hint {
@@ -153,19 +159,16 @@
 
             button {
                 width: auto;
-                background-color: $backgroundColor;
-                border: 1px solid $indicator-fieldButton-borderColor;
-                color: $color-dark;
-                float: none;
-                position: static;
+                color:#0B0C0C;
                 text-align: center;
-                width: 40%;
-                margin: 0;
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 25px;
+                text-align: center;
                 font-size: 1.2em;
-                padding: inherit;
-                padding-left: 2px;
-                padding-right: 2px;
-                border-radius: 4px;
+                padding: 8px 12px 7px 12px;
+                background: #F3F2F1;
+                box-shadow: 0 -2px 0 0 #929191 inset;
 
                 &:hover {
                     background: $indicator-fieldButton-borderColor-hover;
@@ -181,19 +184,23 @@
             }
 
             label {
-                padding-left: 7px;
-                padding-right: 25px;
+                padding: 7px 25px 7px 0;
                 position: relative;
-                font-size: 1.3em;
+                font-size: 19px;
+                font-weight: 400;
+                line-height: 25px;
+                display: flex;
+                align-items: center;
 
                 &:not(:first-child) {
                     border-top: 1px solid $indicator-fieldLabel-borderColor;
                 }
 
                 input {
-                    position: absolute;
-                    top: 4px;
-                    right: 4px;
+                    position: static;
+                    margin-right: 10px;
+                    height: 24px;
+                    width: 24px;
                 }
 
                 &:hover {
@@ -286,7 +293,17 @@
 
 #series-help {
     > h4 {
-        margin-bottom: 1.5rem;
+        margin-bottom: 16px;
+        color: #0B0C0C;
+        font-size: 27px;
+        font-weight: 700;
+        line-height: 30px;
+    }
+    p {
+        color: #0B0C0C;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
     }
 }
 
