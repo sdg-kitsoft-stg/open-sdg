@@ -20,8 +20,16 @@
         <fieldset class="variable-options-fieldset">
           <legend class="sr-only">{{ page.t.indicator.sub_categories }} - <%=translations.t(fieldItem.field)%></legend>
           <% _.each(fieldItem.values, function(item) { %>
-            <label>
-              <input type="checkbox" <%=item.checked ? 'checked' : ''%> value="<%=item.value%>" data-field="<%=fieldItem.field%>" /><%=translations.t(item.value)%>
+            <label class="custom-checkbox">
+              <input
+                class="custom-checkbox__input"
+                type="checkbox"
+                <%=item.checked ? 'checked' : ''%>
+                value="<%=item.value%>"
+                data-field="<%=fieldItem.field%>"
+              />
+              <span class="custom-checkbox__box" aria-hidden="true"></span>
+              <span class="custom-checkbox__text"><%=translations.t(item.value)%></span>
             </label>
           <% }); %>
         </fieldset>
