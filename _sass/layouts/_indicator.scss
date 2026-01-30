@@ -84,3 +84,21 @@ body.contrast-high {
         }
     }
 }
+
+#indicator-main {
+    #btnSave, .btn-custom-download {
+        color: #0B0C0C!important;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 25px;
+        background: #F3F2F1!important;
+        box-shadow: 0 -2px 0 0 #929191 inset;
+    }
+
+    .nav-tabs .nav-item.active button {
+        color: #0B0C0C;
+        font-size: 19px;
+        font-weight: 400;
+        line-height: 19px;
+    }
+}

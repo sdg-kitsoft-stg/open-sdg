@@ -7,7 +7,9 @@
                 {% assign country_adjective = site.country.adjective | t %}
                 {{ page.t.indicator.national_metadata_blurb | t }}
             </p>
-            {% include components/indicator/metadata.html scope='national' %}
+            {% comment %}
+                {% include components/indicator/metadata.html scope='national' %}
+            {% endcomment %}
         </article>
     </div>
 </div>
