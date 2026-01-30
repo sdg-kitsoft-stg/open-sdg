@@ -64,7 +64,7 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
                 'download': fileName,
                 'title': translations.indicator.download_csv_title,
                 'aria-label': translations.indicator.download_csv_title,
-                'class': 'btn btn-primary btn-download',
+                'class': 'btn btn-primary btn-download btn-custom-download',
                 'tabindex': 0,
                 'role': 'button',
             });
@@ -118,7 +118,7 @@ function createSourceButton(indicatorId, el) {
             'download': indicatorId + '.csv',
             'title': translations.indicator.download_source_title,
             'aria-label': translations.indicator.download_source_title,
-            'class': 'btn btn-primary btn-download btn-custom-download',
+            'class': 'btn btn-primary btn-download',
             'tabindex': 0,
             'role': 'button',
         }));
