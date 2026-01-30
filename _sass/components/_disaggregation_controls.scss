@@ -128,7 +128,6 @@
         width: 100%;
         border-top: 1px solid $indicator-selector-borderColor;
         display: inline-block;
-        margin-top: 24px;
         padding: 8px 0;
 
         //&:hover {
@@ -151,6 +150,33 @@
             right: -1px;
             left: -1px;
             overflow: auto;
+
+            &-fieldset {
+                max-height: 220px;
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    width: 8px;
+                    height: 8px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background-color: rgba(0, 0, 0, 0.3);
+                    border-radius: 999px;
+                }
+
+                &::-webkit-scrollbar-thumb:hover {
+                    background-color: rgba(0, 0, 0, 0.5);
+                }
+
+                /* Firefox */
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0,0,0,.3) transparent;
+            }
 
             > div {
                 text-align: left;
@@ -360,4 +386,8 @@ body.contrast-high {
     div#serieses {
         color: $color-light-highContrast;
     }
+}
+
+#indicator-sidebar button#clear {
+    display: none;
 }

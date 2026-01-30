@@ -6,7 +6,7 @@
       "
       data-field="<%=fieldItem.field%>"
     >
-      <button class='accessBtn' tabindex='0' aria-expanded='false'
+      <button class='accessBtn' tabindex='0' aria-expanded='true'
         <% if(allowedFields.indexOf(fieldItem.field) == -1) { %>
         aria-describedby='variable-hint-<%=fieldItem.field.replace(/ /g, '-')%>'
         <% }%>
@@ -16,19 +16,19 @@
           <span class="sr-only">{{ page.t.indicator.sub_categories_show }} <%=translations.t(fieldItem.label)%></span>
         <% if(allowedFields.indexOf(fieldItem.field) == -1) { %></h6><% } else { %></h5><% } %>
       </button>
-      <div class="variable-options">
-        <fieldset>
+      <div class="variable-options" style="display:block;">
+        <fieldset class="variable-options-fieldset">
           <legend class="sr-only">{{ page.t.indicator.sub_categories }} - <%=translations.t(fieldItem.field)%></legend>
           <% _.each(fieldItem.values, function(item) { %>
             <label>
               <input type="checkbox" <%=item.checked ? 'checked' : ''%> value="<%=item.value%>" data-field="<%=fieldItem.field%>" /><%=translations.t(item.value)%>
             </label>
           <% }); %>
-            <div class="mt-3">
-                <button data-type="select">{{ page.t.indicator.select_all }}</button>
-                <button data-type="clear">{{ page.t.indicator.clear_all }}</button>
-            </div>
         </fieldset>
+          <div class="mt-3 mb-4">
+              <button data-type="select">{{ page.t.indicator.select_all }}</button>
+              <button data-type="clear">{{ page.t.indicator.clear_all }}</button>
+          </div>
       </div>
 
       <% if(allowedFields.indexOf(fieldItem.field) == -1) { %>
