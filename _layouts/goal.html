@@ -35,14 +35,28 @@
             {% endif %}
         </div>
         <hr class="goal-page-column-header-rule">
-
-        <div class="alert alert-info" style="font-family: monospace; font-size: 12px; margin-bottom: 20px;">
-            <strong>DEBUG MODE:</strong><br>
-            {% for ind in goal_indicators %}
-            Файл: {{ ind.name }} |
-            Номер: {{ ind.indicator_number }} |
-            Editions: {{ ind.editions | join: ", " | default: "НЕТ ДАННЫХ" }} <br>
-            {% endfor %}
+        <div class="alert alert-warning" style="font-family: monospace; font-size: 11px; line-height: 1.2;">
+            <strong>DEEP DEBUG:</strong><br>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Technical Name (ID)</th>
+                    <th>Indicator Number</th>
+                    <th>Editions Raw</th>
+                    <th>Target Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ind in goal_indicators %}
+                <tr>
+                    <td>{{ ind.indicator_id | default: "N/A" }}</td>
+                    <td>{{ ind.number }}</td>
+                    <td>{{ ind.editions | inspect }}</td>
+                    <td>{{ ind.target_number }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
 
         <ul class="nav nav-tabs edition-tabs" role="tablist">
