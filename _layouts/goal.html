@@ -62,15 +62,26 @@
         </ul>
 
         <div class="tab-content">
+            {% assign current_list = "" | split: "" %}
+            {% assign archive_list = "" | split: "" %}
+
+            {% for indicator in goal_indicators %}
+                {% if indicator.name contains "-old" %}
+                    {% assign archive_list = archive_list | push: indicator %}
+                {% else %}
+                    {% assign current_list = current_list | push: indicator %}
+                {% endif %}
+            {% endfor %}
+
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% assign current_indicators = goal_indicators | where_exp: "item", "item.name contains '-old' == nil" | group_by: 'target_number' %}
-                {% include components/goal/targets-list.html target_groups=current_indicators show_progress=show_progress %}
+                {% assign current_grouped = current_list | group_by: 'target_number' %}
+                {% include components/goal/targets-list.html target_groups=current_grouped show_progress=show_progress %}
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% assign archive_indicators = goal_indicators | where_exp: "item", "item.name contains '-old'" | group_by: 'target_number' %}
-                {% if archive_indicators.size > 0 %}
-                {% include components/goal/targets-list.html target_groups=archive_indicators show_progress=show_progress %}
+                {% if archive_list.size > 0 %}
+                {% assign archive_grouped = archive_list | group_by: 'target_number' %}
+                {% include components/goal/targets-list.html target_groups=archive_grouped show_progress=show_progress %}
                 {% else %}
                 <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
                 {% endif %}
