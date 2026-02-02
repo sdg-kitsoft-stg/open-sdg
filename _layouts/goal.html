@@ -87,21 +87,16 @@
         </ul>
 
         <div class="tab-content">
-            {% assign goal_indicators = page.indicators | where: "goal_number", page.goal.number %}
-            {% assign grouped = goal_indicators | group_by: 'target_number' %}
+            {% assign all_goal_indicators = site.indicators | where: "goal_number", page.goal.number %}
+            {% assign grouped = all_goal_indicators | group_by: 'target_number' %}
 
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
                 {% for group in grouped %}
                 {% assign current_items = "" | split: "" %}
                 {% for ind in group.items %}
-                {% assign is_arch = false %}
-                {% if ind.indicator_id contains "-a" or ind.editions contains "archive" %}
-                {% assign is_arch = true %}
-                {% endif %}
-
-                {% if is_arch == false %}
+                {% unless ind.indicator_id contains "-a" or ind.editions contains "archive" %}
                 {% assign current_items = current_items | push: ind %}
-                {% endif %}
+                {% endunless %}
                 {% endfor %}
                 {% if current_items.size > 0 %}
                 {% include components/goal/targets-list.html target_groups=current_items show_progress=show_progress %}
@@ -119,15 +114,13 @@
                 {% assign archive_exists = true %}
                 {% endif %}
                 {% endfor %}
-
                 {% if archive_items.size > 0 %}
                 {% include components/goal/targets-list.html target_groups=archive_items show_progress=show_progress %}
                 {% endif %}
                 {% endfor %}
-
-                {% if archive_exists == false %}
+                {% unless archive_exists %}
                 <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
-                {% endif %}
+                {% endunless %}
             </div>
         </div>
 
