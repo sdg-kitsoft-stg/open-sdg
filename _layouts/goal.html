@@ -61,36 +61,38 @@
             </li>
         </ul>
 
+        {% assign all_indicators = site.indicators | where: 'goal_number', page.goal.number %}
+
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% assign goal_indicators_grouped = goal_indicators | group_by: 'target_number' %}
-                {% for group in goal_indicators_grouped %}
-                    {% assign has_current = false %}
-                    {% for item in group.items %}
-                        {% unless item.name contains "-old" %}{% assign has_current = true %}{% endunless %}
-                    {% endfor %}
+                {% assign current_list = "" | split: "" %}
+                {% for ind in all_indicators %}
+                    {% unless ind.name contains "-old" %}
+                        {% assign current_list = current_list | push: ind %}
+                    {% endunless %}
+                {% endfor %}
 
-                    {% if has_current %}
-                        {% include components/goal/targets-list.html target_groups=group.items is_archive=false show_progress=show_progress %}
-                    {% endif %}
+                {% assign current_grouped = current_list | group_by: 'target_number' %}
+                {% for group in current_grouped %}
+                    {% include components/goal/targets-list.html target_groups=group.items show_progress=show_progress %}
                 {% endfor %}
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% assign has_any_archive = false %}
-                {% for group in goal_indicators_grouped %}
-                    {% assign has_archive_in_group = false %}
-                    {% for item in group.items %}
-                        {% if item.name contains "-old" %}{% assign has_archive_in_group = true %}{% assign has_any_archive = true %}{% endif %}
-                    {% endfor %}
-
-                    {% if has_archive_in_group %}
-                        {% include components/goal/targets-list.html target_groups=group.items is_archive=true show_progress=show_progress %}
+                {% assign archive_list = "" | split: "" %}
+                {% for ind in all_indicators %}
+                    {% if ind.name contains "-old" %}
+                        {% assign archive_list = archive_list | push: ind %}
                     {% endif %}
                 {% endfor %}
 
-                {% if has_any_archive == false %}
-                    <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
+                {% if archive_list.size > 0 %}
+                    {% assign archive_grouped = archive_list | group_by: 'target_number' %}
+                    {% for group in archive_grouped %}
+                        {% include components/goal/targets-list.html target_groups=group.items show_progress=show_progress %}
+                    {% endfor %}
+                {% else %}
+                <div class="container"><p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p></div>
                 {% endif %}
             </div>
         </div>
