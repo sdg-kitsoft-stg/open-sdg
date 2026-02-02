@@ -36,6 +36,15 @@
         </div>
         <hr class="goal-page-column-header-rule">
 
+        <div class="alert alert-info" style="font-family: monospace; font-size: 12px; margin-bottom: 20px;">
+            <strong>DEBUG MODE:</strong><br>
+            {% for ind in goal_indicators %}
+            Файл: {{ ind.name }} |
+            Номер: {{ ind.indicator_number }} |
+            Editions: {{ ind.editions | join: ", " | default: "НЕТ ДАННЫХ" }} <br>
+            {% endfor %}
+        </div>
+
         <ul class="nav nav-tabs edition-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#current-edition" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
@@ -83,11 +92,14 @@
                 {% assign archive_exists = false %}
                 {% for group in grouped %}
                     {% assign archive_in_group = "" | split: "" %}
+
                     {% for ind in group.items %}
-                        {% if ind.editions contains 'archive' %}
-                            {% assign archive_in_group = archive_in_group | push: ind %}
-                            {% assign archive_exists = true %}
-                        {% endif %}
+                        {% for ed in ind.editions %}
+                            {% if ed == "archive" %}
+                                {% assign archive_in_group = archive_in_group | push: ind %}
+                                {% assign archive_exists = true %}
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
 
                     {% if archive_in_group.size > 0 %}
