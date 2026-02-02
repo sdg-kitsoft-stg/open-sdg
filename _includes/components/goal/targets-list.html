@@ -1,42 +1,30 @@
-{% for group in include.target_groups %}
-{% assign target = group.name | sdg_lookup %}
+{% assign target = include.target_groups[0].target_number | sdg_lookup %}
+
 <div class="row align-items-start goal-target">
     <div class="col-auto goal-page-target-number">
-        <h3 class="goal-target">
-            <span class="target-number"><span class="visually-hidden">{{ page.t.general.target }}</span> {{ target.number }}</span>
-        </h3>
+        <h3 class="goal-target"><span class="target-number">{{ target.number }}</span></h3>
     </div>
-    <div class="col goal-page-target-name">
-        <span class="target-name">{{ target.name }}</span>
-    </div>
-    {% if include.show_progress %}
-    <div class="col-lg-2 d-none d-lg-block"></div>
-    {% endif %}
+    <div class="col goal-page-target-name"><span class="target-name">{{ target.name }}</span></div>
 </div>
 
-{% for indicator in group.items %}
+{% for indicator in include.target_groups %}
+{% assign is_old = false %}
+{% if indicator.name contains "-old" %}{% assign is_old = true %}{% endif %}
+
+{% if is_old == include.is_archive %}
 <div class="row align-items-start goal-indicator">
     <div class="col-auto goal-page-indicator-number">
-        <h4>
-            <span class="indicator-number"><span class="visually-hidden">{{ page.t.general.indicator }}</span> {{ indicator.number }}</span>
-        </h4>
+        <h4><span class="indicator-number">{{ indicator.number }}</span></h4>
     </div>
     <div class="col goal-page-indicator-name">
-        {% if indicator.placeholder and indicator.placeholder != '' %}
-        <span class="indicator-name">{{ indicator.placeholder }}</span>
-        {% else %}
         <span class="indicator-name"><a href="{{ indicator.url }}">{{ indicator.name }}</a></span>
-        {% include components/indicator/tags.html tags=indicator.tags reporting_status=true indicator=indicator %}
-        {% endif %}
     </div>
     {% if include.show_progress %}
     <div class="col-lg-2 goal-page-indicator-progress">
-        {% if indicator.progress_status and indicator.progress_status != '' %}
-        {% include components/progress/progress-status.html indicator=indicator %}
-        {% endif %}
+        {% if indicator.progress_status %}{% include components/progress/progress-status.html indicator=indicator %}{% endif %}
     </div>
     {% endif %}
 </div>
+{% endif %}
 {% endfor %}
 <hr class="goal-page-target-rule" />
-{% endfor %}

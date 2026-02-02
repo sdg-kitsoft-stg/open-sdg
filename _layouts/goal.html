@@ -38,7 +38,7 @@
 
         <ul class="nav nav-tabs edition-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#current-edition" aria-controls="current-edition" role="tab" data-toggle="tab">
+                <a href="#current-edition" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
@@ -49,7 +49,7 @@
                 </a>
             </li>
             <li role="presentation">
-                <a href="#archive-edition" aria-controls="archive-edition" role="tab" data-toggle="tab">
+                <a href="#archive-edition" aria-controls="archive-edition" role="tab" data-bs-toggle="tab">
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
@@ -62,28 +62,35 @@
         </ul>
 
         <div class="tab-content">
-            {% assign current_list = "" | split: "" %}
-            {% assign archive_list = "" | split: "" %}
-
-            {% for indicator in goal_indicators %}
-                {% if indicator.name contains "-old" %}
-                    {% assign archive_list = archive_list | push: indicator %}
-                {% else %}
-                    {% assign current_list = current_list | push: indicator %}
-                {% endif %}
-            {% endfor %}
-
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% assign current_grouped = current_list | group_by: 'target_number' %}
-                {% include components/goal/targets-list.html target_groups=current_grouped show_progress=show_progress %}
+                {% assign goal_indicators_grouped = goal_indicators | group_by: 'target_number' %}
+                {% for group in goal_indicators_grouped %}
+                    {% assign has_current = false %}
+                    {% for item in group.items %}
+                        {% unless item.name contains "-old" %}{% assign has_current = true %}{% endunless %}
+                    {% endfor %}
+
+                    {% if has_current %}
+                        {% include components/goal/targets-list.html target_groups=group.items is_archive=false show_progress=show_progress %}
+                    {% endif %}
+                {% endfor %}
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% if archive_list.size > 0 %}
-                {% assign archive_grouped = archive_list | group_by: 'target_number' %}
-                {% include components/goal/targets-list.html target_groups=archive_grouped show_progress=show_progress %}
-                {% else %}
-                <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
+                {% assign has_any_archive = false %}
+                {% for group in goal_indicators_grouped %}
+                    {% assign has_archive_in_group = false %}
+                    {% for item in group.items %}
+                        {% if item.name contains "-old" %}{% assign has_archive_in_group = true %}{% assign has_any_archive = true %}{% endif %}
+                    {% endfor %}
+
+                    {% if has_archive_in_group %}
+                        {% include components/goal/targets-list.html target_groups=group.items is_archive=true show_progress=show_progress %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if has_any_archive == false %}
+                    <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
                 {% endif %}
             </div>
         </div>
