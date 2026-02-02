@@ -85,41 +85,49 @@
         </ul>
 
         <div class="tab-content">
-            {% assign all_site_indicators = site.indicators | where: "goal_number", page.goal.number %}
-            {% assign grouped = all_site_indicators | group_by: 'target_number' %}
+            {% assign goal_indicators = page.indicators | where: "goal_number", page.goal.number %}
+            {% assign grouped = goal_indicators | group_by: 'target_number' %}
 
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
                 {% for group in grouped %}
-                    {% assign current_items = "" | split: "" %}
-                    {% for ind in group.items %}
-                    {% assign is_arch = false %}
-                    {% for ed in ind.editions %}{% if ed == "archive" %}{% assign is_arch = true %}{% endif %}{% endfor %}
-                        {% if is_arch == false %}
-                            {% assign current_items = current_items | push: ind %}
-                        {% endif %}
-                    {% endfor %}
+                {% assign current_items = "" | split: "" %}
+                {% for ind in group.items %}
+                {% assign is_arch = false %}
+                {% for ed in ind.editions %}
+                {% if ed == "archive" %}{% assign is_arch = true %}{% endif %}
+                {% endfor %}
 
-                    {% if current_items.size > 0 %}
-                        {% include components/goal/targets-list.html target_groups=current_items show_progress=show_progress %}
-                    {% endif %}
+                {% if is_arch == false %}
+                {% assign current_items = current_items | push: ind %}
+                {% endif %}
+                {% endfor %}
+
+                {% if current_items.size > 0 %}
+                {% include components/goal/targets-list.html target_groups=current_items show_progress=show_progress %}
+                {% endif %}
                 {% endfor %}
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
                 {% assign archive_exists = false %}
                 {% for group in grouped %}
-                    {% assign archive_items = "" | split: "" %}
-                    {% for ind in group.items %}
-                    {% for ed in ind.editions %}{% if ed == "archive" %}{% assign archive_items = archive_items | push: ind %}{% assign archive_exists = true %}{% endif %}{% endfor %}
-                        {% endfor %}
+                {% assign archive_items = "" | split: "" %}
+                {% for ind in group.items %}
+                {% for ed in ind.editions %}
+                {% if ed == "archive" %}
+                {% assign archive_items = archive_items | push: ind %}
+                {% assign archive_exists = true %}
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
 
-                    {% if archive_items.size > 0 %}
-                        {% include components/goal/targets-list.html target_groups=archive_items show_progress=show_progress %}
-                    {% endif %}
+                {% if archive_items.size > 0 %}
+                {% include components/goal/targets-list.html target_groups=archive_items show_progress=show_progress %}
+                {% endif %}
                 {% endfor %}
 
                 {% if archive_exists == false %}
-                    <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
+                <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
                 {% endif %}
             </div>
         </div>
