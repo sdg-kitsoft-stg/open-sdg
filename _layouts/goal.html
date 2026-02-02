@@ -85,38 +85,37 @@
                 </a>
             </li>
         </ul>
-        DEBUG: Найдено страниц в папке meta: {{ all_pages.size }}
+
         <div class="tab-content">
-            {% assign all_pages = site.pages | where: "goal_number", page.goal.number %}
+            {% assign goal_indicators = page.indicators | where: "goal_number", page.goal.number %}
+            {% assign grouped = goal_indicators | group_by: 'target_number' %}
 
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% assign current_exists = false %}
-                {% for ind in all_pages %}
+                {% for group in grouped %}
+                {% assign current_items = "" | split: "" %}
+                {% for ind in group.items %}
                 {% assign is_arch = false %}
                 {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign is_arch = true %}{% endif %}{% endfor %}
-
-                {% if is_arch == false %}
-                {% include components/goal/targets-list.html target_groups=ind show_progress=show_progress %}
-                {% assign current_exists = true %}
+                {% if is_arch == false %}{% assign current_items = current_items | push: ind %}{% endif %}
+                {% endfor %}
+                {% if current_items.size > 0 %}
+                {% include components/goal/targets-list.html target_groups=current_items show_progress=show_progress %}
                 {% endif %}
                 {% endfor %}
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% assign archive_exists = false %}
-                {% for ind in all_pages %}
-                {% assign is_arch = false %}
-                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign is_arch = true %}{% endif %}{% endfor %}
-
-                {% if is_arch == true %}
-                {% include components/goal/targets-list.html target_groups=ind show_progress=show_progress %}
-                {% assign archive_exists = true %}
+                {% assign arch_exists = false %}
+                {% for group in grouped %}
+                {% assign arch_items = "" | split: "" %}
+                {% for ind in group.items %}
+                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign arch_items = arch_items | push: ind %}{% assign arch_exists = true %}{% endif %}{% endfor %}
+                {% endfor %}
+                {% if arch_items.size > 0 %}
+                {% include components/goal/targets-list.html target_groups=arch_items show_progress=show_progress %}
                 {% endif %}
                 {% endfor %}
-
-                {% if archive_exists == false %}
-                <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
-                {% endif %}
+                {% unless arch_exists %}<p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>{% endunless %}
             </div>
         </div>
 
