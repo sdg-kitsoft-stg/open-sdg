@@ -85,49 +85,36 @@
                 </a>
             </li>
         </ul>
-
+        DEBUG: Найдено страниц в папке meta: {{ all_pages.size }}
         <div class="tab-content">
-            {% assign all_meta_files = site.indicators | where: "goal_number", page.goal.number %}
-            {% assign grouped_by_target = all_meta_files | group_by: 'target_number' %}
+            {% assign all_pages = site.pages | where: "goal_number", page.goal.number %}
 
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% for group in grouped_by_target %}
-                {% assign current_list = "" | split: "" %}
-                {% for ind in group.items %}
-                {% assign is_archive = false %}
-                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign is_archive = true %}{% endif %}{% endfor %}
+                {% assign current_exists = false %}
+                {% for ind in all_pages %}
+                {% assign is_arch = false %}
+                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign is_arch = true %}{% endif %}{% endfor %}
 
-                {% if is_archive == false %}
-                {% assign current_list = current_list | push: ind %}
-                {% endif %}
-                {% endfor %}
-
-                {% if current_list.size > 0 %}
-                {% include components/goal/targets-list.html target_groups=current_list show_progress=show_progress %}
+                {% if is_arch == false %}
+                {% include components/goal/targets-list.html target_groups=ind show_progress=show_progress %}
+                {% assign current_exists = true %}
                 {% endif %}
                 {% endfor %}
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% assign archive_total_exists = false %}
-                {% for group in grouped_by_target %}
-                {% assign archive_list = "" | split: "" %}
-                {% for ind in group.items %}
-                {% assign is_archive = false %}
-                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign is_archive = true %}{% endif %}{% endfor %}
+                {% assign archive_exists = false %}
+                {% for ind in all_pages %}
+                {% assign is_arch = false %}
+                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign is_arch = true %}{% endif %}{% endfor %}
 
-                {% if is_archive == true %}
-                {% assign archive_list = archive_list | push: ind %}
-                {% assign archive_total_exists = true %}
+                {% if is_arch == true %}
+                {% include components/goal/targets-list.html target_groups=ind show_progress=show_progress %}
+                {% assign archive_exists = true %}
                 {% endif %}
                 {% endfor %}
 
-                {% if archive_list.size > 0 %}
-                {% include components/goal/targets-list.html target_groups=archive_list show_progress=show_progress %}
-                {% endif %}
-                {% endfor %}
-
-                {% if archive_total_exists == false %}
+                {% if archive_exists == false %}
                 <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
                 {% endif %}
             </div>
