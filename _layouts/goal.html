@@ -35,6 +35,8 @@
             {% endif %}
         </div>
         <hr class="goal-page-column-header-rule">
+
+        <p>Всего найдено индикаторов: {{ goal_indicators.size }}</p>
         <div class="alert alert-warning" style="font-family: monospace; font-size: 11px; line-height: 1.2;">
             <strong>DEEP DEBUG:</strong><br>
             <table class="table table-sm">
@@ -93,15 +95,14 @@
                 {% assign current_items = "" | split: "" %}
                 {% for ind in group.items %}
                 {% assign is_arch = false %}
-                {% for ed in ind.editions %}
-                {% if ed == "archive" %}{% assign is_arch = true %}{% endif %}
-                {% endfor %}
+                {% if ind.indicator_id contains "-a" or ind.editions contains "archive" %}
+                {% assign is_arch = true %}
+                {% endif %}
 
                 {% if is_arch == false %}
                 {% assign current_items = current_items | push: ind %}
                 {% endif %}
                 {% endfor %}
-
                 {% if current_items.size > 0 %}
                 {% include components/goal/targets-list.html target_groups=current_items show_progress=show_progress %}
                 {% endif %}
@@ -113,12 +114,10 @@
                 {% for group in grouped %}
                 {% assign archive_items = "" | split: "" %}
                 {% for ind in group.items %}
-                {% for ed in ind.editions %}
-                {% if ed == "archive" %}
+                {% if ind.indicator_id contains "-a" or ind.editions contains "archive" %}
                 {% assign archive_items = archive_items | push: ind %}
                 {% assign archive_exists = true %}
                 {% endif %}
-                {% endfor %}
                 {% endfor %}
 
                 {% if archive_items.size > 0 %}
