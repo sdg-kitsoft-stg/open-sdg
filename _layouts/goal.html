@@ -63,7 +63,7 @@
 
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% assign current_indicators = goal_indicators | where_exp: "item", "item.name contains '-old' == false" | group_by: 'target_number' %}
+                {% assign current_indicators = goal_indicators | where_exp: "item", "item.name contains '-old' == nil" | group_by: 'target_number' %}
                 {% include components/goal/targets-list.html target_groups=current_indicators show_progress=show_progress %}
             </div>
 
