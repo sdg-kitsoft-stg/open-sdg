@@ -61,68 +61,57 @@
             </li>
         </ul>
 
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="current-edition" role="tabpanel">
-                <div style="margin-top: 30px;"></div>
+        <div id="current-edition" class="custom-tab-content active">
+            {% assign current_list = "" | split: "" %}
+            {% for ind in goal_indicators %}
+                {% unless ind.indicator_id contains "a" %}
+                {% assign current_list = current_list | push: ind %}
+                {% endunless %}
+            {% endfor %}
 
-                {% for ind in goal_indicators %}
-                {% if ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}{% continue %}{% endif %}
+            {% assign grouped_current = current_list | group_by: 'target_number' %}
 
-                {% assign target = ind.target_number | sdg_lookup %}
-                <div class="row align-items-start goal-target">
-                    <div class="col-auto goal-page-target-number">
-                        <h3 class="goal-target"><span class="target-number">{{ target.number }}</span></h3>
-                    </div>
-                    <div class="col goal-page-target-name">
-                        <span class="target-name">{{ target.name }}</span>
-                    </div>
+            {% for group in grouped_current %}
+                {% assign target = group.name | sdg_lookup %}
+                <div class="row goal-target">
+                    <div class="col-auto"><strong>{{ target.number }}</strong></div>
+                    <div class="col">{{ target.name }}</div>
                 </div>
-                <div class="row align-items-start goal-indicator">
-                    <div class="col-auto goal-page-indicator-number">
-                        <h4><span class="indicator-number">{{ ind.number }}</span></h4>
+                {% for indicator in group.items %}
+                    <div class="row goal-indicator" style="margin-left: 20px;">
+                        <div class="col-auto">{{ indicator.number }}</div>
+                        <div class="col"><a href="{{ indicator.url }}">{{ indicator.name }}</a></div>
                     </div>
-                    <div class="col goal-page-indicator-name">
-                        <span class="indicator-name"><a href="{{ ind.url }}">{{ ind.name }}</a></span>
-                    </div>
-                </div>
-                <hr class="goal-page-target-rule" />
                 {% endfor %}
-            </div>
+                <hr>
+            {% endfor %}
+        </div>
 
-            <div class="tab-pane fade" id="archive-edition" role="tabpanel">
-                <div style="margin-top: 30px;"></div>
-
-                {% assign archive_count = 0 %}
-                {% for ind in goal_indicators %}
-                {% unless ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}{% continue %}{% endunless %}
-                {% assign archive_count = archive_count | plus: 1 %}
-
-                {% assign target_base = ind.target_number | replace: ".", "-" %}
-                {% assign target_key = target_base | append: "-title" %}
-
-                <div class="row align-items-start goal-target">
-                    <div class="col-auto goal-page-target-number">
-                        <h3 class="goal-target"><span class="target-number">{{ ind.target_number }}</span></h3>
-                    </div>
-                    <div class="col goal-page-target-name">
-                        <span class="target-name">{{ site.translations.uk.global_targets[target_key] }}</span>
-                    </div>
-                </div>
-                <div class="row align-items-start goal-indicator">
-                    <div class="col-auto goal-page-indicator-number">
-                        <h4><span class="indicator-number">{{ ind.number }}</span></h4>
-                    </div>
-                    <div class="col goal-page-indicator-name">
-                        <span class="indicator-name"><a href="{{ ind.url }}">{{ ind.name }}</a></span>
-                    </div>
-                </div>
-                <hr class="goal-page-target-rule" />
-                {% endfor %}
-
-                {% if archive_count == 0 %}
-                <p style="padding: 20px;">Попередні редакції відсутні.</p>
+        <div id="archive-edition" class="custom-tab-content">
+            {% assign archive_list = "" | split: "" %}
+            {% for ind in goal_indicators %}
+                {% if ind.indicator_id contains "a" %}
+                    {% assign archive_list = archive_list | push: ind %}
                 {% endif %}
-            </div>
+            {% endfor %}
+
+            {% assign grouped_archive = archive_list | group_by: 'target_number' %}
+
+            {% for group in grouped_archive %}
+                {% assign target_base = group.name | replace: ".", "-" %}
+                {% assign target_key = target_base | append: "-title" %}
+                    <div class="row goal-target">
+                        <div class="col-auto"><strong>{{ group.name }}</strong></div>
+                        <div class="col">{{ site.translations.uk.global_targets[target_key] }}</div>
+                    </div>
+                {% for indicator in group.items %}
+                    <div class="row goal-indicator" style="margin-left: 20px;">
+                        <div class="col-auto">{{ indicator.number }}</div>
+                        <div class="col"><a href="{{ indicator.url }}">{{ indicator.name }}</a></div>
+                    </div>
+                {% endfor %}
+                <hr>
+            {% endfor %}
         </div>
 
     </div>
