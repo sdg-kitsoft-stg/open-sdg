@@ -36,51 +36,6 @@
         </div>
         <hr class="goal-page-column-header-rule">
 
-        <p>Всего найдено индикаторов: {{ goal_indicators.size }}</p>
-        <div class="alert alert-warning" style="font-family: monospace; font-size: 11px; line-height: 1.2;">
-            <strong>DEEP DEBUG:</strong><br>
-            <table class="table table-sm">
-                <thead>
-                <tr>
-                    <th>Technical Name (ID)</th>
-                    <th>Indicator Number</th>
-                    <th>Editions Raw</th>
-                    <th>Target Number</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for ind in goal_indicators %}
-                <tr>
-                    <td>{{ ind.indicator_id | default: "N/A" }}</td>
-                    <td>{{ ind.number }}</td>
-                    <td>{{ ind.editions | inspect }}</td>
-                    <td>{{ ind.target_number }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div style="background: #fff3cd; padding: 20px; font-family: monospace; font-size: 12px;">
-            <h6>DEEP DEBUG V2:</h6>
-            <table style="width:100%; border-collapse: collapse;">
-                <tr style="border-bottom: 1px solid #000;">
-                    <th>File ID (slug)</th>
-                    <th>Ind. Number</th>
-                    <th>Target Number</th>
-                    <th>Goal Number</th>
-                </tr>
-                {% for ind in page.indicators %}
-                <tr>
-                    <td>{{ ind.indicator_id | default: "N/A" }}</td>
-                    <td>{{ ind.indicator_number }}</td>
-                    <td>{{ ind.target_number }}</td>
-                    <td>{{ ind.goal_number }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
         <ul class="nav nav-tabs edition-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#current-edition" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
@@ -107,37 +62,72 @@
         </ul>
 
         <div class="tab-content">
-            {% assign all_ind = page.indicators | where: "goal_number", page.goal.number %}
 
-            <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% assign current_items = "" | split: "" %}
-                {% for ind in all_ind %}
-                {% comment %} Если в ID НЕТ буквы 'a' — это текущая версия {% endcomment %}
-                {% unless ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
-                {% assign current_items = current_items | push: ind %}
-                {% endunless %}
+            <div class="tab-pane active" id="current-edition" role="tabpanel">
+                <h2 class="goal-page-heading" style="margin-top: 20px;">{{ page.t.general.targets_and_indicators }}</h2>
+                <hr class="goal-page-column-header-rule">
+
+                {% assign current_grouped = goal_indicators | where_exp: "item", "item.indicator_id contains 'a' == false" | group_by: 'target_number' %}
+
+                {% for group in current_grouped %}
+                    {% assign target = group.name | sdg_lookup %}
+                    <div class="row align-items-start goal-target">
+                        <div class="col-auto goal-page-target-number">
+                            <h3 class="goal-target">
+                                <span class="target-number">{{ target.number }}</span>
+                            </h3>
+                        </div>
+                        <div class="col goal-page-target-name">
+                            <span class="target-name">{{ target.name }}</span>
+                        </div>
+                    </div>
+                    {% for indicator in group.items %}
+                    <div class="row align-items-start goal-indicator">
+                        <div class="col-auto goal-page-indicator-number">
+                            <h4><span class="indicator-number">{{ indicator.number }}</span></h4>
+                        </div>
+                        <div class="col goal-page-indicator-name">
+                            <span class="indicator-name"><a href="{{ indicator.url }}">{{ indicator.name }}</a></span>
+                        </div>
+                    </div>
                 {% endfor %}
-
-                {% if current_items.size > 0 %}
-                {% assign grouped_current = current_items | group_by: 'target_number' %}
-                {% include components/goal/targets-list.html target_groups=grouped_current show_progress=show_progress %}
-                {% endif %}
+                    <hr class="goal-page-target-rule" />
+                {% endfor %}
             </div>
 
-            <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% assign archive_items = "" | split: "" %}
-                {% for ind in all_ind %}
-                {% comment %} Если в ID ЕСТЬ буква 'a' — это архив {% endcomment %}
-                {% if ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
-                {% assign archive_items = archive_items | push: ind %}
-                {% endif %}
-                {% endfor %}
+            <div class="tab-pane" id="archive-edition" role="tabpanel">
+                <h2 class="goal-page-heading" style="margin-top: 20px;">Архівні показники</h2>
+                <hr class="goal-page-column-header-rule">
 
-                {% if archive_items.size > 0 %}
-                {% assign grouped_archive = archive_items | group_by: 'target_number' %}
-                {% include components/goal/targets-list.html target_groups=grouped_archive show_progress=show_progress %}
+                {% assign archive_grouped = goal_indicators | where_exp: "item", "item.indicator_id contains 'a'" | group_by: 'target_number' %}
+
+                {% if archive_grouped.size > 0 %}
+                    {% for group in archive_grouped %}
+                        {% assign target_key = group.name | replace: ".", "-" %}
+                        <div class="row align-items-start goal-target">
+                            <div class="col-auto goal-page-target-number">
+                                <h3 class="goal-target">
+                                    <span class="target-number">{{ group.name }}</span>
+                                </h3>
+                            </div>
+                            <div class="col goal-page-target-name">
+                                <span class="target-name">{{ site.translations.uk.global_targets[target_key | append: "-title"] }}</span>
+                            </div>
+                        </div>
+                        {% for indicator in group.items %}
+                        <div class="row align-items-start goal-indicator">
+                            <div class="col-auto goal-page-indicator-number">
+                                <h4><span class="indicator-number">{{ indicator.number }}</span></h4>
+                            </div>
+                            <div class="col goal-page-indicator-name">
+                                <span class="indicator-name"><a href="{{ indicator.url }}">{{ indicator.name }}</a></span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    <hr class="goal-page-target-rule" />
+                    {% endfor %}
                 {% else %}
-                <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
+                    <p style="padding: 20px;">Попередні редакції відсутні.</p>
                 {% endif %}
             </div>
         </div>
