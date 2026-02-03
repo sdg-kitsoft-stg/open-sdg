@@ -61,6 +61,26 @@
             </table>
         </div>
 
+        <div style="background: #fff3cd; padding: 20px; font-family: monospace; font-size: 12px;">
+            <h6>DEEP DEBUG V2:</h6>
+            <table style="width:100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #000;">
+                    <th>File ID (slug)</th>
+                    <th>Ind. Number</th>
+                    <th>Target Number</th>
+                    <th>Goal Number</th>
+                </tr>
+                {% for ind in page.indicators %}
+                <tr>
+                    <td>{{ ind.indicator_id | default: "N/A" }}</td>
+                    <td>{{ ind.indicator_number }}</td>
+                    <td>{{ ind.target_number }}</td>
+                    <td>{{ ind.goal_number }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
         <ul class="nav nav-tabs edition-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#current-edition" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
@@ -87,43 +107,52 @@
         </ul>
 
         <div class="tab-content">
-            {% assign all_goal_indicators = page.indicators | where: "goal_number", page.goal.number %}
-            {% assign grouped = all_goal_indicators | group_by: 'target_number' %}
+            {% assign all_indicators = page.indicators | where: "goal_number", page.goal.number %}
 
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% for group in grouped %}
-                {% assign current_items = "" | split: "" %}
-                {% for ind in group.items %}
-                {% unless ind.indicator_id contains ".a" or ind.indicator_id contains "-a" %}
-                {% assign current_items = current_items | push: ind %}
+                {% assign current_list = "" | split: "" %}
+                {% for ind in all_indicators %}
+                {% unless ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
+                {% assign current_list = current_list | push: ind %}
                 {% endunless %}
                 {% endfor %}
 
-                {% if current_items.size > 0 %}
-                {% include components/goal/targets-list.html target_groups=current_items show_progress=show_progress %}
-                {% endif %}
+                {% assign grouped_current = current_list | group_by: 'target_number' %}
+                {% for group in grouped_current %}
+                <div class="target">
+                    {% assign target_key = group.name | replace: ".", "-" | append: "-title" %}
+                    <h3>{{ group.name }} {{ site.translations.uk.global_targets[target_key] }}</h3>
+
+                    {% for ind in group.items %}
+                    {% include components/goal/indicator-item.html indicator=ind %}
+                    {% endfor %}
+                </div>
                 {% endfor %}
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% assign archive_exists = false %}
-                {% for group in grouped %}
-                {% assign archive_items = "" | split: "" %}
-                {% for ind in group.items %}
-                {% if ind.indicator_id contains ".a" or ind.indicator_id contains "-a" %}
-                {% assign archive_items = archive_items | push: ind %}
-                {% assign archive_exists = true %}
+                {% assign archive_list = "" | split: "" %}
+                {% for ind in all_indicators %}
+                {% if ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
+                {% assign archive_list = archive_list | push: ind %}
                 {% endif %}
                 {% endfor %}
 
-                {% if archive_items.size > 0 %}
-                {% include components/goal/targets-list.html target_groups=archive_items show_progress=show_progress %}
-                {% endif %}
-                {% endfor %}
+                {% if archive_list.size > 0 %}
+                {% assign grouped_archive = archive_list | group_by: 'target_number' %}
+                {% for group in grouped_archive %}
+                <div class="target">
+                    {% assign target_key = group.name | replace: ".", "-" | append: "-title" %}
+                    <h3>{{ group.name }} {{ site.translations.uk.global_targets[target_key] }}</h3>
 
-                {% unless archive_exists %}
+                    {% for ind in group.items %}
+                    {% include components/goal/indicator-item.html indicator=ind %}
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                {% else %}
                 <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
-                {% endunless %}
+                {% endif %}
             </div>
         </div>
 
