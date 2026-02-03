@@ -40,13 +40,13 @@ $(document).ready(function() {
                     })
                     .removeClass('active');
 
-                panes.filter(':visible').attr({
-                    'aria-hidden': 'true',
-                }).hide();
+                // panes.filter(':visible').attr({
+                //     'aria-hidden': 'true',
+                // }).hide();
 
-                pane.attr({
-                    'aria-hidden': 'false',
-                }).show();
+                // pane.attr({
+                //     'aria-hidden': 'false',
+                // }).show();
 
                 tab.attr({
                     'aria-selected': 'true',

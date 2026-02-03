@@ -64,52 +64,71 @@
         <div class="tab-content">
             <div class="tab-pane active" id="current-edition" role="tabpanel">
                 <div style="margin-top: 20px;"></div>
-                {% assign current_inds = goal_indicators | reject_exp: "item", "item.slug contains '-a'" %}
-                {% assign grouped_current = current_inds | group_by: "target_number" %}
 
-                {% for group in grouped_current %}
-                {% assign target = group.name | sdg_lookup %}
+                {% assign last_target = "" %}
+
+                {% for ind in goal_indicators %}
+                {% if ind.slug contains "-a" %}{% continue %}{% endif %}
+
+                {% if ind.target_number != last_target %}
+
+                {% if last_target != "" %}<hr class="goal-page-target-rule">{% endif %}
+
+                {% assign target = ind.target_number | sdg_lookup %}
                 <div class="row align-items-start goal-target">
                     <div class="col-auto"><h3>{{ target.number }}</h3></div>
                     <div class="col"><h3>{{ target.name }}</h3></div>
                 </div>
-                {% for ind in group.items %}
+
+                {% assign last_target = ind.target_number %}
+                {% endif %}
+
                 <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
                     <div class="col-auto"><h4>{{ ind.number }}</h4></div>
                     <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
                 </div>
                 {% endfor %}
+
                 <hr class="goal-page-target-rule">
-                {% endfor %}
             </div>
 
             <div class="tab-pane" id="archive-edition" role="tabpanel">
                 <div style="margin-top: 20px;"></div>
-                {% assign archive_inds = goal_indicators | select_exp: "item", "item.slug contains '-a'" %}
 
-                {% if archive_inds.size > 0 %}
-                {% assign grouped_archive = archive_inds | group_by: "target_number" %}
+                {% assign last_archive_target = "" %}
+                {% assign has_archive_data = false %}
 
-                {% for group in grouped_archive %}
-                {% assign target_base = group.name | replace: ".", "-" %}
-                {% assign archive_key = target_base | append: "-a" %}
+                {% for ind in goal_indicators %}
+                {% unless ind.slug contains "-a" %}{% continue %}{% endunless %}
+
+                {% assign has_archive_data = true %}
+
+                {% if ind.target_number != last_archive_target %}
+
+                {% if last_archive_target != "" %}<hr class="goal-page-target-rule">{% endif %}
+
+                {% assign archive_key = ind.target_number | replace: ".", "-" | append: "-a" %}
 
                 <div class="row align-items-start goal-target">
-                    <div class="col-auto"><h3>{{ group.name }}</h3></div>
+                    <div class="col-auto"><h3>{{ ind.target_number }}.a</h3></div>
                     <div class="col">
                         <h3>
                             {{ site.data.translations['uk'].archive_targets[archive_key] | default: "Архівне завдання" }}
                         </h3>
                     </div>
                 </div>
-                {% for ind in group.items %}
+
+                {% assign last_archive_target = ind.target_number %}
+                {% endif %}
+
                 <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
                     <div class="col-auto"><h4>{{ ind.number }}</h4></div>
                     <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
                 </div>
                 {% endfor %}
+
+                {% if has_archive_data %}
                 <hr class="goal-page-target-rule">
-                {% endfor %}
                 {% else %}
                 <div class="container"><p>Архівні дані для цієї цілі відсутні.</p></div>
                 {% endif %}
