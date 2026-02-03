@@ -3,7 +3,7 @@ all: test
 
 clean:
 	# Stop the detached Jekyll web server.
-	-pkill -f -9 jekyll
+	-pkill -9 -f jekyll
 	# Delete the builds.
 	rm -fr site-starter
 	rm -fr data-starter
@@ -30,15 +30,15 @@ build: clean cache
 	cp -r tests/site/* site-starter/
 	cp -r tests/data/* data-starter/
 	# Build the data and metadata and move it into the starter.
-	cd data-starter && pip install --upgrade -r requirements.txt
-	cd data-starter && python build_data.py
+	cd data-starter && pip3 install --upgrade -r requirements.txt
+	cd data-starter && python3 build_data.py
 	mv data-starter/_build site-starter
 	# Build the Jekyll site.
 	cd site-starter && bundle install
 	cd site-starter && bundle exec jekyll build
 
 build.docs:
-	pip install -r docs/requirements.txt
+	pip3 install -r docs/requirements.txt
 	mkdocs build
 
 serve: build
