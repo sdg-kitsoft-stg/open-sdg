@@ -87,17 +87,18 @@
         </ul>
 
         <div class="tab-content">
-            {% assign goal_indicators = page.indicators | where: "goal_number", page.goal.number %}
-            {% assign grouped = goal_indicators | group_by: 'target_number' %}
+            {% assign all_goal_indicators = page.indicators | where: "goal_number", page.goal.number %}
+            {% assign grouped = all_goal_indicators | group_by: 'target_number' %}
 
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
                 {% for group in grouped %}
                 {% assign current_items = "" | split: "" %}
                 {% for ind in group.items %}
-                {% assign is_arch = false %}
-                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign is_arch = true %}{% endif %}{% endfor %}
-                {% if is_arch == false %}{% assign current_items = current_items | push: ind %}{% endif %}
+                {% unless ind.indicator_id contains ".a" or ind.indicator_id contains "-a" %}
+                {% assign current_items = current_items | push: ind %}
+                {% endunless %}
                 {% endfor %}
+
                 {% if current_items.size > 0 %}
                 {% include components/goal/targets-list.html target_groups=current_items show_progress=show_progress %}
                 {% endif %}
@@ -105,17 +106,24 @@
             </div>
 
             <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                {% assign arch_exists = false %}
+                {% assign archive_exists = false %}
                 {% for group in grouped %}
-                {% assign arch_items = "" | split: "" %}
+                {% assign archive_items = "" | split: "" %}
                 {% for ind in group.items %}
-                {% for ed in ind.editions %}{% if ed == 'archive' %}{% assign arch_items = arch_items | push: ind %}{% assign arch_exists = true %}{% endif %}{% endfor %}
-                {% endfor %}
-                {% if arch_items.size > 0 %}
-                {% include components/goal/targets-list.html target_groups=arch_items show_progress=show_progress %}
+                {% if ind.indicator_id contains ".a" or ind.indicator_id contains "-a" %}
+                {% assign archive_items = archive_items | push: ind %}
+                {% assign archive_exists = true %}
                 {% endif %}
                 {% endfor %}
-                {% unless arch_exists %}<p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>{% endunless %}
+
+                {% if archive_items.size > 0 %}
+                {% include components/goal/targets-list.html target_groups=archive_items show_progress=show_progress %}
+                {% endif %}
+                {% endfor %}
+
+                {% unless archive_exists %}
+                <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
+                {% endunless %}
             </div>
         </div>
 
