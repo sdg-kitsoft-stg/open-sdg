@@ -18,23 +18,6 @@
 {% endif %}
 {% endfor %}
 
-<div style="background: #000; color: #00ffff; padding: 20px; font-family: monospace;">
-    <p>1. Try page.t.global_targets:</p>
-    <pre>{{ page.t.global_targets | inspect }}</pre>
-
-    <hr>
-
-    <p>2. Try site.data.translations['uk'].global_targets:</p>
-    <div>{{ site.data.translations.uk.global_targets }}</div>
-    <pre>{{ site.data.translations['uk'].global_targets | inspect }}</pre>
-
-    <hr>
-
-    <p>3. Try site.data.translations['uk'].archive_targets:</p>
-    <div>{{ site.data.translations.uk.archive_targets }}</div>
-    <pre>{{ site.data.translations['uk'].archive_targets | inspect }}</pre>
-</div>
-
 <div id="main-content" class="container" role="main">
 
     {% include components/goal/goal-content.html content=content %}
@@ -79,45 +62,57 @@
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="current-edition" role="tabpanel">
+            <div class="tab-pane active" id="current-edition" role="tabpanel">
                 <div style="margin-top: 20px;"></div>
-                {% for ind in goal_indicators %}
-                {% if ind.slug contains "-a" %}{% continue %}{% endif %}
+                {% assign current_inds = goal_indicators | reject_exp: "item", "item.slug contains '-a'" %}
+                {% assign grouped_current = current_inds | group_by: "target_number" %}
 
-                {% assign target = ind.target_number | sdg_lookup %}
+                {% for group in grouped_current %}
+                {% assign target = group.name | sdg_lookup %}
                 <div class="row align-items-start goal-target">
                     <div class="col-auto"><h3>{{ target.number }}</h3></div>
                     <div class="col"><h3>{{ target.name }}</h3></div>
                 </div>
+                {% for ind in group.items %}
                 <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
                     <div class="col-auto"><h4>{{ ind.number }}</h4></div>
                     <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
                 </div>
+                {% endfor %}
                 <hr class="goal-page-target-rule">
                 {% endfor %}
             </div>
 
-            <div class="tab-pane fade" id="archive-edition" role="tabpanel">
+            <div class="tab-pane" id="archive-edition" role="tabpanel">
                 <div style="margin-top: 20px;"></div>
-                {% for ind in goal_indicators %}
-                {% unless ind.slug contains "-a" %}{% continue %}{% endunless %}
-                <pre style="background: #f4f4f4; border: 1px solid #ccc; padding: 10px; font-size: 12px;">
-                  DEBUG: {{ ind | inspect }}
-                </pre>
+                {% assign archive_inds = goal_indicators | select_exp: "item", "item.slug contains '-a'" %}
+
+                {% if archive_inds.size > 0 %}
+                {% assign grouped_archive = archive_inds | group_by: "target_number" %}
+
+                {% for group in grouped_archive %}
+                {% assign target_base = group.name | replace: ".", "-" %}
+                {% assign archive_key = target_base | append: "-a" %}
+
                 <div class="row align-items-start goal-target">
-                    <div class="col-auto"><h3>1.1.a</h3></div>
+                    <div class="col-auto"><h3>{{ group.name }}</h3></div>
                     <div class="col">
                         <h3>
-                            {{ ind.SDG_TARGET | default: "Завдання 1.1.а (Архів)" }}
+                            {{ site.data.translations['uk'].archive_targets[archive_key] | default: "Архівне завдання" }}
                         </h3>
                     </div>
                 </div>
+                {% for ind in group.items %}
                 <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
                     <div class="col-auto"><h4>{{ ind.number }}</h4></div>
                     <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
                 </div>
+                {% endfor %}
                 <hr class="goal-page-target-rule">
                 {% endfor %}
+                {% else %}
+                <div class="container"><p>Архівні дані для цієї цілі відсутні.</p></div>
+                {% endif %}
             </div>
         </div>
 
