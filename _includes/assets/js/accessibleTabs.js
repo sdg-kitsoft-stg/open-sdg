@@ -4,11 +4,11 @@ $(document).ready(function() {
         var tabs = tabsList.find('li > button');
         var panes = tabsList.parent().find('.tab-pane');
 
-        panes.attr({
-            'role': 'tabpanel',
-            'aria-hidden': 'true',
-            'tabindex': '0',
-        }).hide();
+        // panes.attr({
+        //     'role': 'tabpanel',
+        //     'aria-hidden': 'true',
+        //     'tabindex': '0',
+        // }).hide();
 
         tabsList.attr({
             'role': 'tablist',
