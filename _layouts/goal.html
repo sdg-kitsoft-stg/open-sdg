@@ -107,70 +107,38 @@
         </ul>
 
         <div class="tab-content">
-            {% assign all_indicators = page.indicators | where: "goal_number", page.goal.number %}
+            {% assign all_ind = page.indicators | where: "goal_number", page.goal.number %}
 
             <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                {% assign current_list = "" | split: "" %}
-                {% for ind in all_indicators %}
+                {% assign current_items = "" | split: "" %}
+                {% for ind in all_ind %}
+                {% comment %} Если в ID НЕТ буквы 'a' — это текущая версия {% endcomment %}
                 {% unless ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
-                {% assign current_list = current_list | push: ind %}
+                {% assign current_items = current_items | push: ind %}
                 {% endunless %}
                 {% endfor %}
 
-                {% assign grouped_current = current_list | group_by: 'target_number' %}
-                {% for group in grouped_current %}
-                <div class="target">
-                    {% assign target_key = group.name | replace: ".", "-" | append: "-title" %}
-                    <h3>{{ group.name }} {{ site.translations.uk.global_targets[target_key] }}</h3>
-
-                    {% for ind in group.items %}
-                    {% include components/goal/indicator-item.html indicator=ind %}
-                    {% endfor %}
-                </div>
-                {% endfor %}
+                {% if current_items.size > 0 %}
+                {% assign grouped_current = current_items | group_by: 'target_number' %}
+                {% include components/goal/targets-list.html target_groups=grouped_current show_progress=show_progress %}
+                {% endif %}
             </div>
-            <div class="tab-content">
-                {% comment %} DEEP DEBUG V3 {% endcomment %}
-                <div style="background: #fff3cd; padding: 10px; font-family: monospace; font-size: 11px; margin-bottom: 20px;">
-                    DEBUG: Всего в page.indicators: {{ page.indicators.size }} <br>
-                    {% for ind in page.indicators %}
-                    ID: {{ ind.indicator_id }} | Target: {{ ind.target_number }} <br>
-                    {% endfor %}
-                </div>
 
-                {% assign all_indicators = page.indicators | where: "goal_number", page.goal.number %}
+            <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
+                {% assign archive_items = "" | split: "" %}
+                {% for ind in all_ind %}
+                {% comment %} Если в ID ЕСТЬ буква 'a' — это архив {% endcomment %}
+                {% if ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
+                {% assign archive_items = archive_items | push: ind %}
+                {% endif %}
+                {% endfor %}
 
-                <div role="tabpanel" class="tab-pane edition-tab-pane active" id="current-edition">
-                    {% assign current_list = "" | split: "" %}
-                    {% for ind in all_indicators %}
-                    {% comment %} Если в ID нет буквы 'a' — это текущий {% endcomment %}
-                    {% unless ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
-                    {% assign current_list = current_list | push: ind %}
-                    {% endunless %}
-                    {% endfor %}
-
-                    {% if current_list.size > 0 %}
-                    {% assign grouped_current = current_list | group_by: 'target_number' %}
-                    {% include components/goal/targets-list.html target_groups=grouped_current show_progress=show_progress %}
-                    {% endif %}
-                </div>
-
-                <div role="tabpanel" class="tab-pane edition-tab-pane" id="archive-edition">
-                    {% assign archive_list = "" | split: "" %}
-                    {% for ind in all_indicators %}
-                    {% comment %} Если в ID есть буква 'a' — это архив {% endcomment %}
-                    {% if ind.indicator_id contains "-a" or ind.indicator_id contains ".a" %}
-                    {% assign archive_list = archive_list | push: ind %}
-                    {% endif %}
-                    {% endfor %}
-
-                    {% if archive_list.size > 0 %}
-                    {% assign grouped_archive = archive_list | group_by: 'target_number' %}
-                    {% include components/goal/targets-list.html target_groups=grouped_archive show_progress=show_progress %}
-                    {% else %}
-                    <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
-                    {% endif %}
-                </div>
+                {% if archive_items.size > 0 %}
+                {% assign grouped_archive = archive_items | group_by: 'target_number' %}
+                {% include components/goal/targets-list.html target_groups=grouped_archive show_progress=show_progress %}
+                {% else %}
+                <p style="padding: 20px;">В цій цілі немає показників попередньої редакції.</p>
+                {% endif %}
             </div>
         </div>
 
