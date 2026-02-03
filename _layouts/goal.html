@@ -18,17 +18,21 @@
 {% endif %}
 {% endfor %}
 
+<div style="background: #000; color: #00ffff; padding: 20px; font-family: monospace;">
+    <p>1. Try page.t.global_targets:</p>
+    <pre>{{ page.t.global_targets | inspect }}</pre>
 
-<div style="background: #000; color: #ff00ff; padding: 20px; font-family: monospace;">
-    <h3>🔍 DEBUG: GLOBAL TARGETS OBJECT</h3>
-    <textarea style="width: 100%; height: 200px; background: #222; color: #ff00ff;">
-        {{ site.translations.uk.global_targets | inspect }}
-    </textarea>
+    <hr>
 
-    <h3>🔍 DEBUG: ARCHIVE TARGETS OBJECT</h3>
-    <textarea style="width: 100%; height: 200px; background: #222; color: #ff00ff;">
-        {{ site.translations.uk.archive_targets | inspect }}
-    </textarea>
+    <p>2. Try site.data.translations['uk'].global_targets:</p>
+    <div>{{ site.data.translations.uk.global_targets }}</div>
+    <pre>{{ site.data.translations['uk'].global_targets | inspect }}</pre>
+
+    <hr>
+
+    <p>3. Try site.data.translations['uk'].archive_targets:</p>
+    <div>{{ site.data.translations.uk.archive_targets }}</div>
+    <pre>{{ site.data.translations['uk'].archive_targets | inspect }}</pre>
 </div>
 
 <div id="main-content" class="container" role="main">
