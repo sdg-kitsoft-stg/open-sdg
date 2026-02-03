@@ -18,11 +18,9 @@
 {% endif %}
 {% endfor %}
 
-<h3>page.goal.number</h3>
-<div style="border: 1px solid #00ff00; margin-bottom: 10px; padding: 10px;">{{ page.goal.number | inspect }}</div>
 
-<h3>page-indicators</h3>
-{% for ind in page.indicators %}
+<h3>global_targets</h3>
+{% for ind in site.translations.uk.global_targets %}
 <div style="border: 1px solid #00ff00; margin-bottom: 10px; padding: 10px;">
     <strong>Indicator ID: {{ ind.indicator_id }}</strong>
     <textarea style="width: 100%; height: 200px; background: #222; color: #00ff00; border: none; font-family: monospace;">
@@ -31,8 +29,8 @@
 </div>
 {% endfor %}
 
-<h3>goal_indicators</h3>
-{% for ind in goal_indicators %}
+<h3>archive_targets</h3>
+{% for ind in site.translations.uk.archive_targets %}
 <div style="border: 1px solid #00ff00; margin-bottom: 10px; padding: 10px;">
     <strong>Indicator ID: {{ ind.indicator_id }}</strong>
     <textarea style="width: 100%; height: 200px; background: #222; color: #00ff00; border: none; font-family: monospace;">
