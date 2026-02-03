@@ -78,57 +78,47 @@
             </li>
         </ul>
 
-        <div id="current-edition" class="custom-tab-content active">
-            {% assign current_list = "" | split: "" %}
-            {% for ind in goal_indicators %}
-                {% unless ind.indicator_id contains "a" %}
-                {% assign current_list = current_list | push: ind %}
-                {% endunless %}
-            {% endfor %}
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="current-edition" role="tabpanel">
+                <div style="margin-top: 20px;"></div>
+                {% for ind in goal_indicators %}
+                {% if ind.slug contains "-a" %}{% continue %}{% endif %}
 
-            {% assign grouped_current = current_list | group_by: 'target_number' %}
-
-            {% for group in grouped_current %}
-                {% assign target = group.name | sdg_lookup %}
-                <div class="row goal-target">
-                    <div class="col-auto"><strong>{{ target.number }}</strong></div>
-                    <div class="col">{{ target.name }}</div>
+                {% assign target = ind.target_number | sdg_lookup %}
+                <div class="row align-items-start goal-target">
+                    <div class="col-auto"><h3>{{ target.number }}</h3></div>
+                    <div class="col"><h3>{{ target.name }}</h3></div>
                 </div>
-                {% for indicator in group.items %}
-                    <div class="row goal-indicator" style="margin-left: 20px;">
-                        <div class="col-auto">{{ indicator.number }}</div>
-                        <div class="col"><a href="{{ indicator.url }}">{{ indicator.name }}</a></div>
-                    </div>
+                <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
+                    <div class="col-auto"><h4>{{ ind.number }}</h4></div>
+                    <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
+                </div>
+                <hr class="goal-page-target-rule">
                 {% endfor %}
-                <hr>
-            {% endfor %}
-        </div>
+            </div>
 
-        <div id="archive-edition" class="custom-tab-content">
-            {% assign archive_list = "" | split: "" %}
-            {% for ind in goal_indicators %}
-                {% if ind.indicator_id contains "a" %}
-                    {% assign archive_list = archive_list | push: ind %}
-                {% endif %}
-            {% endfor %}
-
-            {% assign grouped_archive = archive_list | group_by: 'target_number' %}
-
-            {% for group in grouped_archive %}
-                {% assign target_base = group.name | replace: ".", "-" %}
-                {% assign target_key = target_base | append: "-title" %}
-                    <div class="row goal-target">
-                        <div class="col-auto"><strong>{{ group.name }}</strong></div>
-                        <div class="col">{{ site.translations.uk.global_targets[target_key] }}</div>
+            <div class="tab-pane fade" id="archive-edition" role="tabpanel">
+                <div style="margin-top: 20px;"></div>
+                {% for ind in goal_indicators %}
+                {% unless ind.slug contains "-a" %}{% continue %}{% endunless %}
+                <pre style="background: #f4f4f4; border: 1px solid #ccc; padding: 10px; font-size: 12px;">
+                  DEBUG: {{ ind | inspect }}
+                </pre>
+                <div class="row align-items-start goal-target">
+                    <div class="col-auto"><h3>1.1.a</h3></div>
+                    <div class="col">
+                        <h3>
+                            {{ ind.SDG_TARGET | default: "Завдання 1.1.а (Архів)" }}
+                        </h3>
                     </div>
-                {% for indicator in group.items %}
-                    <div class="row goal-indicator" style="margin-left: 20px;">
-                        <div class="col-auto">{{ indicator.number }}</div>
-                        <div class="col"><a href="{{ indicator.url }}">{{ indicator.name }}</a></div>
-                    </div>
+                </div>
+                <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
+                    <div class="col-auto"><h4>{{ ind.number }}</h4></div>
+                    <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
+                </div>
+                <hr class="goal-page-target-rule">
                 {% endfor %}
-                <hr>
-            {% endfor %}
+            </div>
         </div>
 
     </div>
