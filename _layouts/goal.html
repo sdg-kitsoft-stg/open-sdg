@@ -37,8 +37,8 @@
         <hr class="goal-page-column-header-rule">
 
         <ul class="nav nav-tabs edition-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#current-edition" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
+            <li role="presentation">
+                <a href="#current-edition" class="active" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
@@ -61,7 +61,7 @@
             </li>
         </ul>
 
-        <div class="tab-content">
+        <div class="tab-content edition-tabs-content border-0 p-0">
             <div class="tab-pane active" id="current-edition" role="tabpanel">
                 <div style="margin-top: 20px;"></div>
 
@@ -86,6 +86,7 @@
                 <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
                     <div class="col-auto"><h4>{{ ind.number }}</h4></div>
                     <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
+                    {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
                 </div>
                 {% endfor %}
 
@@ -110,10 +111,10 @@
                 {% assign archive_key = ind.target_number | replace: ".", "-" | append: "-a" %}
 
                 <div class="row align-items-start goal-target">
-                    <div class="col-auto"><h3>{{ ind.target_number }}.a</h3></div>
+                    <div class="col-auto"><h3>{{ ind.target_number }}</h3></div>
                     <div class="col">
                         <h3>
-                            {{ site.data.translations['uk'].archive_targets[archive_key] | default: "Архівне завдання" }}
+                            {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне завдання" }}
                         </h3>
                     </div>
                 </div>
@@ -122,8 +123,9 @@
                 {% endif %}
 
                 <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
-                    <div class="col-auto"><h4>{{ ind.number }}</h4></div>
-                    <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
+                    <div class="col-auto"><h4>{{ ind.number | replace: ".a", "" }}</h4></div>
+                    <div class="col"><a href="{{ ind.url }}">{{ ind.name  }}</a></div>
+                    {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
                 </div>
                 {% endfor %}
 
