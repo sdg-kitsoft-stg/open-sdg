@@ -6,7 +6,11 @@ layout: default
 </div>
 <div id="main-content" class="container{% if page.page_type %} {{page.page_type }}{% endif %}" role="main">
     <div>
-        <h1>{{ page.title | t }}</h1>
-        {% include translated-content.html content=content %}
+        <h1 class="mb-48">{{ page.title | t }}</h1>
+        <div class="row mb-48">
+            <div class="col-md-8">
+                {% include translated-content.html content=content %}
+            </div>
+        </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <div class="goal-tiles">
     <div class="row g-2">
         {% for goal in page.goals %}
-        <div class="col-4 col-md-2 col-lg-1 goal-tile">
+        <div class="col-4 col-md-2 goal-tile">
             <a href="{{ goal.url }}">
                 {% assign hover_icon = goal.icon | replace: '.svg', '_hover.svg' %}
 
