@@ -91,21 +91,11 @@ frontpage_cards:
     button_link: ''
     rule_color: green
   - title: Useful resources
-    content: |
-      * [Useful resource](https://example.com)
-      * [Useful resource](https://example.com)
-      * [Useful resource](https://example.com)
-      * [Useful resource](https://example.com)
-      * [Useful resource](https://example.com)
     include: ''
-    button_label: ''
-    button_link: ''
+    button_label: Go to the website
+    button_link: 'https://example.com'
     rule_color: blue
   - title: Publications
-    content: |
-      * [Publication](https://example.com)
-      * [Publication](https://example.com)
-      * [Publication](https://example.com)
     include: ''
     button_label: View more publications
     button_link: 'https://example.com'
