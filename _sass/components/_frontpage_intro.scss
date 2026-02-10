@@ -8,11 +8,11 @@
     }
 
     @media only screen and (min-width: 700px) {
-        padding-right: 300px;
+        padding-right: 350px;
 
         background: url('../img/banner_logo_uk.svg');
         background-position: right top 50%;
-        background-size: 180px;
+        background-size: 275px;
         background-repeat: no-repeat;
     }
 }
@@ -20,9 +20,10 @@
 body.language-en {
   .site-intro {
     @media only screen and (min-width: 700px) {
+      padding-right: 350px;
       background: url('../img/banner_logo_en.svg');
       background-position: right top 50%;
-      background-size: 180px;
+      background-size: 275px;
       background-repeat: no-repeat;
     }
   }

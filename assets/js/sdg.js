@@ -30,3 +30,4 @@
 {%- include assets/js/plugins/leaflet.disaggregationControls.js -%}
 {%- include assets/js/backToTop.js -%}
 {%- include assets/js/mouse-hover.js -%}
+{%- include assets/js/addAttrsForLinks.js -%}
