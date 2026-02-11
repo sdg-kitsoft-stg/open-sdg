@@ -1,3 +1,23 @@
+.indicator-item {
+    .status {
+        padding: 5px 8px 4px 8px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 16px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        &.complete {
+            color: #005A30;
+            background: #CCE2D8;
+            
+            .status-inner {
+                color: #005A30;
+                background: #CCE2D8;
+            }
+        }
+    }
+}
 @mixin status {
     color: $color-dark;
     font-weight: normal;

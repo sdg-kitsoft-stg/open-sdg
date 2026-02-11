@@ -98,7 +98,8 @@
                         {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
                     </div>
 
-                    <button data-bs-toggle="collapse"
+                    <button class="btn btn-toggle-collapse"
+                            data-bs-toggle="collapse"
                             data-bs-target="#collapse-{{ ind.slug }}"
                             aria-expanded="false"
                             aria-controls="collapse-{{ ind.slug }}"
@@ -116,7 +117,7 @@
                             </div>
                             <div id="chart-target-{{ ind.slug }}"></div>
                         </div>
-                        <a href="{{ ind.url }}">
+                        <a class="view-indicator-details" href="{{ ind.url }}">
                             {{ page.t.general.view_indicator_details | default: 'Переглянути деталі індикатора' }}
                         </a>
                     </div>
@@ -162,7 +163,8 @@
                         <div class="col">{{ ind.name }}</div>
                         {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
                     </div>
-                    <button data-bs-toggle="collapse"
+                    <button class="btn btn-toggle-collapse"
+                            data-bs-toggle="collapse"
                             data-bs-target="#collapse-{{ ind.slug }}"
                             aria-expanded="false"
                             aria-controls="collapse-{{ ind.slug }}"
@@ -180,7 +182,7 @@
                             </div>
                             <div id="chart-target-{{ ind.slug }}"></div>
                         </div>
-                        <a href="{{ ind.url }}">
+                        <a class="view-indicator-details" href="{{ ind.url }}">
                             {{ page.t.general.view_indicator_details | default: 'Переглянути деталі індикатора' }}
                         </a>
                     </div>

@@ -60,3 +60,27 @@ body.contrast-high {
         }
     }
 }
+
+.btn-toggle-collapse {
+    color: #1D70B8;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 19px;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+    display: flex;
+    align-items: center;
+
+    &:before {
+        content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMC4yNSIgeT0iMC4yNSIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgcng9IjkuNzUiIHN0cm9rZT0iIzFENzBCOCIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBhdGggZD0iTTEzLjUzNTUgMTEuNDY0NUwxMCA3LjkyODkyTDYuNDY0NDcgMTEuNDY0NSIgc3Ryb2tlPSIjMUQ3MEI4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4K");
+        margin-right: 5px;
+    }
+
+    &.collapsed:before {
+        transform: rotate(180deg);
+    }
+}
