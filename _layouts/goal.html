@@ -42,8 +42,12 @@
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
-                            <span class="tab-title">Редакція розпорядження Кабінету Міністрів України від 29.11.2024 № 1190-р</span>
-                            <span class="badge-edition badge-current">ЧИННА</span>
+                            <span class="tab-title">
+                                {{ page.t.general.tab_title }}
+                            </span>
+                            <span class="badge-edition badge-current">
+                                 {{ page.t.general.badge_current_short | default: 'Чинна' }}
+                            </span>
                         </div>
                     </div>
                 </a>
@@ -53,8 +57,12 @@
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
-                            <span class="tab-title">Редакція розпорядження Кабінету Міністрів України від 21.08.2019 № 686-р</span>
-                            <span class="badge-edition badge-archive">ПОПЕРЕДНЯ</span>
+                            <span class="tab-title">
+                                {{ page.t.general.archive_tab_title }}
+                            </span>
+                            <span class="badge-edition badge-archive">
+                                {{ page.t.general.badge_previous_short | default: 'Попередня' }}
+                            </span>
                         </div>
                     </div>
                 </a>
@@ -83,11 +91,37 @@
                 {% assign last_target = ind.target_number %}
                 {% endif %}
 
-                <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
-                    <div class="col-auto"><h4>{{ ind.number }}</h4></div>
-                    <div class="col"><a href="{{ ind.url }}">{{ ind.name }}</a></div>
-                    {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
+                <div class="indicator-item">
+                    <div class="row align-items-start goal-indicator">
+                        <div class="col-auto"><h4>{{ ind.number }}</h4></div>
+                        <div class="col">{{ ind.name }}</div>
+                        {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
+                    </div>
+
+                    <button data-bs-toggle="collapse"
+                            data-bs-target="#collapse-{{ ind.slug }}"
+                            aria-expanded="false"
+                            aria-controls="collapse-{{ ind.slug }}"
+                            onclick="loadChart('{{ ind.url }}', '{{ ind.slug }}')"
+                            data-text-show="{{ page.t.general.show_chart }}"
+                            data-text-hide="{{ page.t.general.hide_chart }}">
+                        {{ page.t.general.show_chart | default: 'Показати' }}
+                    </button>
+
+                    <div class="collapse" id="collapse-{{ ind.slug }}">
+                        <div class="card card-body mt-2">
+                            <div id="loader-{{ ind.slug }}" class="text-center">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <p>{{ page.t.general.loading_chart | default: 'Завантаження графіка...' }}</p>
+                            </div>
+                            <div id="chart-target-{{ ind.slug }}"></div>
+                        </div>
+                        <a href="{{ ind.url }}">
+                            {{ page.t.general.view_indicator_details | default: 'Переглянути деталі індикатора' }}
+                        </a>
+                    </div>
                 </div>
+
                 {% endfor %}
 
                 <hr class="goal-page-target-rule">
@@ -122,11 +156,36 @@
                 {% assign last_archive_target = ind.target_number %}
                 {% endif %}
 
-                <div class="row align-items-start goal-indicator" style="margin-left: 20px;">
-                    <div class="col-auto"><h4>{{ ind.number | replace: ".a", "" }}</h4></div>
-                    <div class="col"><a href="{{ ind.url }}">{{ ind.name  }}</a></div>
-                    {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
+                <div class="indicator-item">
+                    <div class="row align-items-start goal-indicator">
+                        <div class="col-auto"><h4>{{ ind.number | replace: ".a", "" }}</h4></div>
+                        <div class="col">{{ ind.name }}</div>
+                        {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
+                    </div>
+                    <button data-bs-toggle="collapse"
+                            data-bs-target="#collapse-{{ ind.slug }}"
+                            aria-expanded="false"
+                            aria-controls="collapse-{{ ind.slug }}"
+                            onclick="loadChart('{{ ind.url }}', '{{ ind.slug }}')"
+                            data-text-show="{{ page.t.general.show_chart }}"
+                            data-text-hide="{{ page.t.general.hide_chart }}">
+                        {{ page.t.general.show_chart | default: 'Показати' }}
+                    </button>
+
+                    <div class="collapse" id="collapse-{{ ind.slug }}">
+                        <div class="card card-body mt-2">
+                            <div id="loader-{{ ind.slug }}" class="text-center">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <p>{{ page.t.general.loading_chart | default: 'Завантаження графіка...' }}</p>
+                            </div>
+                            <div id="chart-target-{{ ind.slug }}"></div>
+                        </div>
+                        <a href="{{ ind.url }}">
+                            {{ page.t.general.view_indicator_details | default: 'Переглянути деталі індикатора' }}
+                        </a>
+                    </div>
                 </div>
+
                 {% endfor %}
 
                 {% if has_archive_data %}
@@ -142,3 +201,83 @@
 </div>
 
 {% include footer.html %}
+
+<script>
+  function loadChart(url, slug) {
+    const targetDiv = document.getElementById('chart-target-' + slug);
+    const loader = document.getElementById('loader-' + slug);
+
+    if (targetDiv.innerHTML.trim() !== "") return;
+
+    const iframe = document.createElement('iframe');
+    iframe.src = url;
+    iframe.width = "100%";
+    iframe.height = "500px";
+    iframe.style.border = "none";
+    iframe.style.visibility = "hidden";
+
+    iframe.onload = function() {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const chart = iframeDoc.getElementById('selectionsChart');
+
+        if (chart) {
+          Array.from(iframeDoc.body.children).forEach(child => {
+            child.style.display = 'none';
+          });
+
+          let current = chart;
+          while (current && current !== iframeDoc.body) {
+            current.style.display = 'block';
+            current = current.parentElement;
+          }
+
+          const style = iframeDoc.createElement('style');
+          style.textContent = `
+            .plot-container { padding: 0 !important; }
+            #chart-canvas { margin-top: 0 !important; }
+            #main-content { margin: 0 !important; }
+            #main-content #indicatorData { margin-top: 0 !important; }
+            #legend { margin-bottom: 0 !important; }
+            #selectionsChart figure { margin-bottom: 0 !important; }
+            .tab-content.data-view { border: none !important; padding: 0 !important; }
+        `;
+          iframeDoc.head.appendChild(style);
+
+          const toHideInside = iframeDoc.querySelectorAll('#chart-heading, #selectionChartFooter, #chartSelectionDownload, .breadcrumb, header, footer, .nav-tabs, #indicator-sidebar, #metadataTabs, a[href="#top"]');
+          toHideInside.forEach(el => el.style.display = 'none');
+
+          iframeDoc.body.style.overflow = 'hidden';
+          loader.style.display = 'none';
+          iframe.style.visibility = "visible";
+        } else {
+          loader.style.display = 'none';
+          targetDiv.innerHTML = '';
+        }
+
+      } catch (e) {
+        console.warn("CORS error: iframe", e);
+        loader.innerHTML = "Помилка доступу до графіка";
+      }
+    };
+
+    targetDiv.appendChild(iframe);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const collapses = document.querySelectorAll('.collapse');
+
+    collapses.forEach(collapseEl => {
+      const button = document.querySelector(`[data-bs-target="#${collapseEl.id}"]`);
+      if (!button) return;
+
+      collapseEl.addEventListener('show.bs.collapse', function () {
+        button.textContent = button.getAttribute('data-text-hide');
+      });
+
+      collapseEl.addEventListener('hide.bs.collapse', function () {
+        button.textContent = button.getAttribute('data-text-show');
+      });
+    });
+  });
+</script>
