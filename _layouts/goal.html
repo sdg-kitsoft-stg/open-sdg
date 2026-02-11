@@ -18,7 +18,7 @@
 {% endif %}
 {% endfor %}
 
-<div id="main-content" class="container" role="main">
+<div id="main-content" class="container indicators-container" role="main">
 
     {% include components/goal/goal-content.html content=content %}
 
@@ -84,21 +84,26 @@
 
                 {% assign target = ind.target_number | sdg_lookup %}
                 <div class="row align-items-start goal-target">
-                    <div class="col-auto"><h3>{{ target.number }}</h3></div>
-                    <div class="col"><h3>{{ target.name }}</h3></div>
+                    <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ target.number }}</h3></div>
+                    <div class="col">{{ target.name }}</div>
                 </div>
-
+                <hr class="goal-page-target-rule">
                 {% assign last_target = ind.target_number %}
                 {% endif %}
 
                 <div class="indicator-item">
                     <div class="row align-items-start goal-indicator">
-                        <div class="col-auto"><h4>{{ ind.number }}</h4></div>
+                        <div class="col-auto">
+                            <h4>
+                                <span class="visually-hidden">{{ page.t.general.indicator }}</span>
+                                {{ ind.number }}
+                            </h4>
+                        </div>
                         <div class="col">{{ ind.name }}</div>
                         {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
                     </div>
 
-                    <button class="btn btn-toggle-collapse"
+                    <button class="btn btn-toggle-collapse collapsed"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapse-{{ ind.slug }}"
                             aria-expanded="false"
@@ -122,7 +127,7 @@
                         </a>
                     </div>
                 </div>
-
+                <hr class="goal-page-target-rule">
                 {% endfor %}
 
                 <hr class="goal-page-target-rule">
@@ -146,24 +151,27 @@
                 {% assign archive_key = ind.target_number | replace: ".", "-" | append: "-a" %}
 
                 <div class="row align-items-start goal-target">
-                    <div class="col-auto"><h3>{{ ind.target_number }}</h3></div>
+                    <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ ind.target_number }}</h3></div>
                     <div class="col">
-                        <h3>
-                            {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне завдання" }}
-                        </h3>
+                        {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне завдання" }}
                     </div>
                 </div>
-
+                <hr class="goal-page-target-rule">
                 {% assign last_archive_target = ind.target_number %}
                 {% endif %}
 
                 <div class="indicator-item">
                     <div class="row align-items-start goal-indicator">
-                        <div class="col-auto"><h4>{{ ind.number | replace: ".a", "" }}</h4></div>
+                        <div class="col-auto">
+                            <h4>
+                                <span class="visually-hidden">{{ page.t.general.indicator }}</span>
+                                {{ ind.number | replace: ".a", "" }}
+                            </h4>
+                        </div>
                         <div class="col">{{ ind.name }}</div>
                         {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
                     </div>
-                    <button class="btn btn-toggle-collapse"
+                    <button class="btn btn-toggle-collapse collapsed"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapse-{{ ind.slug }}"
                             aria-expanded="false"
@@ -187,7 +195,7 @@
                         </a>
                     </div>
                 </div>
-
+                <hr class="goal-page-target-rule">
                 {% endfor %}
 
                 {% if has_archive_data %}
