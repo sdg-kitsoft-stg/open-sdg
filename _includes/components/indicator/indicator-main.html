@@ -43,6 +43,12 @@
   {% else %}
   <div id="indicator-main" class="indicator-main col-md-12">
   {% endif %}
+  {% if page.indicator.footer_reference %}
+      <div class="indicator-footer-reference" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+          <h5 style="margin-top: 0;">{{ page.indicator.reference_title | default: 'Довідково' }}</h5>
+          <p style="margin-bottom: 0;">{{ page.indicator.footer_reference }}</p>
+      </div>
+  {% endif %}
   {% include components/indicator/metadata-section.html %}
   </div>
 </div>
