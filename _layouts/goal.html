@@ -2,7 +2,19 @@
 {% include header.html %}
 
 <div class="container">
-    {% include components/goal/breadcrumbs.html %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
+            <li class="breadcrumb-item">
+                <a href="{{ site.baseurl }}/{{ page.language }}/">{{ page.t.general.home | default: 'Головна' }}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ site.baseurl }}/{{ page.language }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ page.goal.name }}
+            </li>
+        </ol>
+    </nav>
     {% if site.create_goals.previous_next_links %}
     {% include components/previous-next-links.html previous_label=page.t.goal.previous next_label=page.t.goal.next %}
     {% endif %}
@@ -80,14 +92,14 @@
 
                 {% if ind.target_number != last_target %}
 
-                {% if last_target != "" %}<hr class="goal-page-target-rule">{% endif %}
+                {% if last_target != "" %}{% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}{% endif %}
 
                 {% assign target = ind.target_number | sdg_lookup %}
                 <div class="row align-items-start goal-target">
                     <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ target.number }}</h3></div>
                     <div class="col">{{ target.name }}</div>
                 </div>
-                <hr class="goal-page-target-rule">
+                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
                 {% assign last_target = ind.target_number %}
                 {% endif %}
 
@@ -127,10 +139,8 @@
                         </a>
                     </div>
                 </div>
-                <hr class="goal-page-target-rule">
+                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
                 {% endfor %}
-
-                <hr class="goal-page-target-rule">
             </div>
 
             <div class="tab-pane" id="archive-edition" role="tabpanel">
@@ -146,7 +156,7 @@
 
                 {% if ind.target_number != last_archive_target %}
 
-                {% if last_archive_target != "" %}<hr class="goal-page-target-rule">{% endif %}
+                {% if last_archive_target != "" %}{% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}{% endif %}
 
                 {% assign archive_key = ind.target_number | replace: ".", "-" | append: "-a" %}
 
@@ -156,7 +166,9 @@
                         {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне завдання" }}
                     </div>
                 </div>
-                <hr class="goal-page-target-rule">
+
+                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
+
                 {% assign last_archive_target = ind.target_number %}
                 {% endif %}
 
@@ -195,14 +207,8 @@
                         </a>
                     </div>
                 </div>
-                <hr class="goal-page-target-rule">
+                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
                 {% endfor %}
-
-                {% if has_archive_data %}
-                <hr class="goal-page-target-rule">
-                {% else %}
-                <div class="container"><p>Архівні дані для цієї цілі відсутні.</p></div>
-                {% endif %}
             </div>
         </div>
 
