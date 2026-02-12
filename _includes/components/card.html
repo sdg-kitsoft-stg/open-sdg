@@ -18,7 +18,7 @@
     {% endif %}
 
     {% if include.card.button_label and include.card.button_label != '' %}
-    {% assign button_href = include.card.button_link %}
+    {% assign button_href = include.card.button_link | t %}
     {% assign href_start = button_href | slice: 0, 4 %}
     {% if href_start != 'http' %}
       {%- assign href_first = button_href | slice: 0 %}
