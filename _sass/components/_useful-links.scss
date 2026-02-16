@@ -78,6 +78,7 @@ ul > li > p {
 
 #main-content a[href="#top"] {
   margin-top: 40px;
+  font-weight: 700;
 }
 
 #menu {
@@ -130,5 +131,9 @@ ul > li > p {
 .contact-us {
   h1 {
     margin-bottom: 48px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 24px;
+    }
   }
 }
