@@ -23,5 +23,3 @@ page_type: useful-links
 [Report of the 63-rd plenary meeting of the Conference of European Statisticians](https://www.unece.org/fileadmin/DAM/stats/documents/ece/ces/2015/CES_89_Add.1-E.pdf)
 
 [Ukraine SDG profile on the UN Statistics Division website](https://country-profiles.unstatshub.org/ukr#)
-
-[Back to top](#top)
