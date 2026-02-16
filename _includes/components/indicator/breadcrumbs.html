@@ -6,17 +6,20 @@
         {%- assign item_path = item.path -%}
         {%- assign item_path_first = item_path | slice: 0 %}
         {%- if item_path_first == '/' -%}
-            {%- assign item_path = item_path | slice: 1, item_path.size -%}
+        {%- assign item_path = item_path | slice: 1, item_path.size -%}
         {%- endif -%}
         <li class="breadcrumb-item">
             <a href="{{ page.baseurl }}{{ item_path }}">{{ item.label | t }}</a>
         </li>
+        <li class="breadcrumb-item">
+            <a href="{{ site.baseurl }}/{{ page.language }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
+        </li>
         {% endfor %}
         <li class="breadcrumb-item">
             <a href="{{ page.goal.url }}"
-               title="{{ page.t.general.goal }} {{ page.goal.number }} - {{ page.goal.short | escape }}"
-               aria-label="{{ page.t.general.goal }} {{ goal.number }} - {{ goal.short | escape }}">
-               {{ page.t.general.goal }} {{ page.goal.number }}
+               title="{{ page.goal.name }} - {{ page.goal.short | escape }}"
+               aria-label="{{ page.goal.name }} - {{ goal.short | escape }}">
+                {{ page.goal.name }}
             </a>
         </li>
         {% else %}
@@ -24,13 +27,16 @@
             <a href="{{ page.baseurl }}">{{ page.t.general.home }}</a>
         </li>
         <li class="breadcrumb-item">
+            <a href="{{ site.baseurl }}/{{ page.language }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
+        </li>
+        <li class="breadcrumb-item">
             <a href="{{ page.goal.url }}"
-               title="{{ page.t.general.goal }} {{ page.goal.number }} - {{ page.goal.short | escape }}"
-               aria-label="{{ page.t.general.goal }} {{ goal.number }} - {{ goal.short | escape }}">
-               {{ page.t.general.goal }} {{ page.goal.number }}
+               title="  {{ page.goal.name }}- {{ page.goal.short | escape }}"
+               aria-label="  {{ page.goal.name }} - {{ goal.short | escape }}">
+                {{ page.goal.name }}
             </a>
         </li>
-        <li class="breadcrumb-item active">{{ page.t.general.indicator }} {{ page.indicator.number }}</li>
+        <li class="breadcrumb-item active">{{ page.t.general.indicator }} {{ page.indicator.number | replace: ".a", ""  }}</li>
         {% endif %}
     </ol>
 </nav>

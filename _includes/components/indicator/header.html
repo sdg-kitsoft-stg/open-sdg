@@ -15,10 +15,21 @@
             <div class="col-12 indicator-details">
             {% endunless %}
                 <div>
-                    <h1 class="goal-banner-title">
+                    <h1 class="goal-banner-title d-flex align-items-center">
                         {% unless page.indicator.standalone %}
-                        {{ page.t.general.indicator }} {{ page.indicator.number }}
+                        {{ page.t.general.indicator }} {{ page.indicator.number | replace: ".a", "" }}
                         {% endunless %}
+
+                        {% comment %} Проверяем наличие "-a" в номере индикатора {% endcomment %}
+                        {% if page.indicator.number contains '-a' %}
+                        <span class="badge-edition badge-archive mx-3">
+                            {{ page.t.custom.status_archive | default: 'Попередня редакція' }}
+                        </span>
+                        {% else %}
+                        <span class="badge-edition badge-current mx-3">
+                            {{ page.t.custom.status_active | default: 'Чинна редакція' }}
+                        </span>
+                        {% endif %}
                     </h1>
                     <span class="lead-copy">{{ page.indicator.name }}</span>
                 </div>

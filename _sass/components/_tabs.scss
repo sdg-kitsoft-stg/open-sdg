@@ -128,32 +128,32 @@
         margin-bottom: 12px;
     }
 
-    .badge-edition {
-        display: inline-block;
-        width: fit-content;
-        padding: 5px 15px;
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 14px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-    }
-
-    .badge-current {
-        background-color: #1D70B8;
-        color: #ffffff;
-    }
-
-    .badge-archive {
-        background-color: #DBD5E9;
-        color: #3D2375;
-    }
-
     .edition-tabs > li > a:hover,
     .edition-tabs > li > a:focus {
         background: #e8e8e8 !important;
         border-color: #00aeef !important;
     }
+}
+
+.badge-edition {
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 15px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.badge-current {
+    background-color: #1D70B8;
+    color: #ffffff;
+}
+
+.badge-archive {
+    background-color: #DBD5E9;
+    color: #3D2375;
 }
 
 body.contrast-high {
