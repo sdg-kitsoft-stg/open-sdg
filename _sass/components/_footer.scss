@@ -6,6 +6,10 @@ footer {
     background: #F3F2F1;
     padding: 24px 80px;
 
+    @media (max-width: 768px) {
+      padding: 24px 0;
+    }
+
     #footerLinks > ul {
         padding-left: 0;
         > li {
