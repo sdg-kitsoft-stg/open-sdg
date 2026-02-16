@@ -118,10 +118,9 @@ ul > li > p {
   line-height: 21px;
 }
 
-@media (max-width: 768px) {
-  .zip-download-container a.btn {
-    margin-left: 0;
-  }
+.zip-download-container a.btn,
+.zip-download-container #zip-download-info {
+  margin-left: 0;
 }
 
 #main-content p {
