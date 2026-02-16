@@ -9,12 +9,6 @@
 
     position: relative;
 
-    &:last-child {
-      &::before {
-        content: none;
-      }
-    }
-
     &::before {
       content: '';
       position: absolute;
@@ -132,4 +126,9 @@ ul > li > p {
 #main-content p {
   font-size: 16px;
   line-height: 24px;
+}
+.contact-us {
+  h1 {
+    margin-bottom: 48px;
+  }
 }
