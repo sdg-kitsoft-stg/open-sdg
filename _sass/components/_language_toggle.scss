@@ -1,7 +1,10 @@
 .language-toggle-container {
     .dropdown-toggle, .dropdown-item {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 20px;
+
       color: $menu-link-color;
-      font-size: $menu-link-fontSize;
     }
 }
 .language-toggle-globe-links {
