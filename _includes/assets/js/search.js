@@ -149,6 +149,11 @@ var indicatorSearch = function () {
             resultItems.push(doc);
         });
 
+        console.log({
+            resultItems,
+            searchTerms
+        });
+
         $('.loader').hide();
 
         var template = _.template(
