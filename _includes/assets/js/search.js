@@ -206,7 +206,8 @@ var indicatorSearch = function () {
             if (!originalDoc) return;
 
             var doc = Object.assign({}, originalDoc);
-
+            doc.url = normalizeUrl(doc.url);
+            
             if (doc.content && doc.content.length > 400) {
                 doc.content = doc.content.substring(0, 400) + '...';
             }
@@ -249,6 +250,15 @@ var indicatorSearch = function () {
 
         $('.header-search-bar').hide();
     }
+    function normalizeUrl(url) {
+        if (!url) return url;
+
+        url = url.replace('/uk/uk/', '/uk/');
+        url = url.replace(/\/{2,}/g, '/');
+
+        return url;
+    }
+
 };
 
 $(function () {
