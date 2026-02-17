@@ -2,7 +2,7 @@
 {% include header.html %}
 
 <div class="container">
-    <nav aria-label="breadcrumb">
+    <nav aria-label="{{ page.t.general.breadcrumbs }}">
         <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
             <li class="breadcrumb-item">
                 <a href="{{ site.baseurl }}/{{ page.language }}/">{{ page.t.general.home | default: 'Головна' }}</a>
