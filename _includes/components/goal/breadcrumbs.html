@@ -1,5 +1,5 @@
 <nav>
-    <ol aria-label="breadcrumb" class="breadcrumb" style="--bs-breadcrumb-divider: '&rsaquo;';">
+    <ol aria-label="{{ page.t.general.breadcrumbs }}" class="breadcrumb" style="--bs-breadcrumb-divider: '&rsaquo;';">
         {% if site.breadcrumbs.goal and site.breadcrumbs.goal.size > 0 %}
         {% for item in site.breadcrumbs.goal %}
         {%- assign item_path = item.path -%}
