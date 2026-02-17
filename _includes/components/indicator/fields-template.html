@@ -41,7 +41,7 @@
             <%
             var fromField = _.find(edges, { To: fieldItem.field }).From;
             var translatedFromField = translations.t(fromField);
-            var hintText = "{{ page.t.indicator.variable_hint }}".replace('%field', translatedFromField);
+            var hintText = '{{ page.t.indicator.variable_hint }}'.replace('%field', translatedFromField);
             %>
             <%= hintText %>
         </div>
