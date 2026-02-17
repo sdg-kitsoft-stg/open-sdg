@@ -20,7 +20,7 @@
                         {{ page.t.general.indicator }} {{ page.indicator.number | replace: ".a", "" }}
                         {% endunless %}
 
-                        {% if page.indicator.number contains '-a' %}
+                        {% if page.indicator.number contains '.a' %}
                         <span class="badge-edition badge-archive mx-3">
                             {{ page.t.general.badge_previous | default: 'Попередня редакція' }}
                         </span>
