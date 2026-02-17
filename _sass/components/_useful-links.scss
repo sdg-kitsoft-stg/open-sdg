@@ -50,8 +50,8 @@ h3 {
   line-height: 32px;
 }
 
-.mb-8 {
-  margin-bottom: 8px;
+.mb-16 {
+  margin-bottom: 16px;
 }
 
 .mb-48 {
@@ -78,6 +78,7 @@ ul > li > p {
 
 #main-content a[href="#top"] {
   margin-top: 40px;
+  font-weight: 700;
 }
 
 #menu {
@@ -86,7 +87,11 @@ ul > li > p {
 
 .navbar-container {
   margin-top: 31px;
-  margin-bottom: 40px;
+  margin-bottom: 23px;
+
+  @media (max-width: 768px) {
+    margin-top: 0;
+  }
 }
 
 .lead-copy {
@@ -117,10 +122,9 @@ ul > li > p {
   line-height: 21px;
 }
 
-@media (max-width: 768px) {
-  .zip-download-container a.btn {
-    margin-left: 0;
-  }
+.zip-download-container a.btn,
+.zip-download-container #zip-download-info {
+  margin-left: 0;
 }
 
 #main-content p {
@@ -130,5 +134,9 @@ ul > li > p {
 .contact-us {
   h1 {
     margin-bottom: 48px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 24px;
+    }
   }
 }

@@ -5,14 +5,26 @@
         {% endunless %}
         {{ page.indicator.name | escape }} - {{ site.title | t | escape }}
     </title>
+    <meta property="og:title" content="{% unless page.indicator.standalone %}
+        {{ page.t.general.indicator | escape }} {{ page.indicator.number }} -
+        {% endunless %}
+        {{ page.indicator.name | escape }} - {{ site.title | t | escape }}"/>
 {% elsif page.goal %}
     {% if page.goal_heading and page.goal_heading != '' %}
     <title>{{ page.goal_heading | t | escape }} - {{ site.title | t | escape }}</title>
+    <meta property="og:title" content="{{ page.goal_heading | t | escape }} - {{ site.title | t | escape }}"/>
     {% else %}
     <title>{{ page.t.general.goal | escape }} {{ page.goal.number }} - {{ page.goal.short | escape }} - {{ site.title | t | escape }}</title>
+    <meta property="og:title" content="{{ page.t.general.goal | escape }} {{ page.goal.number }} - {{ page.goal.short | escape }} - {{ site.title | t | escape }}"/>
     {% endif %}
 {% elsif page.title and page.title != '' %}
     <title>{{ page.title | t | escape }} - {{ site.title | t | escape }}</title>
+    <meta property="og:title" content="{{ page.title | t | escape }} - {{ site.title | t | escape }}"/>
 {% else %}
     <title>{{ site.title | t | escape }}</title>
+    <meta property="og:title" content="{{ site.title | t | escape }}"/>
 {% endif %}
+
+<meta property="og:url" content="/"/>
+<meta name="description" content="">
+<meta property="og:description" content="">

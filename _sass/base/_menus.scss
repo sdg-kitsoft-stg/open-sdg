@@ -1,7 +1,5 @@
 .navbar {
     .navbar-nav {
-        background-color: #F3F2F1;
-
         > .nav-item {
             padding: 0 16px;
             > .nav-link {
@@ -12,10 +10,6 @@
                 line-height: 20px;
                 padding: 10px 0;
                 text-decoration: none;
-                border-bottom: 3px solid transparent;
-                &:hover {
-                    border-bottom: 3px solid $color-dark;
-                }
             }
 
             &.active > .nav-link {
@@ -33,6 +27,8 @@
             font-size: $menu-link-fontSize;
         }
     }
+
+  padding-top: 32px;
 }
 body.contrast-high {
     .navbar {

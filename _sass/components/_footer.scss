@@ -4,10 +4,15 @@ footer {
     border-top: 1px solid #B1B4B6;
 
     background: #F3F2F1;
-    padding: 24px 80px;
+    padding: 24px 0;
+
+    @media (max-width: 768px) {
+      padding: 24px 0;
+    }
 
     #footerLinks > ul {
         padding-left: 0;
+        margin-bottom: 0;
         > li {
             display: inline-block;
             margin: 3px 18px 3px 0;
