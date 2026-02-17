@@ -17,7 +17,6 @@ var indicatorSearch = function () {
         };
 
         var reg = /[&<>"'/`]/ig;
-
         return stripped.replace(reg, function (match) {
             return map[match];
         });
@@ -31,54 +30,122 @@ var indicatorSearch = function () {
         );
     }
 
+    function norm(s) {
+        return (s || '').toString().toLowerCase().trim();
+    }
+
+    function includesTerm(haystack, needle) {
+        haystack = norm(haystack);
+        needle = norm(needle);
+        return needle.length > 0 && haystack.indexOf(needle) !== -1;
+    }
+
+    function escapeRegExp(str) {
+        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/gi, "\\$&");
+    }
+
+    // Lunr pipeline helper (keeps unstemmed token)
+    function storeUnstemmed(builder) {
+        function pipelineFunction(token) {
+            token.metadata['unstemmed'] = token.toString();
+            return token;
+        }
+        lunr.Pipeline.registerFunction(pipelineFunction, 'storeUnstemmed');
+        var firstPipelineFunction = builder.pipeline._stack[0];
+        builder.pipeline.before(firstPipelineFunction, pipelineFunction);
+        builder.metadataWhitelist.push('unstemmed');
+    }
+
     var urlParams = new URLSearchParams(window.location.search);
     var searchTerms = sanitizeInput(urlParams.get('q'));
 
     if (searchTerms !== null) {
-
         document.getElementById('search-bar-on-page').value = searchTerms;
         document.getElementById('search-term').innerHTML = searchTerms;
 
         var searchTermsToUse = searchTerms;
 
+        // allow indicator search by dash (best guess)
         if (searchTerms.split('-').length === 3 && searchTerms.length < 15) {
             searchTermsToUse = searchTerms.replace(/-/g, '.');
         }
 
-        var results = [];
-        var alternativeSearchTerms = [];
         var noTermsProvided = (searchTerms === '');
 
-        var useLunr = typeof window.lunr !== 'undefined';
+        var lang = (window.opensdg && opensdg.language) ? opensdg.language : 'en';
 
+        // ✅ Use Lunr only if available + language supported
+        var useLunr = (typeof window.lunr !== 'undefined');
+        if (useLunr && lang !== 'en') {
+            // if no language plugin, disable lunr (fallback will handle)
+            if (typeof lunr[lang] === 'undefined') {
+                useLunr = false;
+            }
+        }
+
+        // Special-case indicator ids: do not need Lunr
+        var searchWords = searchTermsToUse.split(' ');
+        var indicatorIdParts = searchWords[0].split('.');
+        var isIndicatorSearch = (searchWords.length === 1 && indicatorIdParts.length >= 3);
+        if (isIndicatorSearch) {
+            useLunr = false;
+        }
+
+        var results = [];
+        var alternativeSearchTerms = [];
+
+        // -----------------------------
+        // LUNR SEARCH (if supported)
+        // -----------------------------
         if (useLunr && !noTermsProvided) {
+            // English tweak for commas/dashes
+            if (lang === 'en') {
+                lunr.tokenizer.separator = /[\s\-,]+/;
+            }
 
             var searchIndex = lunr(function () {
+                if (lang !== 'en' && lunr[lang]) {
+                    this.use(lunr[lang]);
+                }
 
                 this.use(storeUnstemmed);
                 this.ref('url');
 
+                // We want "strict-ish" results: title/id are primary
                 this.field('title', { boost: 20 });
                 this.field('id', { boost: 50 });
 
+                // Index documents:
+                // Goals/Indicators: title + id + (optionally content)
+                // Pages: title only (to reduce noise)
                 for (var ref in opensdg.searchItems) {
-
                     var item = opensdg.searchItems[ref];
+                    if (!item || !item.url) continue;
 
-                    if (!item) continue;
-
-                    // Goals & Indicators: index fully
                     if (item.type === 'Goals' || item.type === 'Indicators') {
-                        this.add(item);
-                    }
-
-                    // Pages: index only title
-                    if (item.type === 'Pages') {
                         this.add({
                             url: item.url,
-                            title: item.title,
+                            title: item.title || '',
+                            id: item.id || '',
+                            // keep content out to stay strict, or include if you want broader matching:
+                            content: item.content || '',
+                            type: item.type
+                        });
+                    } else if (item.type === 'Pages') {
+                        this.add({
+                            url: item.url,
+                            title: item.title || '',
+                            id: item.id || '',
                             content: '',
-                            id: item.id,
+                            type: item.type
+                        });
+                    } else {
+                        // default: title-only
+                        this.add({
+                            url: item.url,
+                            title: item.title || '',
+                            id: item.id || '',
+                            content: '',
                             type: item.type
                         });
                     }
@@ -87,40 +154,54 @@ var indicatorSearch = function () {
 
             results = searchIndex.search(searchTermsToUse);
 
-            // Strict filtering — remove weak matches
-            results = results.filter(function (result) {
-
-                var item = opensdg.searchItems[result.ref];
-                if (!item) return false;
-
-                var term = searchTermsToUse.toLowerCase();
-
-                // match in title
-                if (item.title && item.title.toLowerCase().includes(term)) {
-                    return true;
-                }
-
-                // match by id for goals/indicators
-                if ((item.type === 'Goals' || item.type === 'Indicators') && item.id) {
-                    if (item.id.toLowerCase().includes(term)) {
-                        return true;
-                    }
-                }
-
-                return false;
-            });
-
+            // ✅ If Lunr returns nothing (common on unsupported/weak languages),
+            // we will fallback to basic search below.
         }
 
-        // remove 404
-        results = results.filter(function (result) {
-            return !isBadUrl(result.ref);
-        });
+        // -----------------------------
+        // BASIC FALLBACK SEARCH
+        // (Runs when Lunr is off OR returns 0)
+        // -----------------------------
+        if (!noTermsProvided && (!useLunr || results.length === 0)) {
+            var term = searchTermsToUse;
 
+            // Strict relevance:
+            // - Goals/Indicators: title OR id contains term
+            // - Pages: title contains term (and optionally content contains term — uncomment if needed)
+            var matched = [];
+            for (var key in opensdg.searchItems) {
+                var item = opensdg.searchItems[key];
+                if (!item || !item.url) continue;
+
+                if (isBadUrl(item.url)) continue;
+
+                var ok = false;
+
+                if (item.type === 'Goals' || item.type === 'Indicators') {
+                    ok = includesTerm(item.title, term) || includesTerm(item.id, term);
+                    // If you want allow content matching for these types, add:
+                    // ok = ok || includesTerm(item.content, term);
+                } else if (item.type === 'Pages') {
+                    ok = includesTerm(item.title, term);
+                    // If you want Pages to match by content too (less strict, more results), add:
+                    // ok = ok || includesTerm(item.content, term);
+                } else {
+                    ok = includesTerm(item.title, term);
+                }
+
+                if (ok) matched.push(item);
+            }
+
+            // mimic Lunr results format
+            results = matched.map(function (item) { return { ref: item.url }; });
+        }
+
+        // remove 404 / page-not-found from Lunr results too
+        results = results.filter(function (r) { return !isBadUrl(r.ref); });
+
+        // Build resultItems without mutating opensdg.searchItems
         var resultItems = [];
-
         results.forEach(function (result) {
-
             var originalDoc = opensdg.searchItems[result.ref];
             if (!originalDoc) return;
 
@@ -150,48 +231,30 @@ var indicatorSearch = function () {
         });
 
         console.log({
-            resultItems,
-            searchTerms
+            searchTerms: searchTerms,
+            searchTermsToUse: searchTermsToUse,
+            lang: lang,
+            useLunr: useLunr,
+            resultItems: resultItems
         });
 
         $('.loader').hide();
 
-        var template = _.template(
-            $("script.results-template").html()
-        );
-
+        var template = _.template($("script.results-template").html());
         $('div.results').html(template({
             searchResults: resultItems,
             resultsCount: resultItems.length,
-            didYouMean: false,
+            didYouMean: (alternativeSearchTerms.length > 0) ? alternativeSearchTerms : false,
         }));
 
         $('.header-search-bar').hide();
     }
-
-    function escapeRegExp(str) {
-        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/gi, "\\$&");
-    }
-
-    function storeUnstemmed(builder) {
-        function pipelineFunction(token) {
-            token.metadata['unstemmed'] = token.toString();
-            return token;
-        }
-
-        lunr.Pipeline.registerFunction(pipelineFunction, 'storeUnstemmed');
-        var firstPipelineFunction = builder.pipeline._stack[0];
-        builder.pipeline.before(firstPipelineFunction, pipelineFunction);
-        builder.metadataWhitelist.push('unstemmed');
-    }
 };
 
 $(function () {
-
     var $el = $('#indicator_search');
 
     $('#jump-to-search').show();
-
     $('#jump-to-search a').click(function () {
         if ($el.is(':hidden')) {
             $('.navbar span[data-target="search"]').click();
