@@ -207,7 +207,7 @@ var indicatorSearch = function () {
 
             var doc = Object.assign({}, originalDoc);
             doc.url = normalizeUrl(doc.url);
-            
+
             if (doc.content && doc.content.length > 400) {
                 doc.content = doc.content.substring(0, 400) + '...';
             }
