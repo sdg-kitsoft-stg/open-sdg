@@ -87,7 +87,11 @@ ul > li > p {
 
 .navbar-container {
   margin-top: 31px;
-  margin-bottom: 40px;
+  margin-bottom: 23px;
+
+  @media (max-width: 768px) {
+    margin-top: 0;
+  }
 }
 
 .lead-copy {
