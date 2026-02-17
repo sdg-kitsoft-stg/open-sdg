@@ -1,5 +1,11 @@
 .navbar {
     .navbar-nav {
+        background-color: #F3F2F1;
+
+        @media (max-width: 768px) {
+          background-color: transparent;
+        }
+
         > .nav-item {
             padding: 0 16px;
             > .nav-link {
