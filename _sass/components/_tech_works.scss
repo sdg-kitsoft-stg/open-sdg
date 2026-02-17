@@ -28,6 +28,11 @@
     font-weight: 400;
     line-height: 214px;
     margin-bottom: 32px;
+
+    @media only screen and (max-width: 680px) {
+      font-size: clamp(64px, 18vw, 214px);
+      line-height: 1;
+    }
   }
 
   &-title {
