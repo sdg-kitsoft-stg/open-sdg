@@ -15,4 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
             img.src = normal;
         });
     });
+
+    if (window.OPEN_SDG_VERSION) {
+        const siteVersion = document.querySelector('.site_version');
+
+        siteVersion.textContent = siteVersion.textContent + ' (' + window.OPEN_SDG_VERSION + ')';
+    }
 });
