@@ -16,6 +16,11 @@ cache:
 cache.bust:
 	rm -fr make-cache
 
+generate.version.js:
+	@echo "Generating Open SDG version..."
+	@VERSION=$$(grep 'spec.version' open-sdg.gemspec | sed 's/.*"\(.*\)".*/\1/'); \
+	echo "window.OPEN_SDG_VERSION = \"$$VERSION\";" > _includes/assets/js/open-sdg-version.js
+
 build: clean cache
 	mkdir site-starter
 	mkdir data-starter
@@ -35,6 +40,7 @@ build: clean cache
 	mv data-starter/_build site-starter
 	# Build the Jekyll site.
 	cd site-starter && bundle install
+	$(MAKE) generate.version.js
 	cd site-starter && bundle exec jekyll build
 
 build.docs:
