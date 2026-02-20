@@ -3,6 +3,7 @@
         {{ page.t.general.indicator }} {{ page.indicator.slug}} - {{ page.indicator.name | escape }} - {{ site.title | t | escape }}
     </title>
     <meta property="og:title" content="{{ page.t.general.indicator }} {{ page.indicator.slug}} - {{ page.indicator.name | escape }} - {{ site.title | t | escape }}"/>
+    <meta property="og:page.indicator" content="{{ page.indicator }}"/>
 {% elsif page.goal and page.goal != 'none' %}
     {% if page.goal_heading and page.goal_heading != '' %}
     <title>{{ page.name | t | escape }} - {{ site.title | t | escape }}</title>
@@ -14,9 +15,11 @@
 {% elsif page.title and page.title != '' %}
     <title>{{ page.title | t | escape }} - {{ site.title | t | escape }}</title>
     <meta property="og:title" content="{{ page.title | t | escape }} - {{ site.title | t | escape }}"/>
+    <meta property="og:page.title and page.title != ''" content="{{ page.title | t | escape }} - {{ site.title | t | escape }}"/>
 {% else %}
     <title>{{ site.title | t | escape }}</title>
     <meta property="og:title" content="{{ site.title | t | escape }}"/>
+    <meta property="og:else" content="{{ site.title | t | escape }}"/>
 {% endif %}
 
 <meta property="og:url" content="/"/>
