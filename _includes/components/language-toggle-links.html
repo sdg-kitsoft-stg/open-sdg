@@ -11,9 +11,9 @@
         </li>
         {%- elsif site.languages.size > 2 -%}
         <li class="language-option-{{ language }} list-inline-item">
-            <span class="language-toggle-active-language">
+            <div class="language-toggle-active-language">
                 {{ page.t.languages[language] }}
-            </span>
+            </div>
         </li>
         {%- endif -%}
         {%- endfor -%}
