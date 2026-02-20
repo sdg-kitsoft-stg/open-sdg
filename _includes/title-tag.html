@@ -16,9 +16,10 @@
     <title>{{ site.title | t | escape }}</title>
     <meta property="og:title" content="{{ page.title | t | escape }}"/>
     <meta property="og:mainpage" content="{{ page.title | t | escape }}"/>
-    {% else %}%}
+    {% else %}
     <title>{{ page.title | t | escape }} - {{ site.title | t | escape }}</title>
     <meta property="og:title" content="{{ page.title | t | escape }} - {{ site.title | t | escape }}"/>
+    <meta property="og:page.t.general.site_title" content="{{ page.t.general.site_title }}"/>
     {% endif %}
 {% else %}
     <title>{{ site.title | t | escape }}</title>
