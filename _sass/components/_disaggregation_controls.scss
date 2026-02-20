@@ -329,6 +329,10 @@
                         background: $backgroundColor;
                     }
                 }
+
+                .custom-checkbox__box {
+                    display: none;
+                }
             }
 
             padding-bottom: 5px;
