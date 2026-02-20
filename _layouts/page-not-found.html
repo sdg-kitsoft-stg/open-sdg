@@ -16,6 +16,14 @@
   let isUk = window.location.pathname.indexOf('/uk/') !== -1;
 
   if (isUk) {
+    const titleTag = document.querySelector('title');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const [_, siteName] = titleTag.innerText.split(' - ');
+    const newTitle = `Сторінку на знайдено - ${siteName}`;
+
+    titleTag.innerHTML = newTitle;
+    ogTitle.setAttribute('content', newTitle);
+
     document.getElementById('404-title').innerText = "Такої сторінки не існує";
     document.getElementById('404-desc').innerText = "Сторінку не знайдено. Можливо, вона переїхала або в посиланні є помилка. Будь ласка, перевірте адресу.";
     document.getElementById('404-btn').innerText = "На головну";
