@@ -42,4 +42,29 @@
     </li>
     {% endfor %}
   </ul>
-  
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.data-view .nav-link');
+
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('keydown', function (e) {
+
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    const next = tabs[(index + 1) % tabs.length];
+                    window.bootstrap.Tab.getOrCreateInstance(next).show();
+                    next.focus();
+                }
+
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    const prev = tabs[(index - 1 + tabs.length) % tabs.length];
+                    window.bootstrap.Tab.getOrCreateInstance(prev).show();
+                    prev.focus();
+                }
+
+            });
+        });
+    });
+</script>

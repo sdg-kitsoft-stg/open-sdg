@@ -39,11 +39,19 @@
 
       border-bottom: 1px solid #B1B4B6;
 
+      a:focus {
+        display: block;
+        background: transparent !important;
+        box-shadow: none !important;
+        outline: 3px solid #1d70b8 !important;
+        outline-offset: 3px !important;
+      }
+
       &:last-child {
         margin-bottom: 0;
       }
 
-      h3 {
+      h2 {
         font-size: 19px;
         font-style: normal;
         font-weight: 700;
