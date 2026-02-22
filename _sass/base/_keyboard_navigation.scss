@@ -6,9 +6,7 @@ body.contrast-high {
         @include focusHighContrast;
     }
 }
-div[tabindex]:focus {
-    @include focusOutlineOnly;
-}
+
 body.contrast-high div[tabindex]:focus {
     @include focusOutlineOnlyHighContrast;
 }

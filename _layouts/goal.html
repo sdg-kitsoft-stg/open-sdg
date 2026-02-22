@@ -229,12 +229,14 @@
 
     if (targetDiv.innerHTML.trim() !== "") return;
 
+    const indicatorTitle = window.location.pathname.includes('/uk') ? 'Індикатор' : 'Indicator';
     const iframe = document.createElement('iframe');
     iframe.src = url;
     iframe.width = "100%";
     iframe.height = "500px";
     iframe.style.border = "none";
     iframe.style.visibility = "hidden";
+    iframe.title = `${indicatorTitle} ${slug}`;
 
     iframe.onload = function() {
       try {

@@ -10,10 +10,10 @@
         aria-describedby='variable-hint-<%=fieldItem.field.replace(/ /g, '-')%>'
         <% }%>
       >
-        <% if(allowedFields.indexOf(fieldItem.field) == -1) { %><h6><% } else { %><h5><% } %>
+        <% if(allowedFields.indexOf(fieldItem.field) == -1) { %><h3><% } else { %><h3><% } %>
           <span aria-hidden="true"><%=translations.t(fieldItem.label)%><i class="fa fa-chevron-down"></i></span>
           <span class="sr-only">{{ page.t.indicator.sub_categories_show }} <%=translations.t(fieldItem.label)%></span>
-        <% if(allowedFields.indexOf(fieldItem.field) == -1) { %></h6><% } else { %></h5><% } %>
+        <% if(allowedFields.indexOf(fieldItem.field) == -1) { %></h3><% } else { %></h3><% } %>
       </button>
       <div class="variable-options" style="display:block;">
         <fieldset class="variable-options-fieldset">
@@ -49,4 +49,18 @@
 
     </div>
   <% }); %>
+</script>
+
+<script>
+    document.addEventListener('keydown', function(e) {
+        if (
+            e.target.classList.contains('custom-checkbox__input') &&
+            (e.key === ' ' || e.key === 'Enter')
+        ) {
+            e.preventDefault();
+            e.target.checked = !e.target.checked;
+            e.target.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+    });
 </script>

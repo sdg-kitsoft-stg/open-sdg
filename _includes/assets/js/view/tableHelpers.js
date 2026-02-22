@@ -182,7 +182,11 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
         };
 
         table.headings.forEach(function (heading, index) {
-            table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + getHeading(heading, index) + '</th>';
+            const title = getHeading(heading, index);
+
+            if (title) {
+                table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + title + '</th>';
+            }
         });
 
         table_head += '</tr></thead>';
