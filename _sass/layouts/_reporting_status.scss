@@ -1,6 +1,12 @@
 .layout-reportingstatus {
     .reporting-status-description {
-        margin-bottom: 25px;
+        margin-bottom: 48px;
+        width: 66%;
+
+        @media only screen and (max-width: 720px) {
+          width: 100%;
+          margin-bottom: 25px;
+        }
     }
 
     #main-content {
@@ -16,7 +22,7 @@
                 .status {
                     @include status;
                     display: inline-block;
-                    margin-right: 3px;
+                    margin-right: 16px;
                     padding: 2px 5px;
                     border-radius: 4px;
 
@@ -25,6 +31,7 @@
                     font-size: $fontSize;
 
                     .status-inner {
+                        font-size: 14px;
                         padding: 0 2px;
                         border-radius: 5px;
                     }
@@ -43,7 +50,7 @@
             margin-top: 10px;
             & span {
                 display: inline-block;
-                height: 10px;
+                height: 8px;
                 font-weight: bold;
             }
             .notapplicable {
@@ -70,7 +77,7 @@
             clear: left;
             margin-bottom: 4px;
             padding-bottom: 4px;
-            border-bottom: 1px solid $horizontalRule-color;
+
             .total {
                 line-height: 1.2;
                 font-size: $fontSize;
@@ -105,6 +112,11 @@
         .details {
             width: calc(100% - 125px);
             float: left;
+
+            &:first-child {
+              width: 100%;
+              margin-bottom: 40px;
+            }
             h2 {
                 margin-top: 0;
                 @media screen and (min-width: 520px) {
@@ -113,6 +125,9 @@
             }
             h3 {
                 margin-top: 10px;
+                font-size: 19px;
+                line-height: 24px;
+
                 @media screen and (min-width: 520px) {
                     display: inline-block;
                 }
@@ -122,7 +137,6 @@
                 @media only screen and (max-width: 520px) {
                     margin-bottom: 3px;
                 }
-                line-height: 1.2;
             }
         }
         [data-extra-field] {

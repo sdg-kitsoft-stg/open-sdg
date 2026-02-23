@@ -35,6 +35,14 @@ $goal-tile-gutter: 3px;
                     outline: 8px $focusOutlineColor solid !important;
                 }
             }
+
+            div {
+              margin-top: 25px;
+              @media screen and (min-width: 520px) {
+                margin-top: 0;
+              }
+            }
+
             img {
                 width: 100%;
                 border: 0;
