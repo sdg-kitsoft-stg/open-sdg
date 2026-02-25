@@ -255,6 +255,8 @@
                 box-shadow: 0 -2px 0 0 #929191 inset;
                 display: inline-flex;
                 align-items: center;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
 
                 &:hover {
                     background: $indicator-fieldButton-borderColor-hover;
