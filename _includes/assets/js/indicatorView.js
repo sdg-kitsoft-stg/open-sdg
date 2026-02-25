@@ -67,7 +67,7 @@ var indicatorView = function (model, options) {
         VIEW._precision = args.precision;
 
         if (MODEL.showData) {
-            $('#dataset-size-warning')[args.datasetCountExceedsMax ? 'show' : 'hide']();
+            // $('#dataset-size-warning')[args.datasetCountExceedsMax ? 'show' : 'hide']();
             if (!VIEW._chartInstance) {
                 helpers.createPlot(args, helpers);
                 helpers.setPlotEvents(args);

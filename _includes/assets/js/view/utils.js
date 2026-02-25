@@ -64,7 +64,7 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
                 'download': fileName,
                 'title': translations.indicator.download_csv_title,
                 'aria-label': translations.indicator.download_csv_title,
-                'class': 'btn btn-primary btn-download btn-custom-download',
+                'class': 'btn btn-primary btn-download',
                 'tabindex': 0,
                 'role': 'button',
             });

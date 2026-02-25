@@ -253,6 +253,8 @@
                 padding: 8px 12px 7px 12px;
                 background: #F3F2F1;
                 box-shadow: 0 -2px 0 0 #929191 inset;
+                display: inline-flex;
+                align-items: center;
 
                 &:hover {
                     background: $indicator-fieldButton-borderColor-hover;
@@ -262,9 +264,23 @@
             button[data-type="select"] {
                 margin-bottom: 5px;
                 margin-left: 5px;
+
+                &:before {
+                    content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPG1hc2sgaWQ9Im1hc2swXzEwMTNfNDUyNyIgc3R5bGU9Im1hc2stdHlwZTphbHBoYSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRDlEOUQ5Ii8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrMF8xMDEzXzQ1MjcpIj4KPHBhdGggZD0iTTYuNzAwNzggMThMMS4wNTA3OCAxMi4zNUwyLjQ3NTc4IDEwLjk1TDguMTI1NzggMTYuNkw2LjcwMDc4IDE4Wk0xMi4zNTA4IDE4TDYuNzAwNzggMTIuMzVMOC4xMDA3OCAxMC45MjVMMTIuMzUwOCAxNS4xNzVMMjEuNTUwOCA1Ljk3NDk4TDIyLjk1MDggNy4zOTk5OEwxMi4zNTA4IDE4Wk0xMi4zNTA4IDEyLjM1TDEwLjkyNTggMTAuOTVMMTUuODc1OCA1Ljk5OTk4TDE3LjMwMDggNy4zOTk5OEwxMi4zNTA4IDEyLjM1WiIgZmlsbD0iIzBCMEMwQyIvPgo8L2c+Cjwvc3ZnPgo=");
+                    width: 24px;
+                    height: 24px;
+                    margin-right: 4px;
+                }
             }
             button[data-type="clear"] {
                 margin-bottom: 5px;
+
+                &:before {
+                    content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4IDcuNjM2NzJMMTMuNjM2NyAxMkwxOCAxNi4zNjMzTDE2LjM2NDMgMThMMTIgMTMuNjM1N0w3LjYzNjcyIDE4TDYgMTYuMzYzM0wxMC4zNjMzIDExLjk5OUw2IDcuNjM2NzJMNy42MzY3MiA2TDEyIDEwLjM2MzNMMTYuMzYzMyA2TDE4IDcuNjM2NzJaIiBmaWxsPSIjMEIwQzBDIi8+Cjwvc3ZnPgo=");
+                    width: 24px;
+                    height: 24px;
+                    margin-right: 4px;
+                }
             }
 
             label {
