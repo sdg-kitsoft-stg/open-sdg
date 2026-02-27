@@ -181,18 +181,23 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
             return button + arrows;
         };
 
-        table.headings.forEach(function (heading, index) {
-          let translatedHeading = translations.t(heading);
-          if (index > 0 && (!translatedHeading || translatedHeading === 'undefined' || translatedHeading === heading)) {
+      table.headings.forEach(function (heading, index) {
+        let translatedHeading = translations.t(heading);
+
+        if (table.headings.length === 2 && index === 1) {
+          const genericTerms = ['Value', 'Значення', 'Value', 'undefined', heading];
+
+          if (!translatedHeading || genericTerms.includes(translatedHeading) || genericTerms.includes(heading)) {
             translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Україна' : 'Ukraine';
           }
+        }
 
-          const title = getHeading(translatedHeading, index);
+        const title = getHeading(translatedHeading, index);
 
-          if (title) {
-            table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + title + '</th>';
-          }
-        });
+        if (title) {
+          table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + title + '</th>';
+        }
+      });
 
         table_head += '</tr></thead>';
         currentTable.append(table_head);
