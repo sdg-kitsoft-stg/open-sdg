@@ -301,11 +301,19 @@ function generateChartLegend(chart) {
     text.push('<h5 class="sr-only">' + translations.indicator.plot_legend_description + '</h5>');
     text.push('<ul id="legend" class="legend-for-' + chart.config.type + '-chart">');
     _.each(chart.data.datasets, function (dataset) {
+        let currentLabel = translations.t(dataset.label);
+        if (!currentLabel || currentLabel === 'undefined' || currentLabel === '') {
+          currentLabel = translations.t('general.country_name');
+
+          if (!currentLabel || currentLabel === 'general.country_name') {
+            currentLabel = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Україна' : 'Ukraine';
+          }
+        }
         text.push('<li>');
         text.push('<span class="swatch' + (dataset.borderDash ? ' dashed' : '') + (dataset.headline ? ' headline' : '') + '" style="background-color: ' + dataset.borderColor + '">');
         text.push('<span class="swatch-inner" style="background-color: ' + dataset.borderColor + '"></span>');
         text.push('</span>');
-        text.push(translations.t(dataset.label));
+        text.push(currentLabel);
         text.push('</li>');
     });
     text.push('</ul>');
