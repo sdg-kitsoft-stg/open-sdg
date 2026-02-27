@@ -182,11 +182,16 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
         };
 
         table.headings.forEach(function (heading, index) {
-            const title = getHeading(heading, index);
+          let translatedHeading = translations.t(heading);
+          if (index > 0 && (!translatedHeading || translatedHeading === 'undefined' || translatedHeading === heading)) {
+            translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Україна' : 'Ukraine';
+          }
 
-            if (title) {
-                table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + title + '</th>';
-            }
+          const title = getHeading(translatedHeading, index);
+
+          if (title) {
+            table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + title + '</th>';
+          }
         });
 
         table_head += '</tr></thead>';
