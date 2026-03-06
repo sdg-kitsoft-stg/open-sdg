@@ -7,9 +7,9 @@
     <div id="zip-download-info">
         {{ page.t.frontpage.zip_file }} - {{ site.data.zip.size_human }}
         {% if site.data.zip.timestamp %}
-            <br>
-            {{ page.t.metadata_fields.national_data_update_url }}:
-            <span id="zip-date" data-timestamp="{{ site.data.zip.timestamp }}">
+        <br>
+        {{ page.t.metadata_fields.national_data_update_url }}:
+        <span id="zip-date" data-timestamp="{{ site.data.zip.timestamp | date_to_xmlschema }}">
                 {{ site.data.zip.timestamp | t_date: 'standard' }}
             </span>
         {% endif %}
@@ -23,17 +23,23 @@
       if (timestamp) {
         let rawDate = new Date(timestamp);
 
-        let isUk = window.location.pathname.indexOf('/uk/') !== -1;
-        let locale = isUk ? 'uk-UA' : 'en-US';
+        if (isNaN(rawDate.getTime())) {
+          rawDate = new Date(timestamp.replace(/-/g, "/").replace(/[TZ]/g, " "));
+        }
 
-        let options = {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        };
+        if (!isNaN(rawDate.getTime())) {
+          let isUk = window.location.pathname.indexOf('/uk/') !== -1;
+          let locale = isUk ? 'uk-UA' : 'en-US';
 
-        let formattedDate = rawDate.toLocaleDateString(locale, options);
-        dateEl.innerText = formattedDate.replace(' р.', '');
+          let options = {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          };
+
+          let formattedDate = rawDate.toLocaleDateString(locale, options);
+          dateEl.innerText = formattedDate.replace(/\s*р\.?$/, "");
+        }
       }
     }
   });
