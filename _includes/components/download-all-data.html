@@ -7,8 +7,9 @@
     <div id="zip-download-info">
         {{ page.t.frontpage.zip_file }} - {{ site.data.zip.size_human }}
         {% if site.data.zip.timestamp %}
-            <br>
-            {{ page.t.metadata_fields.national_data_update_url }} - {{ site.data.zip.timestamp | t_date: 'standard' }}
+        <br>
+        {% assign formatted_date = site.data.zip.timestamp | t_date: 'standard' %}
+            {{ page.t.metadata_fields.national_data_update_url }}: {{ formatted_date }}
         {% endif %}
     </div>
 </div>
