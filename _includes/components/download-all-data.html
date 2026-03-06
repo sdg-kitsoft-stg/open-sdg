@@ -7,9 +7,34 @@
     <div id="zip-download-info">
         {{ page.t.frontpage.zip_file }} - {{ site.data.zip.size_human }}
         {% if site.data.zip.timestamp %}
-        <br>
-        {% assign formatted_date = site.data.zip.timestamp | t_date: 'standard' %}
-            {{ page.t.metadata_fields.national_data_update_url }}: {{ formatted_date }}
+            <br>
+            {{ page.t.metadata_fields.national_data_update_url }}:
+            <span id="zip-date" data-timestamp="{{ site.data.zip.timestamp }}">
+                {{ site.data.zip.timestamp | t_date: 'standard' }}
+            </span>
         {% endif %}
     </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    let dateEl = document.getElementById('zip-date');
+    if (dateEl) {
+      let timestamp = dateEl.getAttribute('data-timestamp');
+      if (timestamp) {
+        let rawDate = new Date(timestamp);
+
+        let isUk = window.location.pathname.indexOf('/uk/') !== -1;
+        let locale = isUk ? 'uk-UA' : 'en-US';
+
+        let options = {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        };
+
+        let formattedDate = rawDate.toLocaleDateString(locale, options);
+        dateEl.innerText = formattedDate.replace(' р.', '');
+      }
+    }
+  });
+</script>
