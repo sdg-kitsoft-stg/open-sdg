@@ -7,37 +7,35 @@
 
 <h2>{{ include.title }}</h2>
 {%- for goalreport in include.goals -%}
-    {%- assign goal = goalreport.goal | strip | sdg_lookup -%}
-    {%- assign target_goal = goal.number | append: "" -%}
+{%- assign goal = goalreport.goal | strip | sdg_lookup -%}
+{%- assign target_goal = goal.number | append: "" -%}
 
-    {%- assign g_total = 0 -%}
-    {%- assign g_complete = 0 -%}
-    {%- assign g_inprogress = 0 -%}
-    {%- assign g_notstarted = 0 -%}
+{%- assign g_total = 0 -%}
+{%- assign g_complete = 0 -%}
+{%- assign g_inprogress = 0 -%}
+{%- assign g_notstarted = 0 -%}
 
-    {%- for ind_id in site.data.indicator_details -%}
-    {%- assign ind = site.indicators | where: "indicator_id", ind_id | first -%}
+{%- for pg in site.pages -%}
 
-    {%- if ind -%}
-    {%- assign id_str = ind.indicator_id | downcase -%}
-    {%- assign ind_goal = id_str | split: "-" | first -%}
+{%- assign id_str = pg.indicator_id | default: pg.indicator_number | downcase -%}
+{%- assign pg_goal = id_str | split: "-" | first -%}
 
-    {%- if ind.language == page.language and ind_goal == target_goal -%}
-    {%- unless id_str contains "-a" -%}
+{%- if pg.language == page.language and pg_goal == target_goal -%}
+{%- unless id_str contains "-a" -%}
 
-    {%- assign g_total = g_total | plus: 1 -%}
+{%- assign g_total = g_total | plus: 1 -%}
 
-    {%- if ind.reporting_status == 'complete' -%}
-    {%- assign g_complete = g_complete | plus: 1 -%}
-    {%- elsif ind.reporting_status == 'inprogress' -%}
-    {%- assign g_inprogress = g_inprogress | plus: 1 -%}
-    {%- else -%}
-    {%- assign g_notstarted = g_notstarted | plus: 1 -%}
-    {%- endif -%}
+{%- if pg.reporting_status == 'complete' -%}
+{%- assign g_complete = g_complete | plus: 1 -%}
+{%- elsif pg.reporting_status == 'inprogress' -%}
+{%- assign g_inprogress = g_inprogress | plus: 1 -%}
+{%- else -%}
+{%- assign g_notstarted = g_notstarted | plus: 1 -%}
+{%- endif -%}
 
-    {%- endunless -%}
-    {%- endif -%}
-    {%- endif -%}
+{%- endunless -%}
+{%- endif -%}
+{%- endif -%}
 {%- endfor -%}
 
 <div class="goal reporting-status-item">
