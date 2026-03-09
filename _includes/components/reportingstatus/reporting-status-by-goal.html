@@ -14,15 +14,18 @@
 {%- assign g_inprogress = 0 -%}
 {%- assign g_notstarted = 0 -%}
 
+{%- assign target_goal = goal.number | append: "" -%}
+
 {%- for ind in site.indicators -%}
+    {%- assign ind_goal = ind.goal_number | append: "" -%}
     {%- assign id_suffix = ind.indicator_id | slice: -2, 2 -%}
 
-    {%- if ind.language == page.language and ind.goal_number == goal.number and id_suffix != "-a" -%}
+    {%- if ind.language == page.language and ind_goal == target_goal and id_suffix != "-a" -%}
         {%- assign g_total = g_total | plus: 1 -%}
         {%- case ind.reporting_status -%}
         {%- when 'complete' -%} {%- assign g_complete = g_complete | plus: 1 -%}
         {%- when 'inprogress' -%} {%- assign g_inprogress = g_inprogress | plus: 1 -%}
-        {%- when 'notstarted' -%} {%- assign g_notstarted = g_notstarted | plus: 1 -%}
+        {%- else -%} {%- assign g_notstarted = g_notstarted | plus: 1 -%}
         {%- endcase -%}
     {%- endif -%}
 {%- endfor -%}
