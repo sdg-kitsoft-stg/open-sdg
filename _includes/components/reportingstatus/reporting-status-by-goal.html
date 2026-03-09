@@ -6,6 +6,7 @@
 {%- endif -%}
 
 <h2>{{ include.title }}</h2>
+
 {%- for goalreport in include.goals -%}
 {%- assign goal = goalreport.goal | strip | sdg_lookup -%}
 {%- assign target_goal = goal.number | append: "" -%}
@@ -16,15 +17,13 @@
 {%- assign g_notstarted = 0 -%}
 
 {%- for pg in site.pages -%}
-
+{%- if pg.indicator_number -%}
 {%- assign id_str = pg.indicator_id | default: pg.indicator_number | downcase -%}
 {%- assign pg_goal = id_str | split: "-" | first -%}
 
 {%- if pg.language == page.language and pg_goal == target_goal -%}
 {%- unless id_str contains "-a" -%}
-
 {%- assign g_total = g_total | plus: 1 -%}
-
 {%- if pg.reporting_status == 'complete' -%}
 {%- assign g_complete = g_complete | plus: 1 -%}
 {%- elsif pg.reporting_status == 'inprogress' -%}
@@ -32,7 +31,6 @@
 {%- else -%}
 {%- assign g_notstarted = g_notstarted | plus: 1 -%}
 {%- endif -%}
-
 {%- endunless -%}
 {%- endif -%}
 {%- endif -%}
@@ -55,11 +53,9 @@
             <div class="statuses">
                 {%- for status_type in status_types -%}
                 {%- assign current_count = 0 -%}
-                {%- case status_type.value -%}
-                {%- when 'complete' -%} {%- assign current_count = g_complete -%}
-                {%- when 'inprogress' -%} {%- assign current_count = g_inprogress -%}
-                {%- when 'notstarted' -%} {%- assign current_count = g_notstarted -%}
-                {%- endcase -%}
+                {%- if status_type.value == 'complete' -%}{%- assign current_count = g_complete -%}
+                {%- elsif status_type.value == 'inprogress' -%}{%- assign current_count = g_inprogress -%}
+                {%- else -%}{%- assign current_count = g_notstarted -%}{%- endif -%}
 
                 {% if current_count > 0 %}
                 {%- assign percentage = current_count | times: 100.0 | divided_by: g_total | round -%}
@@ -75,15 +71,13 @@
         </div>
         <div class="goal-stats">
             {%- for status_type in status_types -%}
-            {%- assign current_count = 0 -%}
-            {%- case status_type.value -%}
-            {%- when 'complete' -%} {%- assign current_count = g_complete -%}
-            {%- when 'inprogress' -%} {%- assign current_count = g_inprogress -%}
-            {%- when 'notstarted' -%} {%- assign current_count = g_notstarted -%}
-            {%- endcase -%}
+            {%- assign current_count_bar = 0 -%}
+            {%- if status_type.value == 'complete' -%}{%- assign current_count_bar = g_complete -%}
+            {%- elsif status_type.value == 'inprogress' -%}{%- assign current_count_bar = g_inprogress -%}
+            {%- else -%}{%- assign current_count_bar = g_notstarted -%}{%- endif -%}
 
-            {% if current_count > 0 %}
-            {%- assign percentage_precise = current_count | times: 100.0 | divided_by: g_total -%}
+            {% if current_count_bar > 0 %}
+            {%- assign percentage_precise = current_count_bar | times: 100.0 | divided_by: g_total -%}
             <span class="{{ status_type.value | slugify }}" style="width:{{ percentage_precise }}%" title="{{ status_type.label | t }}: {{ percentage_precise | round }}%"></span>
             {% endif %}
             {%- endfor -%}
