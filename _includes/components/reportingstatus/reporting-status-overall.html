@@ -5,18 +5,20 @@
 {%- assign c_notstarted = 0 -%}
 
 {%- for ind in site.indicators -%}
-    {%- assign id_suffix = ind.indicator_id | slice: -2, 2 -%}
+    {%- if ind.language == page.language -%}
+        {%- unless ind.indicator_id contains "-a" -%}
 
-    {%- if ind.language == page.language and id_suffix != "-a" -%}
         {%- assign total_count = total_count | plus: 1 -%}
 
         {%- if ind.reporting_status == 'complete' -%}
             {%- assign c_complete = c_complete | plus: 1 -%}
-            {%- elsif ind.reporting_status == 'inprogress' -%}
-                {%- assign c_inprogress = c_inprogress | plus: 1 -%}
-            {%- else -%}
+        {%- elsif ind.reporting_status == 'inprogress' -%}
+            {%- assign c_inprogress = c_inprogress | plus: 1 -%}
+        {%- else -%}
             {%- assign c_notstarted = c_notstarted | plus: 1 -%}
         {%- endif -%}
+
+        {%- endunless -%}
     {%- endif -%}
 {%- endfor -%}
 
