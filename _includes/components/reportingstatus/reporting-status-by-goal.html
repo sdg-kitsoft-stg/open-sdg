@@ -9,25 +9,29 @@
 {%- for goalreport in include.goals -%}
 {%- assign goal = goalreport.goal | strip | sdg_lookup -%}
 
-{%- assign g_total = 0 -%}
-{%- assign g_complete = 0 -%}
-{%- assign g_inprogress = 0 -%}
-{%- assign g_notstarted = 0 -%}
+<div style="background: #f0f0f0; padding: 5px; font-size: 10px; color: red;">
+    DEBUG: Goal Number from Lookup = "{{ goal.number }}"
+</div>
 
+{%- assign g_total = 0 -%}
 {%- assign target_goal = goal.number | append: "" -%}
 
 {%- for ind in site.indicators -%}
-    {%- assign ind_goal = ind.goal_number | append: "" -%}
-    {%- assign id_suffix = ind.indicator_id | slice: -2, 2 -%}
+{%- assign id_suffix = ind.indicator_id | slice: -2, 2 -%}
 
-    {%- if ind.language == page.language and ind_goal == target_goal and id_suffix != "-a" -%}
-        {%- assign g_total = g_total | plus: 1 -%}
-        {%- case ind.reporting_status -%}
-        {%- when 'complete' -%} {%- assign g_complete = g_complete | plus: 1 -%}
-        {%- when 'inprogress' -%} {%- assign g_inprogress = g_inprogress | plus: 1 -%}
-        {%- else -%} {%- assign g_notstarted = g_notstarted | plus: 1 -%}
-        {%- endcase -%}
-    {%- endif -%}
+{%- if ind.language == page.language and id_suffix != "-a" -%}
+
+{%- if g_total < 1 -%}
+<div style="font-size: 9px; color: blue;">
+    Sample Ind: {{ ind.indicator_id }} | Goal_Num field: "{{ ind.goal_number }}" | Goal_Num_from_ID: "{{ ind.indicator_id | split: '-' | first }}"
+</div>
+{%- endif -%}
+
+{%- assign ind_goal = ind.goal_number | append: "" -%}
+{%- if ind_goal == target_goal -%}
+{%- assign g_total = g_total | plus: 1 -%}
+{%- endif -%}
+{%- endif -%}
 {%- endfor -%}
 
 <div class="goal reporting-status-item">
