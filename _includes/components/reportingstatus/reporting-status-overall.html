@@ -1,70 +1,49 @@
 {%- assign status_types = site.reporting_status.status_types -%}
-{%- if include.status_types and site[include.status_types] -%}
-    {%- assign status_types = site[include.status_types].status_types -%}
-{%- endif -%}
-
 {%- assign total_count = 0 -%}
+{%- assign c_complete = 0 -%}
+{%- assign c_inprogress = 0 -%}
+{%- assign c_notstarted = 0 -%}
+
 {%- for ind in site.indicators -%}
     {%- assign id_suffix = ind.indicator_id | slice: -2, 2 -%}
-    {%- if id_suffix != "-a" -%}
+
+    {%- if ind.language == page.language and id_suffix != "-a" -%}
         {%- assign total_count = total_count | plus: 1 -%}
+
+        {%- if ind.reporting_status == 'complete' -%}
+            {%- assign c_complete = c_complete | plus: 1 -%}
+            {%- elsif ind.reporting_status == 'inprogress' -%}
+                {%- assign c_inprogress = c_inprogress | plus: 1 -%}
+            {%- else -%}
+            {%- assign c_notstarted = c_notstarted | plus: 1 -%}
+        {%- endif -%}
     {%- endif -%}
 {%- endfor -%}
 
-{%- assign indicators_plural = page.t.general.indicators | downcase -%}
-
 <div class="goal goal-overall">
     <div class="details">
-        <h2 class="status-goal">
-            {{ include.title }}
-        </h2>
-        <span class="total"><span>{{ total_count }}</span> {{ include.indicator_count_label | t | default: indicators_plural }}</span>
+        <h2 class="status-goal">{{ include.title }}</h2>
+        <span class="total"><span>{{ total_count }}</span> {{ page.t.general.indicators | downcase }}</span>
 
         {% if total_count > 0 %}
         <div class="summary">
             <div class="statuses">
-                {%- for status_type in status_types -%}
-                    {%- assign current_status_count = 0 -%}
-                    {%- for ind in site.indicators -%}
-                        {%- assign id_suffix = ind.indicator_id | slice: -2, 2 -%}
-                        {%- if id_suffix != "-a" and ind.reporting_status == status_type.value -%}
-                        {%- assign current_status_count = current_status_count | plus: 1 -%}
-                        {%- endif -%}
-                    {%- endfor -%}
+                {%- if c_complete > 0 -%}
+                {%- assign p_complete = c_complete | times: 100.0 | divided_by: total_count | round -%}
+                <div><span class="status complete"><span class="status-inner">{{ c_complete }}</span></span><strong>{{ page.t.status.reported }}</strong><span class="value">{{ p_complete }}%</span></div>
+                {%- endif -%}
 
-                    {% if current_status_count > 0 %}
-                    {%- assign percentage = current_status_count | times: 100.0 | divided_by: total_count | round -%}
-                    <div>
-                        <span class="status {{ status_type.value | slugify }}"><span class="status-inner">{{ current_status_count }}</span></span>
-                        <strong>{{ status_type.label | t }}</strong>
-                        <span class="value">{{ percentage }}%</span>
-                    </div>
-                    {% endif %}
-                {%- endfor -%}
-                <br style="clear:both;">
+                {%- if c_inprogress > 0 -%}
+                {%- assign p_inprogress = c_inprogress | times: 100.0 | divided_by: total_count | round -%}
+                <div><span class="status inprogress"><span class="status-inner">{{ c_inprogress }}</span></span><strong>{{ page.t.status.in_progress }}</strong><span class="value">{{ p_inprogress }}%</span></div>
+                {%- endif -%}
+
+                {%- if c_notstarted > 0 -%}
+                {%- assign p_notstarted = c_notstarted | times: 100.0 | divided_by: total_count | round -%}
+                <div><span class="status notstarted"><span class="status-inner">{{ c_notstarted }}</span></span><strong>{{ page.t.status.not_started }}</strong><span class="value">{{ p_notstarted }}%</span></div>
+                {%- endif -%}
             </div>
-        </div>
-
-        <div class="goal-stats">
-            {%- for status_type in status_types -%}
-                {%- assign current_status_count = 0 -%}
-                {%- for ind in site.indicators -%}
-                    {%- assign id_suffix = ind.indicator_id | slice: -2, 2 -%}
-                    {%- if id_suffix != "-a" and ind.reporting_status == status_type.value -%}
-                        {%- assign current_status_count = current_status_count | plus: 1 -%}
-                    {%- endif -%}
-                {%- endfor -%}
-
-                {% if current_status_count > 0 %}
-                {%- assign percentage_precise = current_status_count | times: 100.0 | divided_by: total_count -%}
-                <span class="{{ status_type.value | slugify }}"
-                      style="width:{{ percentage_precise }}%"
-                      title="{{ status_type.label | t }}: {{ percentage_precise | round }}%">
-                        </span>
-                {% endif %}
-            {%- endfor -%}
         </div>
         {% endif %}
     </div>
-    <br style="clear:both;">
 </div>
