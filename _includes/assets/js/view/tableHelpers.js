@@ -176,9 +176,8 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
         var table_head = '<thead><tr>';
 
         var getHeading = function (heading, index) {
-            const isUkraineHeading = heading === 'Ukraine' || "Україна";
             var arrows = '<span class="sort"><i class="fa fa-sort"></i><i class="fa fa-sort-down"></i><i class="fa fa-sort-up"></i></span>';
-            var button = '<span tabindex="0" role="button" aria-describedby="column-sort-info">' + (isUkraineHeading ? isUkraineHeading : translations.t(heading)) + '</span>';
+            var button = '<span tabindex="0" role="button" aria-describedby="column-sort-info">' + translations.t(heading) + '</span>';
             return button + arrows;
         };
 
@@ -193,7 +192,9 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
           }
         }
 
-        const title = getHeading(translatedHeading, index);
+          const finalTitleText = translatedHeading || heading;
+
+          const title = getHeading(finalTitleText);
 
           console.log({
               title,
