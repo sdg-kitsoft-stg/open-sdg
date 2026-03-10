@@ -146,3 +146,11 @@ ul > li > p {
     margin-bottom: 16px;
   }
 }
+
+.mb-32 {
+  margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+  }
+}
