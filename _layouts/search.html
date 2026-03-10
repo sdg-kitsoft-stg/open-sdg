@@ -1,7 +1,7 @@
 {% include head.html %}
 {% include header.html %}
 <script type="text/template" class="results-template">
-    <% if(resultsCount > 0) { %>
+    <% if(resultsCount) { %>
     <p>{{ page.t.search.results_found }}: <%= resultsCount %></p>
 
     <% _.each(searchResults, function(result){ %>
@@ -11,22 +11,33 @@
                 <a href="<%= result.url %>">
                     <h2 class="title"><%= result.title %></h2>
                 </a>
-                <% if(result.content) { %><p><%= result.content %></p><% } %>
             </div>
         </div>
     </div>
     <% }); %>
 
     <% if(totalPages > 1) { %>
-    <nav aria-label="Page navigation" class="pagination-container">
-        <ul class="pagination">
-            <% for(var i = 1; i <= totalPages; i++) { %>
-            <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
-                <a class="page-link pagination-link" href="#" data-page="<%= i %>"><%= i %></a>
-            </li>
-            <% } %>
-        </ul>
-    </nav>
+    <div class="custom-pagination mt-4">
+
+        <% if(currentPage > 1) { %>
+        <div class="prev-page mb-3">
+            <a href="#" class="pagination-trigger" data-page="<%= currentPage - 1 %>">
+                <span class="arrow left"></span> {{ page.t.search.previous_page }}
+            </a>
+            <div class="page-info"><%= currentPage - 1 %> {{ page.t.search.page_of }} <%= totalPages %></div>
+        </div>
+        <% } %>
+
+        <% if(currentPage < totalPages) { %>
+        <div class="next-page">
+            <a href="#" class="pagination-trigger" data-page="<%= currentPage + 1 %>">
+                <span class="arrow"></span> {{ page.t.search.next_page }}
+            </a>
+            <div class="page-info"><%= currentPage + 1 %> {{ page.t.search.page_of }} <%= totalPages %></div>
+        </div>
+        <% } %>
+
+    </div>
     <% } %>
 
     <% } else { %>

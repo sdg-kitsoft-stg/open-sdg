@@ -57,28 +57,26 @@ var indicatorSearch = function () {
     }
 
     var resultsPerPage = 10;
-    var currentPage = 1;
     var allResultItems = [];
 
-    function displayResults(page) {
-        currentPage = page;
-        var start = (currentPage - 1) * resultsPerPage;
+    function renderPaginatedResults(page) {
+        var start = (page - 1) * resultsPerPage;
         var end = start + resultsPerPage;
+        var totalPages = Math.ceil(allResultItems.length / resultsPerPage);
         var paginatedItems = allResultItems.slice(start, end);
 
         var template = _.template($("script.results-template").html());
         $('div.results').html(template({
             searchResults: paginatedItems,
             resultsCount: allResultItems.length,
-            currentPage: currentPage,
-            totalPages: Math.ceil(allResultItems.length / resultsPerPage),
-            didYouMean: false
+            currentPage: page,
+            totalPages: totalPages
         }));
 
         window.scrollTo(0, 0);
     }
 
-    var searchInput = document.getElementById('search-bar-on-page');
+    var searchInput = document.getElementById('indicator_search-bar-on-page');
     if (searchInput) {
         var clearBtn = document.createElement('button');
         clearBtn.innerHTML = '×';
@@ -87,9 +85,21 @@ var indicatorSearch = function () {
         searchInput.parentNode.style.position = 'relative';
         searchInput.parentNode.appendChild(clearBtn);
 
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                var val = searchInput.value.trim();
+                if (val.length > 0) {
+                    var searchUrl = window.location.pathname + '?q=' + encodeURIComponent(val);
+                    window.location.href = searchUrl;
+                }
+            }
+        });
+
         if (searchInput.value) clearBtn.style.display = 'block';
 
-        clearBtn.onclick = function() {
+        clearBtn.onclick = function(e) {
+            e.preventDefault();
             searchInput.value = '';
             this.style.display = 'none';
             searchInput.focus();
@@ -278,12 +288,12 @@ var indicatorSearch = function () {
 
         allResultItems = resultItems;
         $('.loader').hide();
-        displayResults(1);
+        renderPaginatedResults(1);
 
-        $(document).on('click', '.pagination-link', function(e) {
+        $(document).on('click', '.pagination-trigger', function(e) {
             e.preventDefault();
             var targetPage = $(this).data('page');
-            displayResults(targetPage);
+            renderPaginatedResults(targetPage);
         });
 
         var template = _.template($("script.results-template").html());

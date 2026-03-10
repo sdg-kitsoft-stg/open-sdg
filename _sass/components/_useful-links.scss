@@ -154,3 +154,44 @@ ul > li > p {
     margin-bottom: 24px;
   }
 }
+
+.pagination-trigger {
+  display: flex;
+  width: fit-content;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 19px;
+  color: $link-color;
+  margin-bottom: 7px;
+
+  &:hover {
+    text-decoration: none;
+    color: $link-color;
+  }
+}
+
+.arrow {
+  width: 16px;
+  height: 13px;
+  margin-top: 4px;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iMTMiIHZpZXdCb3g9IjAgMCAxNSAxMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzM0N182NTI5KSI+CjxwYXRoIGQ9Ik04LjEwNyAtMC4wMDc4MTI1TDYuNjkzNCAxLjQwNjE5TDEwLjk4NiA1LjY5OTE5SC0yVjcuNjk5MTlIMTAuODk2TDYuNzEwNSAxMS42NzU4TDguMDg3NSAxMy4xMjVMMTQuODMxNiA2LjcxODc5TDguMTA3IC0wLjAwNzgxMjVaIiBmaWxsPSIjNTA1QTVGIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMzQ3XzY1MjkiPgo8cmVjdCB3aWR0aD0iMTUiIGhlaWdodD0iMTMiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 15px;
+
+  &.left {
+    transform: rotate(180deg);
+  }
+}
+
+.page-info {
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19px;
+  color: $link-color;
+}
