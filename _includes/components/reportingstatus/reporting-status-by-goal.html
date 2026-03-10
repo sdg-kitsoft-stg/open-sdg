@@ -4,8 +4,9 @@
 {%- assign status_types = site[include.status_types].status_types -%}
 {%- endif -%}
 
-<h2>{{ include.title }}</h2>
+<h2 class="mb-4">{{ include.title }}</h2>
 
+<div class="col-md-8">
 {%- for goalreport in include.goals -%}
 {%- assign goal = goalreport.goal | strip | sdg_lookup -%}
 {%- assign goal_num = goal.number -%}
@@ -30,11 +31,12 @@
         </div>
         <div class="goal-stats" id="js-goal-{{ goal_num }}-bars"></div>
 
-        <div class="divider"></div>
+        <div class="status-goal-divider"></div>
     </div>
     <br style="clear:both;">
 </div>
 {%- endfor -%}
+</div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
@@ -97,19 +99,23 @@
               if (summaryEl) summaryEl.style.display = 'block';
 
               if (statusesEl) {
+                const tComplete = "{{ page.t.status.reported | default: 'Виконано' }}";
+                const tInprogress = "{{ page.t.status.in_progress | default: 'В процесі' }}";
+                const tNotstarted = "{{ page.t.status.not_started | default: 'Не розпочато' }}";
+
                 let htmlStr = '';
 
                 if (stats.complete > 0) {
                   let pComp = Math.round((stats.complete / stats.total) * 100);
-                  htmlStr += `<div><span class="status complete"><span class="status-inner">${stats.complete}</span></span><strong>Виконано</strong><span class="value">${pComp}%</span></div>`;
+                  htmlStr += `<div><span class="status complete"><span class="status-inner">${stats.complete}</span></span><strong>${tComplete}</strong><span class="value">${pComp}%</span></div>`;
                 }
                 if (stats.inprogress > 0) {
                   let pInp = Math.round((stats.inprogress / stats.total) * 100);
-                  htmlStr += `<div><span class="status inprogress"><span class="status-inner">${stats.inprogress}</span></span><strong>В процесі</strong><span class="value">${pInp}%</span></div>`;
+                  htmlStr += `<div><span class="status inprogress"><span class="status-inner">${stats.inprogress}</span></span><strong>${tInprogress}</strong><span class="value">${pInp}%</span></div>`;
                 }
                 if (stats.notstarted > 0) {
                   let pNot = Math.round((stats.notstarted / stats.total) * 100);
-                  htmlStr += `<div><span class="status notstarted"><span class="status-inner">${stats.notstarted}</span></span><strong>Не розпочато</strong><span class="value">${pNot}%</span></div>`;
+                  htmlStr += `<div><span class="status notstarted"><span class="status-inner">${stats.notstarted}</span></span><strong>${tNotstarted}</strong><span class="value">${pNot}%</span></div>`;
                 }
 
                 statusesEl.innerHTML = htmlStr;
