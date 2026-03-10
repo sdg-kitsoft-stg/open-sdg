@@ -482,20 +482,20 @@ table.dataTable>thead .sorting:after, table.dataTable>thead .sorting_asc:after, 
   content: '' !important;
 }
 .table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {
-  padding-right: 0;
+  padding-right: 0 !important;
 }
 
 #main-content .nav-tabs .nav-item {
-  padding: 0;
+  padding: 0 !important;
 }
 #main-content .nav-tabs .nav-item:not(.active) {
-  padding-bottom: 0;
+  padding-bottom: 0 !important;
 }
 
 #main-content .nav-tabs .nav-item button {
-  padding: 10px 15px;
+  padding: 10px 15px !important;
 }
 
 #main-content .nav-tabs .nav-item:not(.active) button {
-  padding-bottom: 8px;
+  padding-bottom: 8px !important;
 }

@@ -196,6 +196,7 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
 
           console.log({
               title,
+              heading,
               translatedHeading
           })
 
