@@ -4,23 +4,24 @@
 {%- assign c_inprogress = 0 -%}
 {%- assign c_notstarted = 0 -%}
 
-<div style="display:none!important;">
-    {%- for ind in site.indicators -%}
+{%- for ind in site.indicators -%}
     {%- if ind.language == page.language -%}
-    {%- assign ind_id = ind.indicator | default: ind.indicator_id -%}
-    {%- assign ind_id_low = ind_id | downcase -%}
+        {%- assign ind_id = ind.indicator | default: ind.indicator_id -%}
+        {%- assign ind_id_low = ind_id | downcase -%}
 
-    {%- unless ind_id_low contains "-a" -%}
-    ID: {{ ind_id }} |
-    {%- assign total_count = total_count | plus: 1 -%}
-    {%- if ind.reporting_status == 'complete' -%}{%- assign c_complete = c_complete | plus: 1 -%}
-    {%- elsif ind.reporting_status == 'inprogress' -%}{%- assign c_inprogress = c_inprogress | plus: 1 -%}
-    {%- else -%}{%- assign c_notstarted = c_notstarted | plus: 1 -%}
+        {%- unless ind_id_low contains "-a" -%}
+        {%- assign total_count = total_count | plus: 1 -%}
+        {%- if ind.reporting_status == 'complete' -%}
+            {%- assign c_complete = c_complete | plus: 1 -%}
+        {%- elsif ind.reporting_status == 'inprogress' -%}
+            {%- assign c_inprogress = c_inprogress | plus: 1 -%}
+        {%- else -%}
+            {%- assign c_notstarted = c_notstarted | plus: 1 -%}
+        {%- endif -%}
+        {%- endunless -%}
     {%- endif -%}
-    {%- endunless -%}
-    {%- endif -%}
-    {%- endfor -%}
-</div>
+{%- endfor -%}
+
 <div class="goal goal-overall">
     <div class="details">
         <h2 class="status-goal">{{ include.title }}</h2>
