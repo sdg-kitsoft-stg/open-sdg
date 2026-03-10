@@ -184,7 +184,7 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
       table.headings.forEach(function (heading, index) {
         let translatedHeading = translations.t(heading);
 
-        if (table.headings.length === 2 && index === 1) {
+        if (table.headings.length && index === 1) {
           const genericTerms = ['Value', 'Значення', 'Value', 'undefined', heading];
 
           if (!translatedHeading || genericTerms.includes(translatedHeading) || genericTerms.includes(heading)) {
@@ -192,16 +192,8 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
           }
         }
 
-          const finalTitleText = translatedHeading || heading;
-
-          const title = getHeading(finalTitleText);
-
-          console.log({
-              title,
-              heading,
-              headings: table.headings,
-              translatedHeading
-          })
+        const finalTitleText = translatedHeading || heading;
+        const title = getHeading(finalTitleText);
 
         if (title) {
           table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + title + '</th>';
