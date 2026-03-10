@@ -4,40 +4,11 @@
 {%- assign status_types = site[include.status_types].status_types -%}
 {%- endif -%}
 
-{%- assign clean_pages = "" | split: "" -%}
-{%- for pg in site.pages -%}
-    {%- if pg.indicator_number and pg.language == page.language -%}
-        {%- unless pg.path contains "-a" -%}
-        {%- assign clean_pages = clean_pages | push: pg -%}
-        {%- endunless -%}
-    {%- endif -%}
-{%- endfor -%}
-
 <h2>{{ include.title }}</h2>
 
 {%- for goalreport in include.goals -%}
-    {%- assign goal = goalreport.goal | strip | sdg_lookup -%}
-    {%- assign target_goal = goal.number | append: "" -%}
-
-    {%- assign g_total = 0 -%}
-    {%- assign g_complete = 0 -%}
-    {%- assign g_inprogress = 0 -%}
-    {%- assign g_notstarted = 0 -%}
-
-    {%- for pg in clean_pages -%}
-        {%- assign pg_goal = pg.indicator_number | split: "." | first | append: "" -%}
-
-        {%- if pg_goal == target_goal -%}
-            {%- assign g_total = g_total | plus: 1 -%}
-            {%- if pg.reporting_status == 'complete' -%}
-                {%- assign g_complete = g_complete | plus: 1 -%}
-            {%- elsif pg.reporting_status == 'inprogress' -%}
-                {%- assign g_inprogress = g_inprogress | plus: 1 -%}
-            {%- else -%}
-                {%- assign g_notstarted = g_notstarted | plus: 1 -%}
-            {%- endif -%}
-        {%- endif -%}
-    {%- endfor -%}
+{%- assign goal = goalreport.goal | strip | sdg_lookup -%}
+{%- assign goal_num = goal.number -%}
 
 <div class="goal reporting-status-item">
     <div class="frame goal-tiles">
@@ -49,45 +20,103 @@
         <h3 class="status-goal">
             <a href="{{ goal.url }}">{{ goal.short }}</a>
         </h3>
-        <span class="total">{{ g_total }} {{ include.indicator_count_label | t | default: indicators_plural }}</span>
 
-        {% if g_total > 0 %}
-        <div class="summary">
-            <div class="statuses">
-                {%- for status_type in status_types -%}
-                {%- assign current_count = 0 -%}
-                {%- if status_type.value == 'complete' -%}{%- assign current_count = g_complete -%}
-                {%- elsif status_type.value == 'inprogress' -%}{%- assign current_count = g_inprogress -%}
-                {%- else -%}{%- assign current_count = g_notstarted -%}{%- endif -%}
+        <span class="total">
+            <span id="js-goal-{{ goal_num }}-total">...</span> {{ include.indicator_count_label | t | default: indicators_plural }}
+        </span>
 
-                {% if current_count > 0 %}
-                {%- assign percentage = current_count | times: 100.0 | divided_by: g_total | round -%}
-                <div>
-                    <span class="status {{ status_type.value | slugify }}"><span class="status-inner">{{ current_count }}</span></span>
-                    <strong>{{ status_type.label | t }}</strong>
-                    <span class="value">{{ percentage }}%</span>
-                </div>
-                {% endif %}
-                {%- endfor -%}
-                <br style="clear:both;">
-            </div>
+        <div class="summary" id="js-goal-{{ goal_num }}-summary" style="display: none;">
+            <div class="statuses" id="js-goal-{{ goal_num }}-statuses"></div>
         </div>
-        <div class="goal-stats">
-            {%- for status_type in status_types -%}
-                {%- assign current_count_bar = 0 -%}
-                {%- if status_type.value == 'complete' -%}{%- assign current_count_bar = g_complete -%}
-                {%- elsif status_type.value == 'inprogress' -%}{%- assign current_count_bar = g_inprogress -%}
-                {%- else -%}{%- assign current_count_bar = g_notstarted -%}{%- endif -%}
+        <div class="goal-stats" id="js-goal-{{ goal_num }}-bars"></div>
 
-                {% if current_count_bar > 0 %}
-                {%- assign percentage_precise = current_count_bar | times: 100.0 | divided_by: g_total -%}
-                <span class="{{ status_type.value | slugify }}" style="width:{{ percentage_precise }}%" title="{{ status_type.label | t }}: {{ percentage_precise | round }}%"></span>
-                {% endif %}
-            {%- endfor -%}
-        </div>
-        {% endif %}
         <div class="divider"></div>
     </div>
     <br style="clear:both;">
 </div>
 {%- endfor -%}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const currentLang = "{{ page.language | default: 'uk' }}";
+    const dataUrl = `https://sdg-kitsoft-stg.github.io/data-ukraine-sdg/${currentLang}/meta/all.json`;
+
+    fetch(dataUrl)
+        .then(response => response.json())
+        .then(data => {
+          let allIndicators = [];
+
+          if (Array.isArray(data)) {
+            allIndicators = data;
+          } else {
+            allIndicators = Object.keys(data).map(key => {
+              let item = data[key];
+              item._originalKey = key;
+              return item;
+            });
+          }
+
+          let cleanIndicators = allIndicators.filter(ind => {
+            let id = ind._originalKey || ind.indicator || "";
+            return !id.includes('-a');
+          });
+
+          let statsByGoal = {};
+
+          cleanIndicators.forEach(ind => {
+            let id = ind._originalKey || ind.indicator || "";
+            let goalNum = id.split('-')[0];
+
+            let status = ind.reporting_status || 'notstarted';
+
+            if (!statsByGoal[goalNum]) {
+              statsByGoal[goalNum] = { total: 0, complete: 0, inprogress: 0, notstarted: 0 };
+            }
+
+            statsByGoal[goalNum].total += 1;
+
+            if (status === 'complete') {
+              statsByGoal[goalNum].complete += 1;
+            } else if (status === 'inprogress') {
+              statsByGoal[goalNum].inprogress += 1;
+            } else {
+              statsByGoal[goalNum].notstarted += 1;
+            }
+          });
+
+          Object.keys(statsByGoal).forEach(goalNum => {
+            let stats = statsByGoal[goalNum];
+
+            let totalEl = document.getElementById(`js-goal-${goalNum}-total`);
+            if (totalEl) totalEl.innerText = stats.total;
+
+            if (stats.total > 0) {
+              let summaryEl = document.getElementById(`js-goal-${goalNum}-summary`);
+              let statusesEl = document.getElementById(`js-goal-${goalNum}-statuses`);
+
+              if (summaryEl) summaryEl.style.display = 'block';
+
+              if (statusesEl) {
+                let htmlStr = '';
+
+                if (stats.complete > 0) {
+                  let pComp = Math.round((stats.complete / stats.total) * 100);
+                  htmlStr += `<div><span class="status complete"><span class="status-inner">${stats.complete}</span></span><strong>Виконано</strong><span class="value">${pComp}%</span></div>`;
+                }
+                if (stats.inprogress > 0) {
+                  let pInp = Math.round((stats.inprogress / stats.total) * 100);
+                  htmlStr += `<div><span class="status inprogress"><span class="status-inner">${stats.inprogress}</span></span><strong>В процесі</strong><span class="value">${pInp}%</span></div>`;
+                }
+                if (stats.notstarted > 0) {
+                  let pNot = Math.round((stats.notstarted / stats.total) * 100);
+                  htmlStr += `<div><span class="status notstarted"><span class="status-inner">${stats.notstarted}</span></span><strong>Не розпочато</strong><span class="value">${pNot}%</span></div>`;
+                }
+
+                statusesEl.innerHTML = htmlStr;
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Ошибка загрузки JSON:', error));
+  });
+</script>
