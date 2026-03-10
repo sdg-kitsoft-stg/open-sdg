@@ -131,6 +131,10 @@
         display: inline-block;
         padding: 8px 0;
 
+        &:last-child {
+          border-bottom: 1px solid $indicator-selector-borderColor;
+        }
+
         //&:hover {
         //    border-color: $indicator-selected-borderColor-hover;
         //}
@@ -178,6 +182,11 @@
                 align-items: center;
                 justify-content: center;
                 flex: 0 0 24px;
+            }
+
+            .buttons-container {
+              display: flex;
+              gap: 16px;
             }
 
             .custom-checkbox__box::after {
@@ -248,9 +257,7 @@
                 font-size: 16px;
                 font-weight: 600;
                 line-height: 25px;
-                text-align: center;
-                font-size: 1.2em;
-                padding: 8px 12px 7px 12px;
+                padding: 8px 12px 7px;
                 background: #F3F2F1;
                 box-shadow: 0 -2px 0 0 #929191 inset;
                 display: inline-flex;
@@ -293,10 +300,6 @@
                 line-height: 25px;
                 display: flex;
                 align-items: center;
-
-                &:not(:first-child) {
-                    border-top: 1px solid $indicator-fieldLabel-borderColor;
-                }
 
                 input {
                     position: static;
@@ -410,6 +413,8 @@
         font-size: 16px;
         font-weight: 400;
         line-height: 24px;
+
+        margin-bottom: 0;
     }
 }
 
@@ -470,4 +475,27 @@ body.contrast-high {
 
 #indicator-sidebar button#clear {
     display: none;
+}
+
+.table.dataTable>thead .sorting:before, table.dataTable>thead .sorting_asc:before, table.dataTable>thead .sorting_desc:before, table.dataTable>thead .sorting_asc_disabled:before, table.dataTable>thead .sorting_desc_disabled:before,
+table.dataTable>thead .sorting:after, table.dataTable>thead .sorting_asc:after, table.dataTable>thead .sorting_desc:after, table.dataTable>thead .sorting_asc_disabled:after, table.dataTable>thead .sorting_desc_disabled:after {
+  content: '' !important;
+}
+.table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {
+  padding-right: 0;
+}
+
+#main-content .nav-tabs .nav-item {
+  padding: 0;
+}
+#main-content .nav-tabs .nav-item:not(.active) {
+  padding-bottom: 0;
+}
+
+#main-content .nav-tabs .nav-item button {
+  padding: 10px 15px;
+}
+
+#main-content .nav-tabs .nav-item:not(.active) button {
+  padding-bottom: 8px;
 }

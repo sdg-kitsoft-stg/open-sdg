@@ -194,6 +194,11 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
 
         const title = getHeading(translatedHeading, index);
 
+          console.log({
+              title,
+              translatedHeading
+          })
+
         if (title) {
           table_head += '<th' + (!index ? '' : ' class="table-value"') + ' scope="col">' + title + '</th>';
         }

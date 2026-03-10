@@ -15,11 +15,11 @@
 <script>
   let isUk = window.location.pathname.indexOf('/uk/') !== -1;
 
+  const titleTag = document.querySelector('title');
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+
   if (isUk) {
-    const titleTag = document.querySelector('title');
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    const [_, siteName] = titleTag.innerText.split(' - ');
-    const newTitle = `Сторінку на знайдено - ${siteName}`;
+    const newTitle = `Сторінку на знайдено - Індикатори цілей сталого розвитку`;
 
     titleTag.innerHTML = newTitle;
     ogTitle.setAttribute('content', newTitle);
@@ -28,6 +28,11 @@
     document.getElementById('404-desc').innerText = "Сторінку не знайдено. Можливо, вона переїхала або в посиланні є помилка. Будь ласка, перевірте адресу.";
     document.getElementById('404-btn').innerText = "На головну";
     document.getElementById('404-btn').href = "{{ site.baseurl }}/uk/";
+  } else {
+      const newTitle = `Page not found - Indicators For The Sustainable Development Goals`;
+
+      titleTag.innerHTML = newTitle;
+      ogTitle.setAttribute('content', newTitle);
   }
 </script>
 {% include scripts.html %}
