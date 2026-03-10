@@ -1,33 +1,37 @@
 {% include head.html %}
 {% include header.html %}
 <script type="text/template" class="results-template">
-  <% if(resultsCount) { %>
+    <% if(resultsCount > 0) { %>
     <p>{{ page.t.search.results_found }}: <%= resultsCount %></p>
+
     <% _.each(searchResults, function(result){ %>
-      <div class="row search-result">
-        <div class="col col-xs-12">
-          <div class="item">
-              <a href="<%= result.url %>">
-                  <h2 class="title"><%= result.title %></h2>
-              </a>
-          </div>
+    <div class="row search-result">
+        <div class="col col-md-8">
+            <div class="item">
+                <a href="<%= result.url %>">
+                    <h2 class="title"><%= result.title %></h2>
+                </a>
+                <% if(result.content) { %><p><%= result.content %></p><% } %>
+            </div>
         </div>
-      </div>
+    </div>
     <% }); %>
 
-  <% } else { %>
-    <p>
-      {{ page.t.search.no_results }}
-      <% if(didYouMean) { %>
-      - {{ page.t.search.did_you_mean }}:
-        <% _.each(didYouMean, function(searchTerm){ %>
-        <a href="{{ page.baseurl }}search/?q=<%= searchTerm %>"><%= searchTerm %></a>
-        <% }); %>
-      <% } %>
-      <br><br>
-      {{ page.t.search.adjust_your_search }}
-    </p>
-  <% } %>
+    <% if(totalPages > 1) { %>
+    <nav aria-label="Page navigation" class="pagination-container">
+        <ul class="pagination">
+            <% for(var i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
+                <a class="page-link pagination-link" href="#" data-page="<%= i %>"><%= i %></a>
+            </li>
+            <% } %>
+        </ul>
+    </nav>
+    <% } %>
+
+    <% } else { %>
+    <p class="no-results-text">{{ page.t.search.no_results }}</p>
+    <% } %>
 </script>
 <script>
 opensdg.searchItems = {{ site.data.search_items[page.language] | jsonify }};
@@ -50,7 +54,7 @@ opensdg.searchIndexExtraFields = [];
   {% include components/page/breadcrumbs.html %}
 </div>
 <div id="main-content" class="container" role="main">
-  <h1>{{ page.t.search.search_results_for }} '<span id="search-term"></span>'</h1>
+  <h1 class="mb-32">{{ page.t.search.search_results_for }} «<span id="search-term"></span>»</h1>
   {% include search.html id="search-bar-on-page" not_in_menu=true %}
   {% include components/loading.html %}
   <div id="search-results" class="results"></div>
