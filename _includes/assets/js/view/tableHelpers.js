@@ -175,9 +175,9 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
 
         var table_head = '<thead><tr>';
 
-        var getHeading = function (heading, index) {
+        var getHeading = function (text) {
             var arrows = '<span class="sort"><i class="fa fa-sort"></i><i class="fa fa-sort-down"></i><i class="fa fa-sort-up"></i></span>';
-            var button = '<span tabindex="0" role="button" aria-describedby="column-sort-info">' + translations.t(heading) + '</span>';
+            var button = '<span tabindex="0" role="button" aria-describedby="column-sort-info">' + text + '</span>';
             return button + arrows;
         };
 
