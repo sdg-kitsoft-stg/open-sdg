@@ -1,87 +1,44 @@
 {%- assign indicators_plural = page.t.general.indicators | downcase -%}
-
 {%- assign status_types = site.reporting_status.status_types -%}
 {%- if include.status_types and site[include.status_types] -%}
 {%- assign status_types = site[include.status_types].status_types -%}
 {%- endif -%}
 
-<div style="background: #1e1e1e; color: #00ff00; padding: 20px; margin-bottom: 30px; font-family: monospace; font-size: 14px; border: 2px solid #00ff00; border-radius: 5px;">
-    <h3 style="color: #fff; margin-top: 0;">🛑 АНАЛИЗ ДАННЫХ 🛑</h3>
-
-    {%- assign d_total = 0 -%}
-    {%- assign d_arch_id = 0 -%}
-    {%- assign d_arch_url = 0 -%}
-    {%- assign d_arch_path = 0 -%}
-    {%- assign sample_archive = nil -%}
-    {%- assign sample_normal = nil -%}
-
-    {%- for ind in site.indicators -%}
-    {%- if ind.language == page.language -%}
-    {%- assign d_total = d_total | plus: 1 -%}
-
-    {%- assign is_archive = false -%}
-
-    {%- assign check_id = ind.indicator_id | downcase -%}
-    {%- assign check_url = ind.url | downcase -%}
-    {%- assign check_path = ind.path | downcase -%}
-
-    {%- if check_id contains "-a" -%}{%- assign d_arch_id = d_arch_id | plus: 1 -%}{%- assign is_archive = true -%}{%- endif -%}
-    {%- if check_url contains "-a" -%}{%- assign d_arch_url = d_arch_url | plus: 1 -%}{%- assign is_archive = true -%}{%- endif -%}
-    {%- if check_path contains "-a" -%}{%- assign d_arch_path = d_arch_path | plus: 1 -%}{%- assign is_archive = true -%}{%- endif -%}
-
-    {%- if is_archive and sample_archive == nil -%}
-    {%- assign sample_archive = ind -%}
+{%- assign clean_pages = "" | split: "" -%}
+{%- for pg in site.pages -%}
+    {%- if pg.indicator_number and pg.language == page.language -%}
+        {%- unless pg.path contains "-a" -%}
+        {%- assign clean_pages = clean_pages | push: pg -%}
+        {%- endunless -%}
     {%- endif -%}
-    {%- if is_archive == false and sample_normal == nil -%}
-    {%- assign sample_normal = ind -%}
-    {%- endif -%}
-    {%- endif -%}
-    {%- endfor -%}
-
-    <p><strong>1. Всего индикаторов (укр):</strong> {{ d_total }}</p>
-    <p><strong>2. Найдено "-a" в поле indicator_id:</strong> {{ d_arch_id }}</p>
-    <p><strong>3. Найдено "-a" в поле url:</strong> {{ d_arch_url }}</p>
-    <p><strong>4. Найдено "-a" в поле path:</strong> {{ d_arch_path }}</p>
-
-    <hr style="border-color: #333;">
-
-    <div style="display: flex; gap: 20px;">
-        <div style="flex: 1; background: #000; padding: 10px;">
-            <h4 style="color: #ff5555; margin-top: 0;">🔎 ПРИМЕР АРХИВНОГО (-a)</h4>
-            {%- if sample_archive -%}
-            <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.5;">
-                <li><strong>indicator_id:</strong> "{{ sample_archive.indicator_id }}"</li>
-                <li><strong>number:</strong> "{{ sample_archive.number }}"</li>
-                <li><strong>url:</strong> "{{ sample_archive.url }}"</li>
-                <li><strong>path:</strong> "{{ sample_archive.path }}"</li>
-                <li><strong>status:</strong> "{{ sample_archive.reporting_status }}"</li>
-                <li><strong>published:</strong> "{{ sample_archive.published }}"</li>
-                <li><strong>title:</strong> "{{ sample_archive.title }}"</li>
-            </ul>
-            {%- else -%}
-            <span style="color:red">Архивные файлы вообще не найдены ни по одному полю!</span>
-            {%- endif -%}
-        </div>
-
-        <div style="flex: 1; background: #000; padding: 10px;">
-            <h4 style="color: #55ff55; margin-top: 0;">✅ ПРИМЕР ОБЫЧНОГО</h4>
-            {%- if sample_normal -%}
-            <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.5;">
-                <li><strong>indicator_id:</strong> "{{ sample_normal.indicator_id }}"</li>
-                <li><strong>number:</strong> "{{ sample_normal.number }}"</li>
-                <li><strong>url:</strong> "{{ sample_normal.url }}"</li>
-                <li><strong>path:</strong> "{{ sample_normal.path }}"</li>
-                <li><strong>status:</strong> "{{ sample_normal.reporting_status }}"</li>
-                <li><strong>published:</strong> "{{ sample_normal.published }}"</li>
-            </ul>
-            {%- endif -%}
-        </div>
-    </div>
-</div>
+{%- endfor -%}
 
 <h2>{{ include.title }}</h2>
+
 {%- for goalreport in include.goals -%}
-{%- assign goal = goalreport.goal | strip | sdg_lookup -%}
+    {%- assign goal = goalreport.goal | strip | sdg_lookup -%}
+    {%- assign target_goal = goal.number | append: "" -%}
+
+    {%- assign g_total = 0 -%}
+    {%- assign g_complete = 0 -%}
+    {%- assign g_inprogress = 0 -%}
+    {%- assign g_notstarted = 0 -%}
+
+    {%- for pg in clean_pages -%}
+        {%- assign pg_goal = pg.indicator_number | split: "." | first | append: "" -%}
+
+        {%- if pg_goal == target_goal -%}
+            {%- assign g_total = g_total | plus: 1 -%}
+            {%- if pg.reporting_status == 'complete' -%}
+                {%- assign g_complete = g_complete | plus: 1 -%}
+            {%- elsif pg.reporting_status == 'inprogress' -%}
+                {%- assign g_inprogress = g_inprogress | plus: 1 -%}
+            {%- else -%}
+                {%- assign g_notstarted = g_notstarted | plus: 1 -%}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endfor -%}
+
 <div class="goal reporting-status-item">
     <div class="frame goal-tiles">
         <div>
@@ -92,15 +49,23 @@
         <h3 class="status-goal">
             <a href="{{ goal.url }}">{{ goal.short }}</a>
         </h3>
-        <span class="total">{{ goalreport.totals.total }} {{ include.indicator_count_label | t | default: indicators_plural }}</span>
-        {% if goalreport.totals.total > 0 %}
+        <span class="total">{{ g_total }} {{ include.indicator_count_label | t | default: indicators_plural }}</span>
+
+        {% if g_total > 0 %}
         <div class="summary">
             <div class="statuses">
                 {%- for status_type in status_types -%}
-                {% assign status_stats = goalreport.statuses | where: "status", status_type.value | first %}
-                {% if status_stats %}
+                {%- assign current_count = 0 -%}
+                {%- if status_type.value == 'complete' -%}{%- assign current_count = g_complete -%}
+                {%- elsif status_type.value == 'inprogress' -%}{%- assign current_count = g_inprogress -%}
+                {%- else -%}{%- assign current_count = g_notstarted -%}{%- endif -%}
+
+                {% if current_count > 0 %}
+                {%- assign percentage = current_count | times: 100.0 | divided_by: g_total | round -%}
                 <div>
-                    <span class="status {{ status_type.value | slugify }}"><span class="status-inner">{{ status_stats.count }}</span></span><strong>{{ status_type.label | t }}</strong><span class="value">{{ status_stats.percentage | round }}%</span>
+                    <span class="status {{ status_type.value | slugify }}"><span class="status-inner">{{ current_count }}</span></span>
+                    <strong>{{ status_type.label | t }}</strong>
+                    <span class="value">{{ percentage }}%</span>
                 </div>
                 {% endif %}
                 {%- endfor -%}
@@ -109,13 +74,15 @@
         </div>
         <div class="goal-stats">
             {%- for status_type in status_types -%}
-            {% assign status_stats = goalreport.statuses | where: "status", status_type.value | first %}
-            {% if status_stats %}
-            {% assign status_count_precise = status_stats.count | times: 1.0 %}
-            {% assign goalreport_total_precise = goalreport.totals.total  | times: 1.0 %}
-            {% assign percentage_precise = status_count_precise | divided_by: goalreport_total_precise | times: 100 %}
-            <span class="{{ status_type.value | slugify }}" style="width:{{ percentage_precise }}%" title="{{ status_type.label | t }}: {{ status_stats.percentage | round }}%"></span>
-            {% endif %}
+                {%- assign current_count_bar = 0 -%}
+                {%- if status_type.value == 'complete' -%}{%- assign current_count_bar = g_complete -%}
+                {%- elsif status_type.value == 'inprogress' -%}{%- assign current_count_bar = g_inprogress -%}
+                {%- else -%}{%- assign current_count_bar = g_notstarted -%}{%- endif -%}
+
+                {% if current_count_bar > 0 %}
+                {%- assign percentage_precise = current_count_bar | times: 100.0 | divided_by: g_total -%}
+                <span class="{{ status_type.value | slugify }}" style="width:{{ percentage_precise }}%" title="{{ status_type.label | t }}: {{ percentage_precise | round }}%"></span>
+                {% endif %}
             {%- endfor -%}
         </div>
         {% endif %}
