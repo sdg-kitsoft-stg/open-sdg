@@ -104,6 +104,16 @@ body.contrast-high {
         font-weight: 600;
         line-height: 25px;
         box-shadow: 0 -2px 0 0 #002D18 inset;
+        text-decoration: none;
+        margin-bottom: 50px;
+
+        &:hover {
+          background: #005A30;
+        }
+
+        @media only screen and (max-width: 768px) {
+          margin-bottom: 20px;
+        }
     }
     .indicator-item {
         .col-auto h4,

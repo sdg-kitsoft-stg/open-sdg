@@ -50,7 +50,6 @@
             </div>
             {% endif %}
         </div>
-        <hr class="goal-page-column-header-rule">
 
         <ul class="nav nav-tabs edition-tabs" role="tablist">
             <li role="presentation">
@@ -103,20 +102,24 @@
                     <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ target.number }}</h3></div>
                     <div class="col">{{ target.name }}</div>
                 </div>
-                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
                 {% assign last_target = ind.target_number %}
                 {% endif %}
 
                 <div class="indicator-item">
                     <div class="row align-items-start goal-indicator">
-                        <div class="col-auto">
+                        <div class="col-md-8">
                             <h4>
                                 <span class="visually-hidden">{{ page.t.general.indicator }}</span>
                                 {{ ind.number }}
                             </h4>
                         </div>
-                        <div class="col">{{ ind.name }}</div>
-                        {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
+                        <div class="col-md-8">
+                            <div>
+                                {{ ind.name }}
+                            </div>
+
+                            {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
+                        </div>
                     </div>
 
                     <button class="btn btn-toggle-collapse collapsed"
@@ -143,7 +146,7 @@
                         </a>
                     </div>
                 </div>
-                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
+                {% unless forloop.last %}<hr class="goal-page-target-rule" aria-hidden="true">{% endunless %}
                 {% endfor %}
             </div>
 

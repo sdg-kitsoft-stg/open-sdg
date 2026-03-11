@@ -20,7 +20,8 @@ $goal-by-target-indentation: 60px;
     .goal-page-target-rule, .goal-page-column-header-rule {
         border: 0;
         border-top: 0.1px solid $goalTarget-horizontalRule-color;
-        margin-bottom: 25px;
+        margin-top: 32px;
+        margin-bottom: 12px;
         opacity: 1;
         height: 0.1px;
     }
