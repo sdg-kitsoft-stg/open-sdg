@@ -95,8 +95,6 @@
 
                 {% if ind.target_number != last_target %}
 
-                {% if last_target != "" %}{% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}{% endif %}
-
                 {% assign target = ind.target_number | sdg_lookup %}
                 <div class="row align-items-start goal-target">
                     <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ target.number }}</h3></div>
@@ -171,8 +169,6 @@
                         {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне завдання" }}
                     </div>
                 </div>
-
-                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
 
                 {% assign last_archive_target = ind.target_number %}
                 {% endif %}
