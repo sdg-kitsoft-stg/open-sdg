@@ -74,7 +74,7 @@ body.contrast-high {
     text-underline-position: from-font;
     display: flex;
     align-items: center;
-    padding: 16px 0 32px;
+    padding: 16px 0 32px !important;
 
     &:before {
         content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMC4yNSIgeT0iMC4yNSIgd2lkdGg9IjE5LjUiIGhlaWdodD0iMTkuNSIgcng9IjkuNzUiIHN0cm9rZT0iIzFENzBCOCIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBhdGggZD0iTTEzLjUzNTUgMTEuNDY0NUwxMCA3LjkyODkyTDYuNDY0NDcgMTEuNDY0NSIgc3Ryb2tlPSIjMUQ3MEI4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4K");

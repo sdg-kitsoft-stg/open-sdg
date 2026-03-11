@@ -100,7 +100,7 @@
                 {% assign target = ind.target_number | sdg_lookup %}
                 <div class="row align-items-start goal-target">
                     <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ target.number }}</h3></div>
-                    <div class="col">{{ target.name }}</div>
+                    <div class="col-md-8">{{ target.name }}</div>
                 </div>
                 {% assign last_target = ind.target_number %}
                 {% endif %}
@@ -163,13 +163,11 @@
 
                 {% if ind.target_number != last_archive_target %}
 
-                {% if last_archive_target != "" %}{% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}{% endif %}
-
                 {% assign archive_key = ind.target_number | replace: ".", "-" | append: "-a" %}
 
                 <div class="row align-items-start goal-target">
                     <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ ind.target_number }}</h3></div>
-                    <div class="col">
+                    <div class="col-md-8">
                         {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне завдання" }}
                     </div>
                 </div>
@@ -187,7 +185,7 @@
                                 {{ ind.number | replace: ".a", "" }}
                             </h4>
                         </div>
-                        <div class="col">{{ ind.name }}</div>
+                        <div class="col-md-8">{{ ind.name }}</div>
                         {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
                     </div>
                     <button class="btn btn-toggle-collapse collapsed"

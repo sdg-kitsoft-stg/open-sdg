@@ -105,10 +105,10 @@ body.contrast-high {
         line-height: 25px;
         box-shadow: 0 -2px 0 0 #002D18 inset;
         text-decoration: none;
-        margin-bottom: 50px;
+        margin-bottom: 18px;
 
         &:hover {
-          background: #005A30;
+          background: #005A30 !important;
         }
 
         @media only screen and (max-width: 768px) {
