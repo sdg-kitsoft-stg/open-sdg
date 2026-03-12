@@ -179,6 +179,7 @@ var indicatorView = function (model, options) {
 
     const fieldsContainer = document.querySelector('#fields');
     console.log({
+        fieldsContainer,
         len: fieldsContainer.children.length === 0
     })
 
