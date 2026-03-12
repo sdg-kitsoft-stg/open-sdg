@@ -18,6 +18,7 @@ To run the tests (also requires Node.js):
 
 ```
 make test
+
 ```
 
 To run particular tests:
