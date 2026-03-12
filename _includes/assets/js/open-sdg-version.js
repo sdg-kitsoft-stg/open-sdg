@@ -1,9 +1,9 @@
 window.OPEN_SDG_VERSION = "2.4.0";
 
 
-const fieldsContainer = document.querySelector('#fields');
+const fieldsContainerLength = document.querySelectorAll('.variable-selector').length;
 
-if (fieldsContainer.children.length === 0) {
+if (fieldsContainerLength === 0) {
     const sidebar = document.getElementById('indicator-sidebar');
     const indicatorMain = document.querySelector('.indicator-main');
 
