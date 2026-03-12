@@ -2,6 +2,8 @@
     <!-- National Metadata -->
     <div>
         <article>
+            <h2 class="visually-hidden">{{ }}</h2>
+            <p>{{ page.t.indicator.national_metadata }}</p>
             {% comment %}
             <p>
                 {% assign country_name = site.country.name | t %}
@@ -17,6 +19,7 @@
     <!-- Global Metadata -->
     <div>
         <article>
+            <h2 class="visually-hidden">{{ page.t.indicator.global_metadata }}</h2>
             <p>{{ page.t.indicator.global_metadata_blurb }}</p>
             {% include components/indicator/metadata.html scope='global' %}
         </article>
