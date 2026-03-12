@@ -178,6 +178,9 @@ var indicatorView = function (model, options) {
     });
 
     const fieldsContainer = document.querySelector('#fields');
+    console.log({
+        len: fieldsContainer.children.length === 0
+    })
 
     if (fieldsContainer.children.length === 0) {
         const sidebar = document.getElementById('indicator-sidebar');
