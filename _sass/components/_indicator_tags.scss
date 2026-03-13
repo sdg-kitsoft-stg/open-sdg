@@ -10,6 +10,10 @@
         letter-spacing: 1px;
         text-transform: uppercase;
 
+        h4 {
+          font-weight: 600;
+        }
+
         &.complete {
             color: #005A30;
             background: #CCE2D8;
