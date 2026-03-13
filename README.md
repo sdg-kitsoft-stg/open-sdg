@@ -18,6 +18,7 @@ To run the tests (also requires Node.js):
 
 ```
 make test
+
 ```
 
 To run particular tests:
@@ -36,3 +37,4 @@ To clean up (remove temporary files and stop the web server) after tests:
 ```
 make clean
 ```
+ 

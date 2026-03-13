@@ -146,8 +146,6 @@ var indicatorView = function (model, options) {
         $(OPTIONS.rootElement).find('.selected').css('width', '0');
     });
 
-    let fieldsChildrenCount = 0;
-
     MODEL.onSelectionUpdate.attach(function (sender, args) {
 
         if (args.selectedFields.length) {
@@ -167,10 +165,6 @@ var indicatorView = function (model, options) {
         $('.variable-selector').each(function (index, element) {
             var currentField = $(element).data('field');
             var element = $(OPTIONS.rootElement).find('.variable-selector[data-field="' + currentField + '"]');
-
-            if (element) {
-                fieldsChildrenCount++;
-            }
             // is this an allowed field:
             if (args.allowedFields.includes(currentField)) {
                 $(element).removeClass('disallowed');
@@ -182,15 +176,6 @@ var indicatorView = function (model, options) {
             }
         });
     });
-
-    if (fieldsChildrenCount === 0) {
-        const sidebar = document.getElementById('indicator-sidebar');
-        const indicatorMain = document.querySelector('.indicator-main');
-
-        sidebar.style.display = 'none';
-        indicatorMain.classList.remove('col-md-8');
-        indicatorMain.classList.add('col-md-12');
-    }
 
     MODEL.onFieldsStatusUpdated.attach(function (sender, args) {
 
