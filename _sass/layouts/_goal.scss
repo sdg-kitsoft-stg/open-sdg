@@ -16,6 +16,10 @@ $goal-by-target-indentation: 60px;
     }
     .goal-indicator {
         margin-top: 20px;
+
+        h4 {
+            font-weight: 600;
+        }
     }
     .goal-page-target-rule, .goal-page-column-header-rule {
         border: 0;
