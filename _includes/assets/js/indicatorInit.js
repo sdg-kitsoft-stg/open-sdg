@@ -62,11 +62,6 @@ var indicatorInit = function () {
                     controller.initialise();
 
                     const fieldsContainerLength = document.querySelectorAll('.variable-selector').length;
-                    
-                    console.log({
-                        fieldsContainerLength,
-                        items: document.querySelectorAll('.variable-selector')
-                    })
 
                     if (fieldsContainerLength === 0) {
                         const sidebar = document.getElementById('indicator-sidebar');
