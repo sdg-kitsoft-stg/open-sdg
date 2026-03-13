@@ -275,7 +275,7 @@ function setDataTableWidth(table) {
                 if (!def.width) {
                     $(this).css('white-space', 'nowrap');
                 } else {
-                    $(this).css('width', def.width + 'px');
+                    // $(this).css('width', def.width + 'px');
                     $(this).data('width', def.width);
                 }
                 break;
