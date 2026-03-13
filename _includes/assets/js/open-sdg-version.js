@@ -3,6 +3,12 @@ window.OPEN_SDG_VERSION = "2.4.0";
 
 const fieldsContainerLength = document.querySelectorAll('.variable-selector').length;
 
+
+console.log({
+    fieldsContainerLength,
+    items: document.querySelectorAll('.variable-selector')
+})
+
 if (fieldsContainerLength === 0) {
     const sidebar = document.getElementById('indicator-sidebar');
     const indicatorMain = document.querySelector('.indicator-main');
