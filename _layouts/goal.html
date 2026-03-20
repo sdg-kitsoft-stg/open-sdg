@@ -100,6 +100,8 @@
                     <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ target.number }}</h3></div>
                     <div class="col-md-8">{{ target.name }}</div>
                 </div>
+
+                {% if last_target != "" %}{% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}{% endif %}
                 {% assign last_target = ind.target_number %}
                 {% endif %}
 

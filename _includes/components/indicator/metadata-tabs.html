@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-tabs indicator-metadata-tabs" role="tablist">
     {% if site.metadata_tabs and site.metadata_tabs.size > 0 %}
     {% for tab in site.metadata_tabs %}
         {% if tab.scope %}
@@ -27,3 +27,134 @@
         {% include components/indicator/metadata-tabs-default.html %}
     {% endif %}
 </ul>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tablists = document.querySelectorAll('.indicator-metadata-tabs[role="tablist"]');
+        if (!tablists.length) return;
+
+        tablists.forEach(function (tablist) {
+            var tabs = Array.prototype.slice.call(
+                tablist.querySelectorAll('[role="tab"]')
+            );
+
+            if (!tabs.length) return;
+
+            function activateTab(tab) {
+                if (!tab) return;
+
+                tabs.forEach(function (item) {
+                    item.classList.remove('active');
+                    item.setAttribute('aria-selected', 'false');
+                    item.setAttribute('tabindex', '-1');
+
+                    var parentLi = item.closest('li');
+                    if (parentLi) parentLi.classList.remove('active');
+
+                    var targetSelector =
+                        item.getAttribute('data-bs-target') ||
+                        item.getAttribute('data-target') ||
+                        item.getAttribute('href');
+
+                    if (targetSelector && targetSelector.charAt(0) === '#') {
+                        var pane = document.querySelector(targetSelector);
+                        if (pane) {
+                            pane.classList.remove('active', 'show', 'in');
+                        }
+                    }
+                });
+
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                tab.setAttribute('tabindex', '0');
+
+                var parentLi = tab.closest('li');
+                if (parentLi) parentLi.classList.add('active');
+
+                var activeTarget =
+                    tab.getAttribute('data-bs-target') ||
+                    tab.getAttribute('data-target') ||
+                    tab.getAttribute('href');
+
+                if (activeTarget && activeTarget.charAt(0) === '#') {
+                    var activePane = document.querySelector(activeTarget);
+                    if (activePane) {
+                        activePane.classList.add('active');
+                        activePane.classList.add('show');
+                        activePane.classList.add('in');
+                    }
+                }
+
+                if (window.bootstrap && window.bootstrap.Tab) {
+                    var instance = window.bootstrap.Tab.getOrCreateInstance(tab);
+                    instance.show();
+                } else if (window.jQuery && typeof window.jQuery(tab).tab === 'function') {
+                    window.jQuery(tab).tab('show');
+                }
+
+                tab.focus();
+            }
+
+            function moveTab(currentIndex, direction) {
+                var newIndex = currentIndex;
+
+                if (direction === 'next') {
+                    newIndex = (currentIndex + 1) % tabs.length;
+                } else if (direction === 'prev') {
+                    newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                } else if (direction === 'first') {
+                    newIndex = 0;
+                } else if (direction === 'last') {
+                    newIndex = tabs.length - 1;
+                }
+
+                activateTab(tabs[newIndex]);
+            }
+
+            tabs.forEach(function (tab, index) {
+                tab.addEventListener('keydown', function (e) {
+                    switch (e.key) {
+                        case 'ArrowRight':
+                        case 'Right':
+                        case 'ArrowDown':
+                        case 'Down':
+                            e.preventDefault();
+                            e.stopPropagation();
+                            moveTab(index, 'next');
+                            break;
+
+                        case 'ArrowLeft':
+                        case 'Left':
+                        case 'ArrowUp':
+                        case 'Up':
+                            e.preventDefault();
+                            e.stopPropagation();
+                            moveTab(index, 'prev');
+                            break;
+
+                        case 'Home':
+                            e.preventDefault();
+                            e.stopPropagation();
+                            moveTab(index, 'first');
+                            break;
+
+                        case 'End':
+                            e.preventDefault();
+                            e.stopPropagation();
+                            moveTab(index, 'last');
+                            break;
+                    }
+                });
+
+                tab.addEventListener('click', function () {
+                    tabs.forEach(function (item) {
+                        item.setAttribute('aria-selected', 'false');
+                        item.setAttribute('tabindex', '-1');
+                    });
+
+                    tab.setAttribute('aria-selected', 'true');
+                    tab.setAttribute('tabindex', '0');
+                });
+            });
+        });
+    });
+</script>

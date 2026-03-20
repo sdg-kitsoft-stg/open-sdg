@@ -81,6 +81,8 @@
         font-weight: 700;
         line-height: 27px;
         text-decoration: underline;
+        margin-bottom: 16px;
+        margin-top: 0;
       }
     }
   }
@@ -128,4 +130,8 @@ body.contrast-high.layout-search {
     background: white !important;
     box-shadow: none !important;
   }
+}
+
+.goal-page-heading {
+  margin-bottom: 32px;
 }
