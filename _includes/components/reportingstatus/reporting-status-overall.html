@@ -23,7 +23,6 @@
 {%- if total_count > 0 -%}
 {%- assign p_complete = c_complete | times: 100.0 | divided_by: total_count | round -%}
 {%- assign p_inprogress = c_inprogress | times: 100.0 | divided_by: total_count | round -%}
-{%- assign p_notstarted = 100 | minus: p_complete | minus: p_inprogress -%}
 {%- endif -%}
 
 <div class="goal goal-overall">
@@ -51,18 +50,8 @@
               <span class="status inprogress">
                 <span class="status-inner">{{ c_inprogress }}</span>
               </span>
-                    <strong>{{ page.t.status.in_progress }}</strong>
-                    <span class="value">{{ p_inprogress }}%</span>
-                </div>
-                {%- endif -%}
-
-                {%- if c_notstarted > 0 -%}
-                <div>
-              <span class="status notstarted">
-                <span class="status-inner">{{ c_notstarted }}</span>
-              </span>
                     <strong>{{ page.t.status.not_started }}</strong>
-                    <span class="value">{{ p_notstarted }}%</span>
+                    <span class="value">{{ p_inprogress }}%</span>
                 </div>
                 {%- endif -%}
             </div>
