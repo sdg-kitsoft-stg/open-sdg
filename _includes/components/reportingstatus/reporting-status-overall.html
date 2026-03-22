@@ -37,7 +37,7 @@
                 <div><span class="status inprogress"><span class="status-inner">{{ c_inprogress }}</span></span><strong>{{ page.t.status.in_progress }}</strong><span class="value">{{ p_inprogress }}%</span></div>
                 {%- endif -%}
                 {%- if c_notstarted > 0 -%}
-                {%- assign p_notstarted = c_notstarted | times: 100.0 | divided_by: total_count | round -%}
+                {%- assign p_notstarted = 100 | minus: p_complete | minus: p_inprogress -%}
                 <div><span class="status notstarted"><span class="status-inner">{{ c_notstarted }}</span></span><strong>{{ page.t.status.not_started }}</strong><span class="value">{{ p_notstarted }}%</span></div>
                 {%- endif -%}
             </div>
