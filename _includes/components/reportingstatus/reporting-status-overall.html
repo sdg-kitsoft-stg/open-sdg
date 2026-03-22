@@ -5,7 +5,6 @@
 {%- assign c_notstarted = 0 -%}
 
 {%- for ind in site.indicators -%}
-{{ ind | inspect }}
 {%- if ind.language == page.language -%}
 {%- unless ind.url contains "-a/" -%}
 {%- assign total_count = total_count | plus: 1 -%}
@@ -21,6 +20,12 @@
 {%- endif -%}
 {%- endfor -%}
 
+{%- if total_count > 0 -%}
+{%- assign p_complete = c_complete | times: 100.0 | divided_by: total_count | round -%}
+{%- assign p_inprogress = c_inprogress | times: 100.0 | divided_by: total_count | round -%}
+{%- assign p_notstarted = 100 | minus: p_complete | minus: p_inprogress -%}
+{%- endif -%}
+
 <div class="goal goal-overall">
     <div class="details">
         <h2 class="status-goal">{{ include.title }}</h2>
@@ -29,10 +34,6 @@
     </span>
 
         {% if total_count > 0 %}
-        {%- assign p_complete = c_complete | times: 100.0 | divided_by: total_count | round -%}
-        {%- assign p_inprogress = c_inprogress | times: 100.0 | divided_by: total_count | round -%}
-        {%- assign p_notstarted = c_notstarted | times: 100.0 | divided_by: total_count | round -%}
-
         <div class="summary">
             <div class="statuses">
                 {%- if c_complete > 0 -%}
@@ -40,7 +41,7 @@
               <span class="status complete">
                 <span class="status-inner">{{ c_complete }}</span>
               </span>
-                    <strong>{{ page.t.status.reported }}</strong>
+                    <strong>{{ page.t.status.published }}</strong>
                     <span class="value">{{ p_complete }}%</span>
                 </div>
                 {%- endif -%}
