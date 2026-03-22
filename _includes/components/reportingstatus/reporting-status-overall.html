@@ -5,6 +5,24 @@
 {%- assign c_notstarted = 0 -%}
 {%- assign lang_prefix = '/' | append: page.language | append: '/' -%}
 
+<h3>DEBUG indicators</h3>
+
+{%- assign counter = 0 -%}
+
+{%- for ind in site.indicators -%}
+{%- if counter < 10 -%}
+<div style="margin-bottom: 20px;">
+    <strong>Number:</strong> {{ ind.indicator_number }}<br>
+    <strong>Name:</strong> {{ ind.indicator_name | t }}<br>
+    <strong>URL:</strong> {{ ind.url }}<br>
+    <strong>Status:</strong> {{ ind.reporting_status }}<br>
+    <hr>
+</div>
+
+{%- assign counter = counter | plus: 1 -%}
+{%- endif -%}
+{%- endfor -%}
+
 {%- for ind in site.indicators -%}
 {%- if ind.url contains lang_prefix -%}
 {%- unless ind.url contains "-a/" -%}
