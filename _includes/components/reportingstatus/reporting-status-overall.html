@@ -1,57 +1,48 @@
+{%- assign status_types = site.reporting_status.status_types -%}
 {%- assign total_count = 0 -%}
 {%- assign c_complete = 0 -%}
+{%- assign c_inprogress = 0 -%}
 {%- assign c_notstarted = 0 -%}
 
 {%- for ind in site.indicators -%}
-{%- unless ind.url contains "-a/" -%}
-{%- assign total_count = total_count | plus: 1 -%}
+    {%- if ind.language == page.language -%}
+    {%- unless ind.url contains "-a/" -%}
 
-{%- if ind.reporting_status == 'complete' -%}
-{%- assign c_complete = c_complete | plus: 1 -%}
-{%- else -%}
-{%- assign c_notstarted = c_notstarted | plus: 1 -%}
-{%- endif -%}
-{%- endunless -%}
+    {%- assign total_count = total_count | plus: 1 -%}
+    {%- if ind.reporting_status == 'complete' -%}
+        {%- assign c_complete = c_complete | plus: 1 -%}
+        {%- elsif ind.reporting_status == 'inprogress' -%}
+            {%- assign c_inprogress = c_inprogress | plus: 1 -%}
+        {%- else -%}
+        {%- assign c_notstarted = c_notstarted | plus: 1 -%}
+    {%- endif -%}
+    {%- endunless -%}
+    {%- endif -%}
 {%- endfor -%}
-
-{%- if total_count > 0 -%}
-{%- assign p_complete = c_complete | times: 100.0 | divided_by: total_count | round -%}
-{%- assign p_notstarted = c_notstarted | times: 100.0 | divided_by: total_count | round -%}
-{%- endif -%}
-
+{{ ind.reporting_status }}
 <div class="goal goal-overall">
     <div class="details">
         <h2 class="status-goal">{{ include.title }}</h2>
-        <span class="total">
-      <span>{{ total_count }}</span> {{ page.t.general.indicators | downcase }}
-    </span>
+        <span class="total"><span>{{ total_count }}</span> {{ page.t.general.indicators | downcase }}</span>
 
         {% if total_count > 0 %}
         <div class="summary">
             <div class="statuses">
                 {%- if c_complete > 0 -%}
-                <div>
-              <span class="status complete">
-                <span class="status-inner">{{ c_complete }}</span>
-              </span>
-                    <strong>{{ page.t.status.published }}</strong>
-                    <span class="value">{{ p_complete }}%</span>
-                </div>
+                {%- assign p_complete = c_complete | times: 100.0 | divided_by: total_count | round -%}
+                <div><span class="status complete"><span class="status-inner">{{ c_complete }}</span></span><strong>{{ page.t.status.reported }}</strong><span class="value">{{ p_complete }}%</span></div>
                 {%- endif -%}
-
+                {%- if c_inprogress > 0 -%}
+                {%- assign p_inprogress = c_inprogress | times: 100.0 | divided_by: total_count | round -%}
+                <div><span class="status inprogress"><span class="status-inner">{{ c_inprogress }}</span></span><strong>{{ page.t.status.in_progress }}</strong><span class="value">{{ p_inprogress }}%</span></div>
+                {%- endif -%}
                 {%- if c_notstarted > 0 -%}
-                <div>
-              <span class="status notstarted">
-                <span class="status-inner">{{ c_notstarted }}</span>
-              </span>
-                    <strong>{{ page.t.status.not_started }}</strong>
-                    <span class="value">{{ p_notstarted }}%</span>
-                </div>
+                {%- assign p_notstarted = c_notstarted | times: 100.0 | divided_by: total_count | round -%}
+                <div><span class="status notstarted"><span class="status-inner">{{ c_notstarted }}</span></span><strong>{{ page.t.status.not_started }}</strong><span class="value">{{ p_notstarted }}%</span></div>
                 {%- endif -%}
             </div>
         </div>
-
-        <div class="status-goal-divider"></div>
+        <div class=status-goal-divider"></div>
         {% endif %}
     </div>
 </div>
