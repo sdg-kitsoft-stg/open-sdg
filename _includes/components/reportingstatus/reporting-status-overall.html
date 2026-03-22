@@ -11,14 +11,17 @@
 
 {%- for ind in site.indicators -%}
 {%- if counter < 10 -%}
-<div style="margin-bottom: 20px;">
+<div style="margin-bottom:20px;">
     <strong>Number:</strong> {{ ind.indicator_number }}<br>
-    <strong>Name:</strong> {{ ind.indicator_name | t }}<br>
+    <strong>Title:</strong> {{ ind.title }}<br>
+    <strong>Indicator name:</strong> {{ ind.indicator_name }}<br>
+    <strong>Reporting status:</strong> {{ ind.reporting_status }}<br>
     <strong>URL:</strong> {{ ind.url }}<br>
-    <strong>Status:</strong> {{ ind.reporting_status }}<br>
+    <strong>Lang:</strong> {{ ind.language }}<br>
+    <strong>Layout:</strong> {{ ind.layout }}<br>
+    <strong>Content:</strong> {{ ind.content | strip | truncate: 120 }}<br>
     <hr>
 </div>
-
 {%- assign counter = counter | plus: 1 -%}
 {%- endif -%}
 {%- endfor -%}
