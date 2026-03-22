@@ -149,18 +149,25 @@
 
                             let htmlStr = '';
 
+                            const pComp = stats.complete > 0
+                                ? Math.round((stats.complete / stats.total) * 100)
+                                : 0;
+
+                            const pInp = stats.inprogress > 0
+                                ? Math.round((stats.inprogress / stats.total) * 100)
+                                : 0;
+
+                            const pNot = Math.max(0, 100 - pComp - pInp);
+
                             if (stats.complete > 0) {
-                                let pComp = Math.round((stats.complete / stats.total) * 100);
                                 htmlStr += `<div><span class="status complete"><span class="status-inner">${stats.complete}</span></span><strong>${tComplete}</strong><span class="value">${pComp}%</span></div>`;
                             }
 
                             if (stats.inprogress > 0) {
-                                let pInp = Math.round((stats.inprogress / stats.total) * 100);
                                 htmlStr += `<div><span class="status inprogress"><span class="status-inner">${stats.inprogress}</span></span><strong>${tInprogress}</strong><span class="value">${pInp}%</span></div>`;
                             }
 
                             if (stats.notstarted > 0) {
-                                let pNot = Math.round((stats.notstarted / stats.total) * 100);
                                 htmlStr += `<div><span class="status notstarted"><span class="status-inner">${stats.notstarted}</span></span><strong>${tNotstarted}</strong><span class="value">${pNot}%</span></div>`;
                             }
 
