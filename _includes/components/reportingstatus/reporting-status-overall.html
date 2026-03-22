@@ -3,7 +3,6 @@
 {%- assign c_notstarted = 0 -%}
 
 {%- for ind in site.indicators -%}
-{%- if ind.language == page.language -%}
 {%- unless ind.url contains "-a/" -%}
 
 {%- if ind.reporting_status == 'complete' or ind.reporting_status == 'notstarted' or ind.reporting_status == blank -%}
@@ -15,9 +14,7 @@
 {%- elsif ind.reporting_status == 'notstarted' or ind.reporting_status == blank -%}
 {%- assign c_notstarted = c_notstarted | plus: 1 -%}
 {%- endif -%}
-
 {%- endunless -%}
-{%- endif -%}
 {%- endfor -%}
 
 <div class="goal goal-overall">
