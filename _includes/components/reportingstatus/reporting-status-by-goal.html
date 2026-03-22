@@ -1,4 +1,3 @@
-{%- assign indicators_plural = page.t.general.indicators | downcase -%}
 {%- assign status_types = site.reporting_status.status_types -%}
 {%- if include.status_types and site[include.status_types] -%}
 {%- assign status_types = site[include.status_types].status_types -%}
@@ -7,122 +6,166 @@
 <h2 class="mb-4">{{ include.title }}</h2>
 
 <div class="col-md-8">
-{%- for goalreport in include.goals -%}
-{%- assign goal = goalreport.goal | strip | sdg_lookup -%}
-{%- assign goal_num = goal.number -%}
+    {%- for goalreport in include.goals -%}
+    {%- assign goal = goalreport.goal | strip | sdg_lookup -%}
+    {%- assign goal_num = goal.number -%}
 
-<div class="goal reporting-status-item">
-    <div class="frame goal-tiles">
-        <div>
-            <img src="{{ goal.icon }}" alt="{{ goal.short | escape }} - {{ page.t.general.goal }} {{ goal.number }}" width="80" height="80" class="goal-icon-{{ goal.number }} goal-icon-image goal-icon-image-{{ site.goal_image_extension }}"/>
+    <div class="goal reporting-status-item">
+        <div class="frame goal-tiles">
+            <div>
+                <img src="{{ goal.icon }}" alt="{{ goal.short | escape }} - {{ page.t.general.goal }} {{ goal.number }}"
+                     width="80" height="80"
+                     class="goal-icon-{{ goal.number }} goal-icon-image goal-icon-image-{{ site.goal_image_extension }}"/>
+            </div>
         </div>
-    </div>
-    <div class="details">
-        <h3 class="status-goal mt-0">
-            <a href="{{ goal.url }}">{{ goal.short }}</a>
-        </h3>
+        <div class="details">
+            <h3 class="status-goal mt-0">
+                <a href="{{ goal.url }}">{{ goal.short }}</a>
+            </h3>
 
-        <span class="total">
+            <span class="total">
             <span id="js-goal-{{ goal_num }}-total">...</span> {{ include.indicator_count_label | t | default: indicators_plural }}
         </span>
 
-        <div class="summary" id="js-goal-{{ goal_num }}-summary" style="display: none;">
-            <div class="statuses" id="js-goal-{{ goal_num }}-statuses"></div>
+            <div class="summary" id="js-goal-{{ goal_num }}-summary" style="display: none;">
+                <div class="statuses" id="js-goal-{{ goal_num }}-statuses"></div>
+            </div>
+            <div class="goal-stats" id="js-goal-{{ goal_num }}-bars"></div>
+
+            <div class="status-goal-divider"></div>
         </div>
-        <div class="goal-stats" id="js-goal-{{ goal_num }}-bars"></div>
-
-        <div class="status-goal-divider"></div>
+        <br style="clear:both;">
     </div>
-    <br style="clear:both;">
+    {%- endfor -%}
 </div>
-{%- endfor -%}
-</div>
-
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const currentLang = "{{ page.language | default: 'uk' }}";
-    const dataUrl = `https://sdg-kitsoft-stg.github.io/data-ukraine-sdg/${currentLang}/meta/all.json`;
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentLang = "{{ page.language | default: 'uk' }}";
+        const dataUrl = `https://sdg-kitsoft-stg.github.io/data-ukraine-sdg/${currentLang}/meta/all.json`;
 
-    fetch(dataUrl)
-        .then(response => response.json())
-        .then(data => {
-          let allIndicators = [];
+        const indicatorLabels = {
+            uk: {
+                one: "{{ page.t.general.indicator_one | default: 'індикатор' }}",
+                few: "{{ page.t.general.indicator_few | default: 'індикатори' }}",
+                many: "{{ page.t.general.indicator_many | default: 'індикаторів' }}"
+            },
+            en: {
+                one: "{{ page.t.general.indicator_one | default: 'indicator' }}",
+                other: "{{ page.t.general.indicator_other | default: 'indicators' }}"
+            }
+        };
 
-          if (Array.isArray(data)) {
-            allIndicators = data;
-          } else {
-            allIndicators = Object.keys(data).map(key => {
-              let item = data[key];
-              item._originalKey = key;
-              return item;
-            });
-          }
+        function getPluralKey(count, lang = 'uk') {
+            if (lang === 'uk') {
+                const mod10 = count % 10;
+                const mod100 = count % 100;
 
-          let cleanIndicators = allIndicators.filter(ind => {
-            let id = ind._originalKey || ind.indicator || "";
-            return !id.includes('-a');
-          });
-
-          let statsByGoal = {};
-
-          cleanIndicators.forEach(ind => {
-            let id = ind._originalKey || ind.indicator || "";
-            let goalNum = id.split('-')[0];
-
-            let status = ind.reporting_status || 'notstarted';
-
-            if (!statsByGoal[goalNum]) {
-              statsByGoal[goalNum] = { total: 0, complete: 0, inprogress: 0, notstarted: 0 };
+                if (mod10 === 1 && mod100 !== 11) return 'one';
+                if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'few';
+                return 'many';
             }
 
-            statsByGoal[goalNum].total += 1;
+            return count === 1 ? 'one' : 'other';
+        }
 
-            if (status === 'complete') {
-              statsByGoal[goalNum].complete += 1;
-            } else if (status === 'inprogress') {
-              statsByGoal[goalNum].inprogress += 1;
-            } else {
-              statsByGoal[goalNum].notstarted += 1;
-            }
-          });
+        function getIndicatorLabel(count, lang = 'uk') {
+            const pluralKey = getPluralKey(count, lang);
+            const langLabels = indicatorLabels[lang] || indicatorLabels.en;
 
-          Object.keys(statsByGoal).forEach(goalNum => {
-            let stats = statsByGoal[goalNum];
+            return langLabels[pluralKey] || langLabels.other || '';
+        }
 
-            let totalEl = document.getElementById(`js-goal-${goalNum}-total`);
-            if (totalEl) totalEl.innerText = stats.total;
+        fetch(dataUrl)
+            .then(response => response.json())
+            .then(data => {
+                let allIndicators = [];
 
-            if (stats.total > 0) {
-              let summaryEl = document.getElementById(`js-goal-${goalNum}-summary`);
-              let statusesEl = document.getElementById(`js-goal-${goalNum}-statuses`);
-
-              if (summaryEl) summaryEl.style.display = 'block';
-
-              if (statusesEl) {
-                const tComplete = "{{ page.t.status.reported | default: 'Виконано' }}";
-                const tInprogress = "{{ page.t.status.in_progress | default: 'В процесі' }}";
-                const tNotstarted = "{{ page.t.status.not_started | default: 'Не розпочато' }}";
-
-                let htmlStr = '';
-
-                if (stats.complete > 0) {
-                  let pComp = Math.round((stats.complete / stats.total) * 100);
-                  htmlStr += `<div><span class="status complete"><span class="status-inner">${stats.complete}</span></span><strong>${tComplete}</strong><span class="value">${pComp}%</span></div>`;
-                }
-                if (stats.inprogress > 0) {
-                  let pInp = Math.round((stats.inprogress / stats.total) * 100);
-                  htmlStr += `<div><span class="status inprogress"><span class="status-inner">${stats.inprogress}</span></span><strong>${tInprogress}</strong><span class="value">${pInp}%</span></div>`;
-                }
-                if (stats.notstarted > 0) {
-                  let pNot = Math.round((stats.notstarted / stats.total) * 100);
-                  htmlStr += `<div><span class="status notstarted"><span class="status-inner">${stats.notstarted}</span></span><strong>${tNotstarted}</strong><span class="value">${pNot}%</span></div>`;
+                if (Array.isArray(data)) {
+                    allIndicators = data;
+                } else {
+                    allIndicators = Object.keys(data).map(key => {
+                        let item = data[key];
+                        item._originalKey = key;
+                        return item;
+                    });
                 }
 
-                statusesEl.innerHTML = htmlStr;
-              }
-            }
-          });
-        })
-        .catch(error => console.error('Ошибка загрузки JSON:', error));
-  });
+                let cleanIndicators = allIndicators.filter(ind => {
+                    let id = ind._originalKey || ind.indicator || "";
+                    return !id.includes('-a');
+                });
+
+                let statsByGoal = {};
+
+                cleanIndicators.forEach(ind => {
+                    let id = ind._originalKey || ind.indicator || "";
+                    let goalNum = id.split('-')[0];
+                    let status = ind.reporting_status || 'notstarted';
+
+                    if (!statsByGoal[goalNum]) {
+                        statsByGoal[goalNum] = {
+                            total: 0,
+                            complete: 0,
+                            inprogress: 0,
+                            notstarted: 0
+                        };
+                    }
+
+                    statsByGoal[goalNum].total += 1;
+
+                    if (status === 'complete') {
+                        statsByGoal[goalNum].complete += 1;
+                    } else if (status === 'inprogress') {
+                        statsByGoal[goalNum].inprogress += 1;
+                    } else {
+                        statsByGoal[goalNum].notstarted += 1;
+                    }
+                });
+
+                Object.keys(statsByGoal).forEach(goalNum => {
+                    let stats = statsByGoal[goalNum];
+
+                    let totalEl = document.getElementById(`js-goal-${goalNum}-total`);
+                    if (totalEl) totalEl.innerText = stats.total;
+
+                    let labelEl = document.getElementById(`js-goal-${goalNum}-label`);
+                    if (labelEl) {
+                        labelEl.innerText = getIndicatorLabel(stats.total, currentLang);
+                    }
+
+                    if (stats.total > 0) {
+                        let summaryEl = document.getElementById(`js-goal-${goalNum}-summary`);
+                        let statusesEl = document.getElementById(`js-goal-${goalNum}-statuses`);
+
+                        if (summaryEl) summaryEl.style.display = 'block';
+
+                        if (statusesEl) {
+                            const tComplete = "{{ page.t.status.published | default: 'Опубліковано' }}";
+                            const tInprogress = "{{ page.t.status.in_progress | default: 'В процесі' }}";
+                            const tNotstarted = "{{ page.t.status.not_started | default: 'Не розпочато' }}";
+
+                            let htmlStr = '';
+
+                            if (stats.complete > 0) {
+                                let pComp = Math.round((stats.complete / stats.total) * 100);
+                                htmlStr += `<div><span class="status complete"><span class="status-inner">${stats.complete}</span></span><strong>${tComplete}</strong><span class="value">${pComp}%</span></div>`;
+                            }
+
+                            if (stats.inprogress > 0) {
+                                let pInp = Math.round((stats.inprogress / stats.total) * 100);
+                                htmlStr += `<div><span class="status inprogress"><span class="status-inner">${stats.inprogress}</span></span><strong>${tInprogress}</strong><span class="value">${pInp}%</span></div>`;
+                            }
+
+                            if (stats.notstarted > 0) {
+                                let pNot = Math.round((stats.notstarted / stats.total) * 100);
+                                htmlStr += `<div><span class="status notstarted"><span class="status-inner">${stats.notstarted}</span></span><strong>${tNotstarted}</strong><span class="value">${pNot}%</span></div>`;
+                            }
+
+                            statusesEl.innerHTML = htmlStr;
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Ошибка загрузки JSON:', error));
+    });
 </script>
