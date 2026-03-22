@@ -24,8 +24,11 @@
             </h3>
 
             <span class="total">
-            <span id="js-goal-{{ goal_num }}-total">...</span> {{ include.indicator_count_label | t | default: indicators_plural }}
-        </span>
+                <span id="js-goal-{{ goal_num }}-total">...</span>
+                <span id="js-goal-{{ goal_num }}-label">
+                    {{ page.t.general.indicator_many | default: 'індикаторів' }}
+                </span>
+            </span>
 
             <div class="summary" id="js-goal-{{ goal_num }}-summary" style="display: none;">
                 <div class="statuses" id="js-goal-{{ goal_num }}-statuses"></div>
@@ -54,10 +57,6 @@
                 other: "{{ page.t.general.indicator_other | default: 'indicators' }}"
             }
         };
-
-        console.log({
-            indicatorLabels
-        });
 
         function getPluralKey(count, lang = 'uk') {
             if (lang === 'uk') {
