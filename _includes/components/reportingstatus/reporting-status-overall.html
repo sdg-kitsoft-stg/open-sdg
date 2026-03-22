@@ -5,6 +5,7 @@
 {%- assign c_notstarted = 0 -%}
 
 {%- for ind in site.indicators -%}
+{{ ind | inspect }}
 {%- if ind.language == page.language -%}
 {%- unless ind.url contains "-a/" -%}
 {%- assign total_count = total_count | plus: 1 -%}
