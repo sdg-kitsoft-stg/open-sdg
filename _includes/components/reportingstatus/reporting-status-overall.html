@@ -37,7 +37,8 @@
 
                 const cleanIndicators = allIndicators.filter(ind => {
                     const id = ind._originalKey || ind.indicator_number || '';
-                    return !id.includes('.a') && !id.includes('.b') && !id.includes('.c');
+
+                    return !id.endsWith('-a');
                 });
 
                 let total = 0;
