@@ -1,97 +1,102 @@
-{%- assign status_types = site.reporting_status.status_types -%}
-{%- assign total_count = 0 -%}
-{%- assign c_complete = 0 -%}
-{%- assign c_inprogress = 0 -%}
-{%- assign c_notstarted = 0 -%}
-{%- assign lang_prefix = '/' | append: page.language | append: '/' -%}
-
-<h3>DEBUG indicators</h3>
-
-{%- assign counter = 0 -%}
-
-{%- for ind in site.indicators -%}
-{%- if counter < 10 -%}
-<div style="margin-bottom:20px;">
-    <strong>Number:</strong> {{ ind.indicator_number }}<br>
-    <strong>Title:</strong> {{ ind.title }}<br>
-    <strong>Indicator name:</strong> {{ ind.indicator_name }}<br>
-    <strong>Reporting status:</strong> {{ ind.reporting_status }}<br>
-    <strong>URL:</strong> {{ ind.url }}<br>
-    <strong>Lang:</strong> {{ ind.language }}<br>
-    <strong>Layout:</strong> {{ ind.layout }}<br>
-    <strong>Content:</strong> {{ ind.content | strip | truncate: 120 }}<br>
-    <hr>
-</div>
-{%- assign counter = counter | plus: 1 -%}
-{%- endif -%}
-{%- endfor -%}
-
-{%- for ind in site.indicators -%}
-{%- if ind.url contains lang_prefix -%}
-{%- unless ind.url contains "-a/" -%}
-
-{%- assign total_count = total_count | plus: 1 -%}
-
-{%- if ind.reporting_status == 'complete' -%}
-{%- assign c_complete = c_complete | plus: 1 -%}
-{%- elsif ind.reporting_status == 'inprogress' -%}
-{%- assign c_inprogress = c_inprogress | plus: 1 -%}
-{%- else -%}
-{%- assign c_notstarted = c_notstarted | plus: 1 -%}
-{%- endif -%}
-
-{%- endunless -%}
-{%- endif -%}
-{%- endfor -%}
-
 <div class="goal goal-overall">
     <div class="details">
         <h2 class="status-goal">{{ include.title }}</h2>
 
         <span class="total">
-            <span>{{ total_count }}</span>
+            <span id="js-overall-total">...</span>
             {{ page.t.general.indicators | downcase }}
         </span>
 
-        {% if total_count > 0 %}
-        <div class="summary">
-            <div class="statuses">
-                {%- if c_complete > 0 -%}
-                {%- assign p_complete = c_complete | times: 100.0 | divided_by: total_count | round -%}
-                <div>
-                            <span class="status complete">
-                                <span class="status-inner">{{ c_complete }}</span>
-                            </span>
-                    <strong>{{ page.t.status.reported }}</strong>
-                    <span class="value">{{ p_complete }}%</span>
-                </div>
-                {%- endif -%}
-
-                {%- if c_inprogress > 0 -%}
-                {%- assign p_inprogress = c_inprogress | times: 100.0 | divided_by: total_count | round -%}
-                <div>
-                            <span class="status inprogress">
-                                <span class="status-inner">{{ c_inprogress }}</span>
-                            </span>
-                    <strong>{{ page.t.status.in_progress }}</strong>
-                    <span class="value">{{ p_inprogress }}%</span>
-                </div>
-                {%- endif -%}
-
-                {%- if c_notstarted > 0 -%}
-                {%- assign p_notstarted = c_notstarted | times: 100.0 | divided_by: total_count | round -%}
-                <div>
-                            <span class="status notstarted">
-                                <span class="status-inner">{{ c_notstarted }}</span>
-                            </span>
-                    <strong>{{ page.t.status.not_started }}</strong>
-                    <span class="value">{{ p_notstarted }}%</span>
-                </div>
-                {%- endif -%}
-            </div>
+        <div class="summary" id="js-overall-summary" style="display: none;">
+            <div class="statuses" id="js-overall-statuses"></div>
         </div>
 
         <div class="status-goal-divider"></div>
-        {% endif %}
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentLang = "{{ page.language | default: 'uk' }}";
+        const dataUrl = `https://sdg-kitsoft-stg.github.io/data-ukraine-sdg/${currentLang}/meta/all.json`;
+
+        fetch(dataUrl)
+            .then(response => response.json())
+            .then(data => {
+                let allIndicators = [];
+
+                if (Array.isArray(data)) {
+                    allIndicators = data;
+                } else {
+                    allIndicators = Object.keys(data).map(key => {
+                        const item = data[key];
+                        item._originalKey = key;
+                        return item;
+                    });
+                }
+
+                const cleanIndicators = allIndicators.filter(ind => {
+                    const id = ind._originalKey || ind.indicator_number || '';
+                    return !id.includes('.a') && !id.includes('.b') && !id.includes('.c');
+                });
+
+                let total = 0;
+                let complete = 0;
+                let inprogress = 0;
+                let notstarted = 0;
+
+                cleanIndicators.forEach(ind => {
+                    total += 1;
+
+                    if (ind.reporting_status === 'complete') {
+                        complete += 1;
+                    } else if (ind.reporting_status === 'inprogress') {
+                        inprogress += 1;
+                    } else {
+                        notstarted += 1;
+                    }
+                });
+
+                const totalEl = document.getElementById('js-overall-total');
+                const summaryEl = document.getElementById('js-overall-summary');
+                const statusesEl = document.getElementById('js-overall-statuses');
+
+                if (totalEl) {
+                    totalEl.innerText = total;
+                }
+
+                if (summaryEl && total > 0) {
+                    summaryEl.style.display = 'block';
+                }
+
+                if (statusesEl && total > 0) {
+                    const tComplete = "{{ page.t.status.published | default: 'Опубліковано' }}";
+                    const tInprogress = "{{ page.t.status.in_progress | default: 'В процесі' }}";
+                    const tNotstarted = "{{ page.t.status.not_started | default: 'Не розпочато' }}";
+
+                    const pComp = complete > 0 ? Math.round((complete / total) * 100) : 0;
+                    const pInp = inprogress > 0 ? Math.round((inprogress / total) * 100) : 0;
+                    const pNot = Math.max(0, 100 - pComp - pInp);
+
+                    let html = '';
+
+                    if (complete > 0) {
+                        html += `<div><span class="status complete"><span class="status-inner">${complete}</span></span><strong>${tComplete}</strong><span class="value">${pComp}%</span></div>`;
+                    }
+
+                    if (inprogress > 0) {
+                        html += `<div><span class="status inprogress"><span class="status-inner">${inprogress}</span></span><strong>${tInprogress}</strong><span class="value">${pInp}%</span></div>`;
+                    }
+
+                    if (notstarted > 0) {
+                        html += `<div><span class="status notstarted"><span class="status-inner">${notstarted}</span></span><strong>${tNotstarted}</strong><span class="value">${pNot}%</span></div>`;
+                    }
+
+                    statusesEl.innerHTML = html;
+                }
+            })
+            .catch(error => {
+                console.error('Помилка завантаження all.json:', error);
+            });
+    });
+</script>
