@@ -9,3 +9,4 @@ venv
 /site
 .vscode
 version-*
+/tests

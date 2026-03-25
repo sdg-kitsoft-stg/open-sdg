@@ -4,7 +4,9 @@
 
         <span class="total">
             <span id="js-overall-total">...</span>
-            {{ page.t.general.indicators | downcase }}
+            <span id="js-overall-label">
+                {{ page.t.general.indicator_many | default: 'індикаторів' }}
+            </span>
         </span>
 
         <div class="summary" id="js-overall-summary" style="display: none;">
@@ -19,6 +21,38 @@
     document.addEventListener("DOMContentLoaded", function () {
         const currentLang = "{{ page.language | default: 'uk' }}";
         const dataUrl = `https://sdg-kitsoft-stg.github.io/data-ukraine-sdg/${currentLang}/meta/all.json`;
+
+        const indicatorLabels = {
+            uk: {
+                one: "{{ page.t.general.indicator_one | default: 'індикатор' }}",
+                few: "{{ page.t.general.indicator_few | default: 'індикатори' }}",
+                many: "{{ page.t.general.indicator_many | default: 'індикаторів' }}"
+            },
+            en: {
+                one: "{{ page.t.general.indicator_one | default: 'indicator' }}",
+                other: "{{ page.t.general.indicator_other | default: 'indicators' }}"
+            }
+        };
+
+        function getPluralKey(count, lang = 'uk') {
+            if (lang === 'uk') {
+                const mod10 = count % 10;
+                const mod100 = count % 100;
+
+                if (mod10 === 1 && mod100 !== 11) return 'one';
+                if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'few';
+                return 'many';
+            }
+
+            return count === 1 ? 'one' : 'other';
+        }
+
+        function getIndicatorLabel(count, lang = 'uk') {
+            const pluralKey = getPluralKey(count, lang);
+            const langLabels = indicatorLabels[lang] || indicatorLabels.en;
+
+            return langLabels[pluralKey] || langLabels.other || '';
+        }
 
         fetch(dataUrl)
             .then(response => response.json())
@@ -37,7 +71,6 @@
 
                 const cleanIndicators = allIndicators.filter(ind => {
                     const id = ind._originalKey || ind.indicator_number || '';
-
                     return !id.endsWith('-a');
                 });
 
@@ -59,11 +92,16 @@
                 });
 
                 const totalEl = document.getElementById('js-overall-total');
+                const labelEl = document.getElementById('js-overall-label');
                 const summaryEl = document.getElementById('js-overall-summary');
                 const statusesEl = document.getElementById('js-overall-statuses');
 
                 if (totalEl) {
                     totalEl.innerText = total;
+                }
+
+                if (labelEl) {
+                    labelEl.innerText = getIndicatorLabel(total, currentLang);
                 }
 
                 if (summaryEl && total > 0) {
