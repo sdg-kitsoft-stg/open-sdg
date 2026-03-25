@@ -101,7 +101,7 @@
                     <div class="col-md-8">{{ target.name }}</div>
                 </div>
 
-                {% if last_target != "" %}{% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}{% endif %}
+                <hr class="goal-page-target-rule">
                 {% assign last_target = ind.target_number %}
                 {% endif %}
 
