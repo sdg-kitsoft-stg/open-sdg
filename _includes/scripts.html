@@ -59,15 +59,19 @@
     new indicatorInit();
     new accessibilitySwitcher();
 
-    const iframe = document.querySelector('iframe');
+    const iframes = document.querySelectorAll('iframe');
 
-    iframe.addEventListener('load', () => {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframes.forEach(iframe => {
+        console.log(iframe);
 
-        const blocks = iframeDoc.querySelectorAll(
-            '.tab-content.edition-tabs-content.border-0.p-0 .indicator-footer-reference'
-        );
+        iframe.addEventListener('load', () => {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-        blocks.forEach(el => el.style.display = 'none');
-    });
+            const blocks = iframeDoc.querySelectorAll(
+                '.tab-content.edition-tabs-content.border-0.p-0 .indicator-footer-reference'
+            );
+
+            blocks.forEach(el => el.style.display = 'none');
+        });
+    })
 </script>
