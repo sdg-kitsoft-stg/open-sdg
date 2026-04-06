@@ -54,8 +54,10 @@
             font-weight: 600;
             line-height: 27px;
 
-            .indicator-footer-reference {
-              display: none;
+            #main-content {
+              .indicator-footer-reference {
+                display: none;
+              }
             }
 
             h3 {
