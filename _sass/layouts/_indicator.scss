@@ -145,3 +145,8 @@ body.contrast-high {
         line-height: 40px;
     }
 }
+
+
+.tab-content.edition-tabs-content.border-0.p-0 .indicator-footer-reference {
+  display: none !important;
+}

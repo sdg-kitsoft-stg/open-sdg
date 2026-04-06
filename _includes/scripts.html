@@ -58,20 +58,4 @@
 <script>
     new indicatorInit();
     new accessibilitySwitcher();
-
-    const iframes = document.querySelectorAll('iframe');
-
-    iframes.forEach(iframe => {
-        console.log(iframe);
-
-        iframe.addEventListener('load', () => {
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-            const blocks = iframeDoc.querySelectorAll(
-                '.tab-content.edition-tabs-content.border-0.p-0 .indicator-footer-reference'
-            );
-
-            blocks.forEach(el => el.style.display = 'none');
-        });
-    })
 </script>
