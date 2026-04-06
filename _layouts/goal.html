@@ -264,7 +264,7 @@
         `;
                     iframeDoc.head.appendChild(style);
 
-                    const toHideInside = iframeDoc.querySelectorAll('#chart-heading, #selectionChartFooter, #chartSelectionDownload, .breadcrumb, header, footer, .nav-tabs, #indicator-sidebar, #metadataTabs, a[href="#top"]');
+                    const toHideInside = iframeDoc.querySelectorAll('#chart-heading, #selectionChartFooter, #chartSelectionDownload, .breadcrumb, header, footer, .nav-tabs, #indicator-sidebar, #metadataTabs, a[href="#top"], .indicator-footer-reference');
                     toHideInside.forEach(el => el.style.display = 'none');
 
                     iframeDoc.body.style.overflow = 'hidden';
