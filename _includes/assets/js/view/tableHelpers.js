@@ -185,7 +185,7 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
         let translatedHeading = translations.t(heading);
 
         if (table.headings.length && index === 1) {
-          const genericTerms = ['Value', 'Значення', 'Value', 'undefined', heading];
+          const genericTerms = ['Value', 'Значення', 'Value', 'undefined'];
 
           if (!translatedHeading || genericTerms.includes(translatedHeading) || genericTerms.includes(heading)) {
             translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Україна' : 'Ukraine';
