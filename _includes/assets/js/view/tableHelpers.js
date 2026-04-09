@@ -196,7 +196,7 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
                 if (window.location.pathname.includes('6-1-1')) {
                     const [firstHeading, ...restHeadings] = translatedHeading.split(',');
                     if (firstHeading && (firstHeading === 'Ukraine' || firstHeading === 'Україна')) {
-                        translatedHeading = `${restHeadings.join(', ')},${firstHeading}`;
+                        translatedHeading = `${restHeadings.join(', ')}, ${firstHeading}`;
                     }
                 }
 
