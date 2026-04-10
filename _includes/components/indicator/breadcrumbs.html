@@ -12,7 +12,7 @@
             <a href="{{ page.baseurl }}{{ item_path }}">{{ item.label | t }}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{ page.baseurl }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
+            <a href="{{ page.baseurl }}goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
         </li>
         {% endfor %}
         <li class="breadcrumb-item">
@@ -27,7 +27,7 @@
             <a href="{{ page.baseurl }}">{{ page.t.general.home }}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{ page.baseurl }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
+            <a href="{{ page.baseurl }}goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
         </li>
         <li class="breadcrumb-item">
             <a href="{{ page.goal.url }}"
