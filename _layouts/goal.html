@@ -1,6 +1,8 @@
 {% include head.html %}
 {% include header.html %}
 
+{{ page.language }}
+
 <div class="container">
     <nav aria-label="{{ page.t.general.breadcrumbs }}">
         <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
@@ -8,7 +10,7 @@
                 <a href="{{ site.baseurl }}/{{ page.language }}/">{{ page.t.general.home | default: 'Головна' }}</a>
             </li>
             <li class="breadcrumb-item">
-                {% if page.language == 'en' %}
+                {% if page.language == 'en' or page.language == '' %}
                     <a href="{{ site.baseurl }}/goals/">{{ page.t.general.goals | default: 'Goals' }}</a>
                 {% else %}
                     <a href="{{ site.baseurl }}/{{ page.language }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
