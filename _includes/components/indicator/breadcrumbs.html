@@ -13,7 +13,7 @@
         </li>
         <li class="breadcrumb-item">
             {% if page.language == 'en' %}
-            <a href="{{ site.baseurl }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
+            <a href="{{ site.baseurl }}/goals/">{{ page.t.general.goals | default: 'Goals' }}</a>
             {% else %}
             <a href="{{ site.baseurl }}/{{ page.language }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
             {% endif %}
