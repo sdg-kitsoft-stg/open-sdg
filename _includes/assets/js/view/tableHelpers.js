@@ -125,7 +125,8 @@ function createTableTargetLines(graphAnnotations) {
         if (!targetLineLabel) {
             targetLineLabel = opensdg.annotationPresets.target_line.label.content;
         }
-      $targetLines.append('<dt>' + targetLineLabel + '</dt><dd>' + targetLine.value.toString().replace('.', ',') + '</dd>');
+      var decimalSeparator = (document.documentElement.lang === 'uk') ? ',' : '.';
+      $targetLines.append('<dt>' + targetLineLabel + '</dt><dd>' + targetLine.value.toString().replace('.', decimalSeparator) + '</dd>');
     });
     if (targetLines.length === 0) {
         $targetLines.hide();
