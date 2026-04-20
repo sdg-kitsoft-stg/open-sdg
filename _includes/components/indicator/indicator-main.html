@@ -45,8 +45,9 @@
   {% endif %}
   {% if page.indicator.footer_reference %}
       <div class="indicator-footer-reference" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
-          {% set reporting_status = page.indicator.reporting_status ? page.indicator.reference_title : page.t.indicator.reference_title | default: 'complete' %}
-          <h5 style="margin-top: 0;">{{ page.t.indicator.reference_title | default: 'Довідково' }}</h5>
+          <h5 style="margin-top: 0;">
+              {{ page.indicator.reference_title | default: page.t.indicator.reference_title | default: 'Довідково' }}
+          </h5>
           <p style="margin-bottom: 0;">{{ page.indicator.footer_reference }}</p>
       </div>
   {% endif %}
