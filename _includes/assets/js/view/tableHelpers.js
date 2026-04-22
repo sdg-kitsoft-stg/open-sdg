@@ -205,6 +205,9 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
                     translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'вікові групи' : 'age groups';
                 }
 
+                if (window.location.pathname.includes('16-2-1')) {
+                    translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Потерпіло від кримінальних правопорушень (рівень на 100 тис. населення)' : 'Victims of criminal offenses (per 100 thousand population)';
+                }
             }
 
             const finalTitleText = translatedHeading || heading;
