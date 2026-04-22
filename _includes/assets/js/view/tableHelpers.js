@@ -194,7 +194,7 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
                     translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Україна' : 'Ukraine';
                 }
 
-                if (window.location.pathname.includes('6-1-1') && !window.location.pathname.includes('6-1-1')) {
+                if (window.location.pathname.includes('6-1-1') && !window.location.pathname.includes('16-1-1')) {
                     const [firstHeading, ...restHeadings] = translatedHeading.split(',');
                     if (firstHeading && (firstHeading === 'Ukraine' || firstHeading === 'Україна')) {
                         translatedHeading = `${restHeadings.join(', ')}, ${firstHeading}`;
