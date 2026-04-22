@@ -201,7 +201,7 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
                     }
                 }
 
-                if (window.location.pathname.includes('6-2-1')) {
+                if (window.location.pathname.includes('6-2-1') && !window.location.pathname.includes('16-2-1')) {
                     translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'вікові групи' : 'age groups';
                 }
 
