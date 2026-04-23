@@ -206,7 +206,12 @@ function createTable(table, indicatorId, el, isProxy, observationAttributesTable
                 }
 
                 if (window.location.pathname.includes('16-2-1')) {
-                    translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Потерпіло від кримінальних правопорушень (рівень на 100 тис. населення)' : 'Victims of criminal offenses (per 100 thousand population)';
+                    const badgeType = document.querySelector('.badge-edition');
+                    const isArchive = badgeType && badgeType.classList.contains('badge-archive');
+
+                    if (isArchive) {
+                        translatedHeading = (window.location.pathname.indexOf('/uk/') !== -1) ? 'Потерпіло від кримінальних правопорушень (рівень на 100 тис. населення)' : 'Victims of criminal offenses (per 100 thousand population)';
+                    }
                 }
             }
 
