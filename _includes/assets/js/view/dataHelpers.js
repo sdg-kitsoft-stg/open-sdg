@@ -49,7 +49,11 @@ function alterDataDisplay(value, info, context, additionalInfo) {
         if (Number.isInteger(altered)) {
             altered = altered.toLocaleString('fr-FR').replace(/\s/g, ' ');
         } else {
-            altered = altered.toString();
+            if (opensdg.language === 'uk') {
+                altered = altered.toString().replace('.', ',');
+            } else {
+                altered = altered.toString();
+            }
         }
     }
     // Now let's add any footnotes from observation attributes.
