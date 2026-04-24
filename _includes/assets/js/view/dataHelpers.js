@@ -24,6 +24,7 @@ function alterDataDisplay(value, info, context, additionalInfo) {
     opensdg.dataDisplayAlterations.forEach(function (callback) {
         altered = callback(altered, info, context);
     });
+    
     // If the returned value is not a number, use the legacy logic for
     // precision and decimal separator.
     if (typeof altered !== 'number') {
@@ -39,11 +40,17 @@ function alterDataDisplay(value, info, context, additionalInfo) {
     // Otherwise if we have a number, use toLocaleString instead.
     else {
         var localeOpts = {};
+
         if (VIEW._precision || VIEW._precision === 0) {
             localeOpts.minimumFractionDigits = VIEW._precision;
             localeOpts.maximumFractionDigits = VIEW._precision;
         }
-        altered = altered.toLocaleString(opensdg.language, localeOpts);
+
+        if (Number.isInteger(altered)) {
+            altered = altered.toLocaleString('fr-FR');
+        } else {
+            altered = altered.toString();
+        }
     }
     // Now let's add any footnotes from observation attributes.
     var obsAttributes = [];
