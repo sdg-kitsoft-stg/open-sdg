@@ -47,7 +47,7 @@ function alterDataDisplay(value, info, context, additionalInfo) {
         }
 
         if (Number.isInteger(altered)) {
-            altered = altered.toLocaleString('fr-FR');
+            altered = altered.toLocaleString('fr-FR').replace(/\s/g, ' ');
         } else {
             altered = altered.toString();
         }

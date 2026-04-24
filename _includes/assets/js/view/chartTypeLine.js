@@ -19,10 +19,10 @@ opensdg.chartTypes.line = function(info) {
             return value;
         }
 
-        return new Intl.NumberFormat(getPageLocale(), {
+        return new Intl.NumberFormat('fr-FR', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 20
-        }).format(num);
+        }).format(num).replace(/\s/g, ' ');
     }
 
     var overrides = {
