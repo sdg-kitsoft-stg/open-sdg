@@ -10,3 +10,24 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.reporting-status-description_status {
+  padding: 2px 5px;
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+  border: 1px solid #0b0c0c;
+  margin-bottom: 5px;
+  margin-left: 2px;
+  color: #0b0c0c;
+
+  &.published {
+    background: #2B2B2B;
+    color: #fff;
+    border: 1px solid transparent;
+  }
+
+  .exploring {
+    border: 1px solid #ccc;
+  }
+}
