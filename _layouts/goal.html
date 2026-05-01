@@ -53,7 +53,7 @@
 
         <ul class="nav nav-tabs edition-tabs" role="tablist">
             <li role="presentation">
-                <a href="#current-edition" class="active" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
+                <a href="#current-edition" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
@@ -283,7 +283,6 @@
 
         targetDiv.appendChild(iframe);
     }
-
     document.addEventListener('DOMContentLoaded', function() {
         const collapses = document.querySelectorAll('.collapse');
 
@@ -299,6 +298,49 @@
                 button.textContent = button.getAttribute('data-text-show');
             });
         });
+
+        const heading = document.querySelector('.goal-banner');
+        const thirdClassName = [...heading.classList][2];
+        const indicatorNumber = thirdClassName.split('-')[1];
+
+        const STORAGE_KEY = `indicator_active_tab${indicatorNumber}`;
+        const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
+
+        if (!tabs.length) return;
+
+        function activateTab(tabSelector) {
+            const tabTrigger = document.querySelector(
+                `[data-bs-toggle="tab"][href="${tabSelector}"], [data-bs-toggle="tab"][data-bs-target="${tabSelector}"]`
+            );
+
+            if (!tabTrigger) return;
+
+            if (window.bootstrap && bootstrap.Tab) {
+                const tab = new bootstrap.Tab(tabTrigger);
+                tab.show();
+            } else {
+                tabTrigger.click();
+            }
+        }
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener('shown.bs.tab', function (event) {
+                const target =
+                    event.target.getAttribute('data-bs-target') ||
+                    event.target.getAttribute('href');
+
+                if (target) {
+                    sessionStorage.setItem(STORAGE_KEY, target);
+                }
+            });
+        });
+
+        const firstTab = document.querySelector('[data-bs-toggle="tab"]').getAttribute('href');
+        const savedTab = sessionStorage.getItem(STORAGE_KEY) || firstTab;
+
+        if (savedTab) {
+            activateTab(savedTab);
+        }
     });
 </script>
 
