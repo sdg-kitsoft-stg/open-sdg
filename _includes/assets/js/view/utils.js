@@ -57,13 +57,6 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
         }
         var gaLabel = 'Download ' + name + ' CSV: ' + indicatorId.replace('indicator_', '');
         var tableCsv = toCsv(table, selectedSeries, selectedUnit);
-
-        var metadataTable = document.getElementById('metadataTabs') && document.getElementById('metadataTabs').getElementById('national') && document.getElementById('metadataTabs').getElementById('national').querySelector('table');
-        var metadataCsv = toCsv(metadataTable, selectedSeries, selectedUnit);
-        console.log({
-            tableCsv,
-            metadataCsv
-        });
         var fileName = indicatorId + '.csv';
         var downloadButton = $('<a />').text(translations.indicator[downloadKey])
             .attr(opensdg.autotrack('download_data_current', 'Downloads', 'Download CSV', gaLabel))
