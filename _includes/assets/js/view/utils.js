@@ -109,19 +109,35 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
  * @param {Element} el
  * @return null
  */
-function createSourceButton(indicatorId, el) {
+function createSourceButton(indicatorId, el, table, selectedSeries, selectedUnit) {
     var gaLabel = 'Download Source CSV: ' + indicatorId;
-    $(el).append($('<a />').text(translations.indicator.download_source)
+
+    var csv = toCsv(table, selectedSeries, selectedUnit);
+
+    var blob = new Blob([csv], {
+        type: 'text/csv'
+    });
+
+    var downloadButton = $('<a />').text(translations.indicator.download_source)
         .attr(opensdg.autotrack('download_data_source', 'Downloads', 'Download CSV', gaLabel))
         .attr({
-            'href': opensdg.remoteDataBaseUrl + '/data/' + indicatorId + '.csv',
             'download': indicatorId + '.csv',
             'title': translations.indicator.download_source_title,
             'aria-label': translations.indicator.download_source_title,
             'class': 'btn btn-primary btn-download',
             'tabindex': 0,
             'role': 'button',
-        }));
+        });
+
+    if (window.navigator && window.navigator.msSaveBlob) {
+        downloadButton.on('click.openSdgDownload', function () {
+            window.navigator.msSaveBlob(blob, indicatorId + '.csv');
+        });
+    } else {
+        downloadButton.attr('href', URL.createObjectURL(blob));
+    }
+
+    $(el).append(downloadButton);
 }
 
 /**
