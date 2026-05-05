@@ -143,42 +143,72 @@ function toCsvWithMetadata(tableData, selectedSeries, selectedUnit) {
 
     if (metadataRows.length) {
         lines.push('');
-        lines.push('"Metadata field","Metadata value"');
         lines = lines.concat(metadataRows);
     }
 
     return lines.join('\n');
 }
+
+function downloadCsvWithMetadata(indicatorId) {
+    var sourceUrl = opensdg.remoteDataBaseUrl + '/data/' + indicatorId + '.csv';
+
+    $.get(sourceUrl)
+        .done(function (sourceCsv) {
+            var lines = [sourceCsv.trim()];
+            var metadataRows = getMetadataCsvRows('#national .metadata-content');
+
+            if (metadataRows.length) {
+                lines.push('');
+                lines.push('"Metadata field","Metadata value"');
+                lines = lines.concat(metadataRows);
+            }
+
+            var csv = lines.join('\n');
+            var blob = new Blob(['\ufeff' + csv], {
+                type: 'text/csv;charset=utf-8'
+            });
+
+            if (window.navigator && window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(blob, indicatorId + '.csv');
+                return;
+            }
+
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+
+            link.href = url;
+            link.download = indicatorId + '.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
+        });
+}
+
 /**
  * @param {String} indicatorId
  * @param {Element} el
  * @return null
  */
-function createSourceButton(indicatorId, el, table, selectedSeries, selectedUnit) {
+function createSourceButton(indicatorId, el) {
     var gaLabel = 'Download Source CSV: ' + indicatorId;
 
-    var downloadButton = $('<a />').text(translations.indicator.download_source)
+    var $button = $('<button />').text(translations.indicator.download_source)
         .attr(opensdg.autotrack('download_data_source', 'Downloads', 'Download CSV', gaLabel))
         .attr({
-            'href': '#',
-            'download': indicatorId + '.csv',
+            'type': 'button',
             'title': translations.indicator.download_source_title,
             'aria-label': translations.indicator.download_source_title,
             'class': 'btn btn-primary btn-download',
-            'tabindex': 0,
-            'role': 'button',
         });
 
-    downloadButton.on('click.openSdgDownloadSource', function () {
-        var csv = toCsvWithMetadata(table, selectedSeries, selectedUnit);
-        var blob = new Blob([csv], {
-            type: 'text/csv'
-        });
-
-        downloadButton.attr('href', URL.createObjectURL(blob));
+    $button.on('click.openSdgDownloadSource', function (e) {
+        e.preventDefault();
+        downloadCsvWithMetadata(indicatorId);
     });
 
-    $(el).append(downloadButton);
+    $(el).append($button);
 }
 
 /**
