@@ -49,7 +49,6 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
     var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
     if (metadataRows.length) {
-        lines.push('');
         lines = lines.concat(metadataRows);
     }
 
@@ -72,7 +71,7 @@ function getMetadataCsvRows(selector) {
             rows.push([
                 '"' + key.replace(/"/g, '""') + '"',
                 '"' + value.replace(/"/g, '""') + '"'
-            ].join(','));
+            ].join(';'));
         }
     });
 

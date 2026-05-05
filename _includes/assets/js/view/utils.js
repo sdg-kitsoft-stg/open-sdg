@@ -145,7 +145,7 @@ function downloadCsvWithMetadata(indicatorId) {
 
             if (metadataRows.length) {
                 lines.push('');
-                lines.push('"Metadata field","Metadata value"');
+                lines.push('"Metadata field";"Metadata value"');
                 lines = lines.concat(metadataRows);
             }
 
