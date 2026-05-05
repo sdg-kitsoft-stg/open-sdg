@@ -128,7 +128,7 @@ function getMetadataCsvRows(selector) {
             rows.push([
                 escapeCsvValue(key),
                 escapeCsvValue(value)
-            ].join(','));
+            ].join(';'));
         }
     });
 

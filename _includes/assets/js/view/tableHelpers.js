@@ -43,7 +43,7 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
             line.push(JSON.stringify(translations.t(selectedUnit)));
         }
 
-        lines.push(line.join(','));
+        lines.push(line.join(';'));
     });
 
     var metadataRows = getMetadataCsvRows('#national .metadata-content');
