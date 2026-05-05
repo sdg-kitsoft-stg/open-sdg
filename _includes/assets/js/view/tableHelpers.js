@@ -28,7 +28,7 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
     }
     var allHeadings = dataHeadings.concat(metaHeadings);
 
-    lines.push(allHeadings.join(','));
+    lines.push(allHeadings.join(';'));
 
     _.each(tableData.data, function (dataValues) {
         var line = [];
