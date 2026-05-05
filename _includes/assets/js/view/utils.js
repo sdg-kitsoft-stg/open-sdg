@@ -104,6 +104,51 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
     }
 }
 
+function escapeCsvValue(value) {
+    if (value === null || typeof value === 'undefined') {
+        return '""';
+    }
+
+    return '"' + String(value).trim().replace(/\s+/g, ' ').replace(/"/g, '""') + '"';
+}
+
+function getMetadataCsvRows(selector) {
+    var rows = [];
+    var $table = $(selector);
+
+    if (!$table.length) {
+        return rows;
+    }
+
+    $table.find('tbody tr').each(function () {
+        var key = $(this).find('th').text();
+        var value = $(this).find('td').text();
+
+        if ($.trim(key) || $.trim(value)) {
+            rows.push([
+                escapeCsvValue(key),
+                escapeCsvValue(value)
+            ].join(','));
+        }
+    });
+
+    return rows;
+}
+
+function toCsvWithMetadata(tableData, selectedSeries, selectedUnit) {
+    var csv = toCsv(tableData, selectedSeries, selectedUnit);
+    var lines = csv ? csv.split('\n') : [];
+
+    var metadataRows = getMetadataCsvRows('#national .metadata-content');
+
+    if (metadataRows.length) {
+        lines.push('');
+        lines.push('"Metadata field","Metadata value"');
+        lines = lines.concat(metadataRows);
+    }
+
+    return lines.join('\n');
+}
 /**
  * @param {String} indicatorId
  * @param {Element} el
@@ -112,15 +157,10 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
 function createSourceButton(indicatorId, el, table, selectedSeries, selectedUnit) {
     var gaLabel = 'Download Source CSV: ' + indicatorId;
 
-    var csv = toCsv(table, selectedSeries, selectedUnit);
-
-    var blob = new Blob([csv], {
-        type: 'text/csv'
-    });
-
     var downloadButton = $('<a />').text(translations.indicator.download_source)
         .attr(opensdg.autotrack('download_data_source', 'Downloads', 'Download CSV', gaLabel))
         .attr({
+            'href': '#',
             'download': indicatorId + '.csv',
             'title': translations.indicator.download_source_title,
             'aria-label': translations.indicator.download_source_title,
@@ -129,13 +169,14 @@ function createSourceButton(indicatorId, el, table, selectedSeries, selectedUnit
             'role': 'button',
         });
 
-    if (window.navigator && window.navigator.msSaveBlob) {
-        downloadButton.on('click.openSdgDownload', function () {
-            window.navigator.msSaveBlob(blob, indicatorId + '.csv');
+    downloadButton.on('click.openSdgDownloadSource', function () {
+        var csv = toCsvWithMetadata(table, selectedSeries, selectedUnit);
+        var blob = new Blob([csv], {
+            type: 'text/csv'
         });
-    } else {
+
         downloadButton.attr('href', URL.createObjectURL(blob));
-    }
+    });
 
     $(el).append(downloadButton);
 }
