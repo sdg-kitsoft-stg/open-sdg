@@ -135,20 +135,6 @@ function getMetadataCsvRows(selector) {
     return rows;
 }
 
-function toCsvWithMetadata(tableData, selectedSeries, selectedUnit) {
-    var csv = toCsv(tableData, selectedSeries, selectedUnit);
-    var lines = csv ? csv.split('\n') : [];
-
-    var metadataRows = getMetadataCsvRows('#national .metadata-content');
-
-    if (metadataRows.length) {
-        lines.push('');
-        lines = lines.concat(metadataRows);
-    }
-
-    return lines.join('\n');
-}
-
 function downloadCsvWithMetadata(indicatorId) {
     var sourceUrl = opensdg.remoteDataBaseUrl + '/data/' + indicatorId + '.csv';
 
