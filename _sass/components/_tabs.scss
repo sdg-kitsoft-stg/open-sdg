@@ -60,6 +60,14 @@
               }
             }
 
+            .tab-pane {
+              display: none !important;
+
+              &.active {
+                display: block !important;
+              }
+            }
+
             h3 {
                 color: #0B0C0C;
                 font-size: 24px;

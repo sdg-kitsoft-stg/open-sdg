@@ -9,9 +9,9 @@
             </li>
             <li class="breadcrumb-item">
                 {% if page.language == 'en' %}
-                    <a href="{{ site.baseurl }}/goals/">{{ page.t.general.goals | default: 'Goals' }}</a>
+                <a href="{{ site.baseurl }}/goals/">{{ page.t.general.goals | default: 'Goals' }}</a>
                 {% else %}
-                    <a href="{{ site.baseurl }}/{{ page.language }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
+                <a href="{{ site.baseurl }}/{{ page.language }}/goals/">{{ page.t.general.goals | default: 'Цілі' }}</a>
                 {% endif %}
             </li>
             <li class="breadcrumb-item active" aria-current="page">
@@ -53,7 +53,14 @@
 
         <ul class="nav nav-tabs edition-tabs" role="tablist">
             <li role="presentation">
-                <a href="#current-edition" aria-controls="current-edition" role="tab" data-bs-toggle="tab">
+                <a href="#current-edition"
+                   class="nav-link"
+                   id="current-edition-tab"
+                   data-bs-toggle="tab"
+                   role="tab"
+                   aria-controls="current-edition"
+                   aria-selected="true"
+                >
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
@@ -68,7 +75,14 @@
                 </a>
             </li>
             <li role="presentation">
-                <a href="#archive-edition" aria-controls="archive-edition" role="tab" data-bs-toggle="tab">
+                <a href="#archive-edition"
+                   class="nav-link"
+                   id="archive-edition-tab"
+                   data-bs-toggle="tab"
+                   role="tab"
+                   aria-controls="archive-edition"
+                   aria-selected="false"
+                >
                     <div class="tab-content-wrapper">
                         <span class="radio-dot"></span>
                         <div class="text-group">
@@ -85,7 +99,10 @@
         </ul>
 
         <div class="tab-content edition-tabs-content border-0 p-0">
-            <div class="tab-pane active" id="current-edition" role="tabpanel">
+            <div class="tab-pane fade"
+                 id="current-edition"
+                 role="tabpanel"
+                 aria-labelledby="current-edition-tab">
                 <div style="margin-top: 20px;"></div>
 
                 {% assign last_target = "" %}
@@ -97,7 +114,8 @@
 
                 {% assign target = ind.target_number | sdg_lookup %}
                 <div class="row align-items-start goal-target">
-                    <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ target.number }}</h3></div>
+                    <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{
+                        target.number }}</h3></div>
                     <div class="col-md-8">{{ target.name }}</div>
                 </div>
 
@@ -118,7 +136,8 @@
                                 {{ ind.name }}
                             </div>
 
-                            {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind %}
+                            {% include components/indicator/tags.html tags=ind.tags reporting_status=true indicator=ind
+                            %}
                         </div>
                     </div>
 
@@ -146,11 +165,15 @@
                         </a>
                     </div>
                 </div>
-                {% unless forloop.last %}<hr class="goal-page-target-rule" aria-hidden="true">{% endunless %}
+                {% unless forloop.last %}
+                <hr class="goal-page-target-rule" aria-hidden="true">
+                {% endunless %}
                 {% endfor %}
             </div>
-
-            <div class="tab-pane" id="archive-edition" role="tabpanel">
+            <div class="tab-pane fade"
+                 id="archive-edition"
+                 role="tabpanel"
+                 aria-labelledby="archive-edition-tab">
                 <div style="margin-top: 20px;"></div>
 
                 {% assign last_archive_target = "" %}
@@ -166,9 +189,11 @@
                 {% assign archive_key = ind.target_number | replace: ".", "-" | append: "-a" %}
 
                 <div class="row align-items-start goal-target">
-                    <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{ ind.target_number }}</h3></div>
+                    <div class="col-auto"><h3><span class="visually-hidden">{{ page.t.general.target }}</span>{{
+                        ind.target_number }}</h3></div>
                     <div class="col-md-8">
-                        {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне завдання" }}
+                        {{ site.data.translations[page.language].archive_targets[archive_key] | default: "Архівне
+                        завдання" }}
                     </div>
                 </div>
 
@@ -210,7 +235,9 @@
                         </a>
                     </div>
                 </div>
-                {% unless forloop.last %}<hr class="goal-page-target-rule">{% endunless %}
+                {% unless forloop.last %}
+                <hr class="goal-page-target-rule">
+                {% endunless %}
                 {% endfor %}
             </div>
         </div>
@@ -236,7 +263,7 @@
         iframe.style.visibility = "hidden";
         iframe.title = `${indicatorTitle} ${slug}`;
 
-        iframe.onload = function() {
+        iframe.onload = function () {
             try {
                 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 const chart = iframeDoc.getElementById('selectionsChart');
@@ -254,14 +281,14 @@
 
                     const style = iframeDoc.createElement('style');
                     style.textContent = `
-            .plot-container { padding: 0 !important; }
-            #chart-canvas { margin-top: 0 !important; }
-            #main-content { margin: 0 !important; }
-            #main-content #indicatorData { margin-top: 0 !important; }
-            #legend { margin-bottom: 0 !important; }
-            #selectionsChart figure { margin-bottom: 0 !important; }
-            .tab-content.data-view { border: none !important; padding: 0 !important; }
-        `;
+                        .plot-container { padding: 0 !important; }
+                        #chart-canvas { margin-top: 0 !important; }
+                        #main-content { margin: 0 !important; }
+                        #main-content #indicatorData { margin-top: 0 !important; }
+                        #legend { margin-bottom: 0 !important; }
+                        #selectionsChart figure { margin-bottom: 0 !important; }
+                        .tab-content.data-view { border: none !important; padding: 0 !important; }
+                    `;
                     iframeDoc.head.appendChild(style);
 
                     const toHideInside = iframeDoc.querySelectorAll('#chart-heading, #selectionChartFooter, #chartSelectionDownload, .breadcrumb, header, footer, .nav-tabs, #indicator-sidebar, #metadataTabs, a[href="#top"], .indicator-footer-reference');
@@ -283,64 +310,38 @@
 
         targetDiv.appendChild(iframe);
     }
-    document.addEventListener('DOMContentLoaded', function() {
-        const collapses = document.querySelectorAll('.collapse');
 
-        collapses.forEach(collapseEl => {
-            const button = document.querySelector(`[data-bs-target="#${collapseEl.id}"]`);
-            if (!button) return;
-
-            collapseEl.addEventListener('show.bs.collapse', function () {
-                button.textContent = button.getAttribute('data-text-hide');
-            });
-
-            collapseEl.addEventListener('hide.bs.collapse', function () {
-                button.textContent = button.getAttribute('data-text-show');
-            });
-        });
-
+    document.addEventListener('DOMContentLoaded', function () {
         const heading = document.querySelector('.goal-banner');
+        if (!heading) return;
+
         const thirdClassName = [...heading.classList][2];
         const indicatorNumber = thirdClassName.split('-')[1];
-
         const STORAGE_KEY = `indicator_active_tab${indicatorNumber}`;
-        const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
 
-        if (!tabs.length) return;
+        const savedTab = sessionStorage.getItem(STORAGE_KEY) || '#current-edition';
 
-        function activateTab(tabSelector) {
-            const tabTrigger = document.querySelector(
-                `[data-bs-toggle="tab"][href="${tabSelector}"], [data-bs-toggle="tab"][data-bs-target="${tabSelector}"]`
-            );
+        const tabTrigger = document.querySelector(
+            `[data-bs-toggle="tab"][href="${savedTab}"], [data-bs-toggle="tab"][data-bs-target="${savedTab}"]`
+        );
 
-            if (!tabTrigger) return;
+        const tabPanes = document.querySelectorAll('.edition-tabs-content .tab-pane');
 
-            if (window.bootstrap && bootstrap.Tab) {
-                const tab = new bootstrap.Tab(tabTrigger);
-                tab.show();
-            } else {
-                tabTrigger.click();
-            }
-        }
+        tabPanes.forEach(p => p.classList.remove('fade'));
 
-        tabs.forEach(function (tab) {
+        const tab = new bootstrap.Tab(tabTrigger);
+        tab.show();
+
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (tab) {
             tab.addEventListener('shown.bs.tab', function (event) {
                 const target =
                     event.target.getAttribute('data-bs-target') ||
                     event.target.getAttribute('href');
-
                 if (target) {
                     sessionStorage.setItem(STORAGE_KEY, target);
                 }
             });
         });
-
-        const firstTab = document.querySelector('[data-bs-toggle="tab"]').getAttribute('href');
-        const savedTab = sessionStorage.getItem(STORAGE_KEY) || firstTab;
-
-        if (savedTab) {
-            activateTab(savedTab);
-        }
     });
 </script>
 
