@@ -140,12 +140,15 @@ function downloadCsvWithMetadata(indicatorId) {
 
     $.get(sourceUrl)
         .done(function (sourceCsv) {
+            sourceCsv = sourceCsv
+                .replace(/,/g, ';')
+                .replace(/(\d+)\.(\d+)/g, '$1,$2');
+
             var lines = [sourceCsv.trim()];
             var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
             if (metadataRows.length) {
                 lines.push('');
-                lines.push('"Metadata field";"Metadata value"');
                 lines = lines.concat(metadataRows);
             }
 
