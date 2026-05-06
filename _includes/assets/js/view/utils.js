@@ -109,7 +109,63 @@ function escapeCsvValue(value) {
         return '""';
     }
 
-    return '"' + String(value).trim().replace(/\s+/g, ' ').replace(/"/g, '""') + '"';
+    return '"' + String(value)
+        .trim()
+        .replace(/\s+/g, ' ')
+        .replace(/"/g, '""') + '"';
+}
+
+function formatExcelCsvValue(value) {
+    if (value === null || typeof value === 'undefined') {
+        return '""';
+    }
+
+    var str = String(value).trim();
+    
+    if (/^-?\d+\.\d+$/.test(str)) {
+        str = str.replace('.', ',');
+    }
+
+    return escapeCsvValue(str);
+}
+
+function parseCsvLine(line) {
+    var result = [];
+    var current = '';
+    var inQuotes = false;
+
+    for (var i = 0; i < line.length; i++) {
+        var char = line[i];
+        var nextChar = line[i + 1];
+
+        if (char === '"' && inQuotes && nextChar === '"') {
+            current += '"';
+            i++;
+        } else if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current);
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    result.push(current);
+
+    return result;
+}
+
+function convertSourceCsvForExcel(sourceCsv) {
+    return sourceCsv
+        .trim()
+        .split(/\r?\n/)
+        .map(function (line) {
+            return parseCsvLine(line)
+                .map(formatExcelCsvValue)
+                .join(';');
+        })
+        .join('\n');
 }
 
 function getMetadataCsvRows(selector) {
@@ -126,8 +182,8 @@ function getMetadataCsvRows(selector) {
 
         if ($.trim(key) || $.trim(value)) {
             rows.push([
-                escapeCsvValue(key),
-                escapeCsvValue(value)
+                formatExcelCsvValue(key),
+                formatExcelCsvValue(value)
             ].join(';'));
         }
     });
@@ -142,18 +198,14 @@ function downloadCsvWithMetadata(indicatorId) {
         .done(function (sourceCsv) {
             var lines = [];
 
-            lines.push(sourceCsv.trim());
+            lines.push(convertSourceCsvForExcel(sourceCsv));
 
             var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
             if (metadataRows.length) {
                 lines.push('');
-                lines.push('"Metadata field","Metadata value"');
-                lines = lines.concat(
-                    metadataRows.map(function (row) {
-                        return row.replace(/;/g, ',');
-                    })
-                );
+                lines.push('"Metadata field";"Metadata value"');
+                lines = lines.concat(metadataRows);
             }
 
             var csv = lines.join('\n');
