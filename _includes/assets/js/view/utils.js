@@ -123,7 +123,6 @@ function formatExcelCsvValue(value) {
     var str = String(value).trim();
     var lang = document.documentElement.lang || 'uk';
 
-    // Decimal localization
     if (/^-?\d+\.\d+$/.test(str)) {
         if (lang === 'uk') {
             str = str.replace('.', ',');
@@ -207,8 +206,16 @@ function downloadCsvWithMetadata(indicatorId) {
             var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
             if (metadataRows.length) {
+                var lang = document.documentElement.lang || 'uk';
+
                 lines.push('');
-                lines.push('"Metadata field";"Metadata value"');
+
+                if (lang === 'uk') {
+                    lines.push('"Поле метаданих";"Значення метаданих"');
+                } else {
+                    lines.push('"Metadata field";"Metadata value"');
+                }
+
                 lines = lines.concat(metadataRows);
             }
 
