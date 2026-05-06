@@ -104,15 +104,31 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
     }
 }
 
-function escapeCsvValue(value) {
-    if (value === null || typeof value === 'undefined') {
-        return '""';
+function getLang() {
+    return document.documentElement.lang || 'uk';
+}
+
+function translateCsvHeading(value, index) {
+    var lang = getLang();
+    var str = String(value || '').trim();
+
+    if (index === 0 && (str === 'Year' || str === 'Рік')) {
+        return lang === 'uk' ? 'Рік' : 'Year';
     }
 
-    return '"' + String(value)
-        .trim()
-        .replace(/\s+/g, ' ')
-        .replace(/"/g, '""') + '"';
+    if (
+        index > 0 &&
+        (
+            !str ||
+            str === 'Value' ||
+            str === 'Значення' ||
+            str === 'undefined'
+        )
+    ) {
+        return lang === 'uk' ? 'Значення' : 'Value';
+    }
+
+    return translations && translations.t ? translations.t(str) : str;
 }
 
 function formatExcelCsvValue(value) {
@@ -163,9 +179,17 @@ function convertSourceCsvForExcel(sourceCsv) {
     return sourceCsv
         .trim()
         .split(/\r?\n/)
-        .map(function (line) {
+        .map(function (line, rowIndex) {
             return parseCsvLine(line)
-                .map(formatExcelCsvValue)
+                .map(function (value, colIndex) {
+                    if (rowIndex === 0) {
+                        return formatExcelCsvValue(
+                            translateCsvHeading(value, colIndex)
+                        );
+                    }
+
+                    return formatExcelCsvValue(value);
+                })
                 .join(';');
         })
         .join('\n');
@@ -206,15 +230,13 @@ function downloadCsvWithMetadata(indicatorId) {
             var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
             if (metadataRows.length) {
-                var lang = document.documentElement.lang || 'uk';
+                var lang = getLang();
 
                 lines.push('');
-
-                if (lang === 'uk') {
-                    lines.push('"Поле метаданих";"Значення метаданих"');
-                } else {
-                    lines.push('"Metadata field";"Metadata value"');
-                }
+                lines.push([
+                    formatExcelCsvValue(lang === 'uk' ? 'Поле метаданих' : 'Metadata field'),
+                    formatExcelCsvValue(lang === 'uk' ? 'Значення метаданих' : 'Metadata value')
+                ].join(';'));
 
                 lines = lines.concat(metadataRows);
             }
