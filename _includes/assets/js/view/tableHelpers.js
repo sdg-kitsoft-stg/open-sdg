@@ -13,46 +13,64 @@ function alterTableConfig(config, info) {
  * @param {Object} tableData
  * @return {String}
  */
+function formatCsvValue(value) {
+    if (value === null || typeof value === 'undefined') {
+        return '""';
+    }
+
+    var str = String(value).trim();
+
+    if (/^-?\d+\.\d+$/.test(str)) {
+        str = str.replace('.', ',');
+    }
+
+    return '"' + str.replace(/"/g, '""') + '"';
+}
+
 function toCsv(tableData, selectedSeries, selectedUnit) {
-    var lines = [],
-        dataHeadings = _.map(tableData.headings, function (heading) {
-            return '"' + translations.t(heading) + '"';
-        }),
-        metaHeadings = [];
+    var delimiter = ';';
+    var lines = [];
+    var dataHeadings = _.map(tableData.headings, function (heading) {
+        return formatCsvValue(translations.t(heading));
+    });
+    var metaHeadings = [];
 
     if (selectedSeries) {
-        metaHeadings.push(translations.indicator.series);
+        metaHeadings.push(formatCsvValue(translations.indicator.series));
     }
-    if (selectedUnit) {
-        metaHeadings.push(translations.indicator.unit);
-    }
-    var allHeadings = dataHeadings.concat(metaHeadings);
 
-    lines.push(allHeadings.join(';'));
+    if (selectedUnit) {
+        metaHeadings.push(formatCsvValue(translations.indicator.unit));
+    }
+
+    lines.push(dataHeadings.concat(metaHeadings).join(delimiter));
 
     _.each(tableData.data, function (dataValues) {
         var line = [];
 
-        _.each(dataHeadings, function (heading, index) {
-            line.push(dataValues[index]);
+        _.each(tableData.headings, function (heading, index) {
+            line.push(formatCsvValue(dataValues[index]));
         });
+
         if (selectedSeries) {
-            line.push(JSON.stringify(translations.t(selectedSeries)));
-        }
-        if (selectedUnit) {
-            line.push(JSON.stringify(translations.t(selectedUnit)));
+            line.push(formatCsvValue(translations.t(selectedSeries)));
         }
 
-        lines.push(line.join(';'));
+        if (selectedUnit) {
+            line.push(formatCsvValue(translations.t(selectedUnit)));
+        }
+
+        lines.push(line.join(delimiter));
     });
 
     var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
     if (metadataRows.length) {
+        lines.push('');
         lines = lines.concat(metadataRows);
     }
 
-    return lines.join('\n');
+    return '\ufeff' + lines.join('\n');
 }
 
 function getMetadataCsvRows(selector) {

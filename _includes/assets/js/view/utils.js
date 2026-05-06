@@ -140,16 +140,24 @@ function downloadCsvWithMetadata(indicatorId) {
 
     $.get(sourceUrl)
         .done(function (sourceCsv) {
-            var lines = [sourceCsv.trim()];
+            var lines = [];
+            
+            lines.push(sourceCsv.trim());
+
             var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
             if (metadataRows.length) {
                 lines.push('');
-                lines.push('"Metadata field";"Metadata value"');
-                lines = lines.concat(metadataRows);
+                lines.push('"Metadata field","Metadata value"');
+                lines = lines.concat(
+                    metadataRows.map(function (row) {
+                        return row.replace(/;/g, ',');
+                    })
+                );
             }
 
             var csv = lines.join('\n');
+
             var blob = new Blob(['\ufeff' + csv], {
                 type: 'text/csv;charset=utf-8'
             });
