@@ -141,7 +141,7 @@ function downloadCsvWithMetadata(indicatorId) {
     $.get(sourceUrl)
         .done(function (sourceCsv) {
             var lines = [];
-            
+
             lines.push(sourceCsv.trim());
 
             var metadataRows = getMetadataCsvRows('#national .metadata-content');
