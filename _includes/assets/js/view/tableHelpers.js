@@ -79,7 +79,7 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
         var line = [];
 
         _.each(tableData.headings, function (heading, index) {
-            const valueTitle = lang = 'uk' ? 'Значення': 'Value';
+            const valueTitle = lang === 'uk' ? 'Значення': 'Value';
             const t = dataValues[index].length ? dataValues[index] : valueTitle
 
             line.push(formatCsvValue(t));
