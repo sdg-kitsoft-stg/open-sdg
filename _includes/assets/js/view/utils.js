@@ -121,12 +121,16 @@ function formatExcelCsvValue(value) {
     }
 
     var str = String(value).trim();
-    
+    var lang = document.documentElement.lang || 'uk';
+
+    // Decimal localization
     if (/^-?\d+\.\d+$/.test(str)) {
-        str = str.replace('.', ',');
+        if (lang === 'uk') {
+            str = str.replace('.', ',');
+        }
     }
 
-    return escapeCsvValue(str);
+    return '"' + str.replace(/"/g, '""') + '"';
 }
 
 function parseCsvLine(line) {
