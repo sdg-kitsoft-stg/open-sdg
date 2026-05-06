@@ -19,7 +19,7 @@ function formatCsvValue(value) {
     }
 
     var str = String(value).trim();
-    
+
     if (/^-?\d+\.\d+$/.test(str)) {
         str = str.replace('.', ',');
     }
