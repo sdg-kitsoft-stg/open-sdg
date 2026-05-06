@@ -312,36 +312,33 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const heading = document.querySelector('.goal-banner');
-        if (!heading) return;
+        const defaultTab = document.querySelector('#current-edition-tab');
+        const archiveTab = document.querySelector('#archive-edition-tab');
 
-        const thirdClassName = [...heading.classList][2];
-        const indicatorNumber = thirdClassName.split('-')[1];
-        const STORAGE_KEY = `indicator_active_tab${indicatorNumber}`;
+        const urlParams = new URLSearchParams(window.location.search);
+        const edition = urlParams.get('edition');
 
-        const savedTab = sessionStorage.getItem(STORAGE_KEY) || '#current-edition';
+        const targetTab = edition === 'archive' ? archiveTab : defaultTab;
 
-        const tabTrigger = document.querySelector(
-            `[data-bs-toggle="tab"][href="${savedTab}"], [data-bs-toggle="tab"][data-bs-target="${savedTab}"]`
-        );
+        if (targetTab && window.bootstrap) {
+            bootstrap.Tab.getOrCreateInstance(targetTab).show();
+        }
 
-        const tabPanes = document.querySelectorAll('.edition-tabs-content .tab-pane');
+        document
+            .querySelectorAll('.language-toggle-container .dropdown-item')
+            .forEach(link => {
+                link.addEventListener('click', function () {
+                    const activeTab = document.querySelector('.edition-tabs .nav-link.active');
+                    const activeEdition = activeTab && activeTab.id === 'archive-edition-tab'
+                        ? 'archive'
+                        : 'current';
 
-        tabPanes.forEach(p => p.classList.remove('fade'));
+                    const url = new URL(this.href, window.location.origin);
+                    url.searchParams.set('edition', activeEdition);
 
-        const tab = new bootstrap.Tab(tabTrigger);
-        tab.show();
-
-        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (tab) {
-            tab.addEventListener('shown.bs.tab', function (event) {
-                const target =
-                    event.target.getAttribute('data-bs-target') ||
-                    event.target.getAttribute('href');
-                if (target) {
-                    sessionStorage.setItem(STORAGE_KEY, target);
-                }
+                    this.href = url.toString();
+                });
             });
-        });
     });
 </script>
 
