@@ -121,12 +121,15 @@ function formatExcelCsvValue(value) {
     }
 
     var str = String(value).trim();
-    
+    var lang = document.documentElement.lang || 'uk';
+
     if (/^-?\d+\.\d+$/.test(str)) {
-        str = str.replace('.', ',');
+        if (lang === 'uk') {
+            str = str.replace('.', ',');
+        }
     }
 
-    return escapeCsvValue(str);
+    return '"' + str.replace(/"/g, '""') + '"';
 }
 
 function parseCsvLine(line) {
@@ -203,8 +206,16 @@ function downloadCsvWithMetadata(indicatorId) {
             var metadataRows = getMetadataCsvRows('#national .metadata-content');
 
             if (metadataRows.length) {
+                var lang = document.documentElement.lang || 'uk';
+
                 lines.push('');
-                lines.push('"Metadata field";"Metadata value"');
+
+                if (lang === 'uk') {
+                    lines.push('"Поле метаданих";"Значення метаданих"');
+                } else {
+                    lines.push('"Metadata field";"Metadata value"');
+                }
+
                 lines = lines.concat(metadataRows);
             }
 
