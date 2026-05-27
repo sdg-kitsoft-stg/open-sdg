@@ -324,6 +324,16 @@
             bootstrap.Tab.getOrCreateInstance(targetTab).show();
         }
 
+        if (edition) {
+            urlParams.delete('edition');
+
+            const cleanUrl = window.location.pathname +
+                (urlParams.toString() ? `?${urlParams.toString()}` : '') +
+                window.location.hash;
+
+            window.history.replaceState({}, '', cleanUrl);
+        }
+
         document
             .querySelectorAll('.language-toggle-container .dropdown-item')
             .forEach(link => {
