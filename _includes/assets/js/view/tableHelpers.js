@@ -50,10 +50,9 @@ function getMetadataCsvRows(selector) {
         var value = $(this).find('td').text().trim().replace(/\s+/g, ' ');
 
         if (key || value) {
-            rows.push([
-                formatCsvValue(key, false),
-                formatCsvValue(value, false)
-            ].join(';'));
+            const str = `${formatExcelCsvValue(key, false)}: ${formatExcelCsvValue(value, false)}`;
+
+            rows.push();
         }
     });
 
