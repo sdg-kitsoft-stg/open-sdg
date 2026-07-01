@@ -52,7 +52,7 @@ function getMetadataCsvRows(selector) {
         if (key || value) {
             const str = `${formatExcelCsvValue(key, false)}: ${formatExcelCsvValue(value, false)}`;
 
-            rows.push();
+            rows.push(str);
         }
     });
 
