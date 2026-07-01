@@ -198,7 +198,7 @@ function getMetadataCsvRows(selector) {
         if ($.trim(key) || $.trim(value)) {
             const str = `${formatExcelCsvValue(key)}: ${formatExcelCsvValue(value)}`;
 
-            rows.push();
+            rows.push(str);
         }
     });
 
