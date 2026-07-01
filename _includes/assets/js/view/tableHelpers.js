@@ -126,9 +126,9 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
         lines.push('');
 
         if (lang === 'uk') {
-            lines.push(formatCsvValue('Поле метаданих Значення метаданих', false));
+            lines.push(formatCsvValue('Поле метаданих: Значення метаданих', false));
         } else {
-            lines.push(formatCsvValue('Metadata field Metadata value', false));
+            lines.push(formatCsvValue('Metadata field: Metadata value', false));
         }
 
         lines = lines.concat(metadataRows);
