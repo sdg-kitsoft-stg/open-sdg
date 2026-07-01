@@ -133,7 +133,7 @@ function translateCsvHeading(value, index) {
 
 function formatExcelCsvValue(value) {
     if (value === null || typeof value === 'undefined') {
-        return '""';
+        return '"NA"';
     }
 
     var str = String(value).trim();
@@ -236,7 +236,7 @@ function downloadCsvWithMetadata(indicatorId) {
                 lines.push([
                     formatExcelCsvValue(lang === 'uk' ? 'Поле метаданих' : 'Metadata field'),
                     formatExcelCsvValue(lang === 'uk' ? 'Значення метаданих' : 'Metadata value')
-                ].join(';'));
+                ].join(','));
 
                 lines = lines.concat(metadataRows);
             }
