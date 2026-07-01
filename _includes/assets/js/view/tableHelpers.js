@@ -15,7 +15,7 @@ function alterTableConfig(config, info) {
  */
 function formatCsvValue(value) {
     if (value === null || typeof value === 'undefined') {
-        return '""';
+        return '"NA"';
     }
 
     var str = String(value).trim();
@@ -112,9 +112,9 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
         lines.push('');
 
         if (lang === 'uk') {
-            lines.push('"Поле метаданих";"Значення метаданих"');
+            lines.push('"Поле метаданих","Значення метаданих"');
         } else {
-            lines.push('"Metadata field";"Metadata value"');
+            lines.push('"Metadata field","Metadata value"');
         }
 
         lines = lines.concat(metadataRows);
