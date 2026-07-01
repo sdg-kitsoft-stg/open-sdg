@@ -50,10 +50,9 @@ function getMetadataCsvRows(selector) {
         var value = $(this).find('td').text().trim().replace(/\s+/g, ' ');
 
         if (key || value) {
-            rows.push([
-                formatCsvValue(key, false),
-                formatCsvValue(value, false)
-            ].join(';'));
+            const str = `${formatExcelCsvValue(key, false)}: ${formatExcelCsvValue(value, false)}`;
+
+            rows.push();
         }
     });
 
@@ -127,9 +126,9 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
         lines.push('');
 
         if (lang === 'uk') {
-            lines.push(formatCsvValue('Поле метаданих Значення метаданих', false));
+            lines.push(formatCsvValue('Поле метаданих: Значення метаданих', false));
         } else {
-            lines.push(formatCsvValue('Metadata field Metadata value', false));
+            lines.push(formatCsvValue('Metadata field: Metadata value', false));
         }
 
         lines = lines.concat(metadataRows);
