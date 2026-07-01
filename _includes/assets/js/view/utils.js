@@ -131,18 +131,26 @@ function translateCsvHeading(value, index) {
     return translations && translations.t ? translations.t(str) : str;
 }
 
-function formatExcelCsvValue(value) {
-    if (value === null || typeof value === 'undefined') {
+function formatExcelCsvValue(value, columnIndex, valueColumnIndex) {
+    var lang = getLang();
+
+    if (
+        columnIndex === valueColumnIndex &&
+        (value === null ||
+            typeof value === 'undefined' ||
+            String(value).trim() === '')
+    ) {
         return '"NA"';
     }
 
-    var str = String(value).trim();
-    var lang = document.documentElement.lang || 'uk';
+    if (value === null || typeof value === 'undefined') {
+        return '""';
+    }
 
-    if (/^-?\d+\.\d+$/.test(str)) {
-        if (lang === 'uk') {
-            str = str.replace('.', ',');
-        }
+    var str = String(value).trim();
+
+    if (/^-?\d+\.\d+$/.test(str) && lang === 'uk') {
+        str = str.replace('.', ',');
     }
 
     return '"' + str.replace(/"/g, '""') + '"';
@@ -175,26 +183,6 @@ function parseCsvLine(line) {
     return result;
 }
 
-function convertSourceCsvForExcel(sourceCsv) {
-    return sourceCsv
-        .trim()
-        .split(/\r?\n/)
-        .map(function (line, rowIndex) {
-            return parseCsvLine(line)
-                .map(function (value, colIndex) {
-                    if (rowIndex === 0) {
-                        return formatExcelCsvValue(
-                            translateCsvHeading(value, colIndex)
-                        );
-                    }
-
-                    return formatExcelCsvValue(value);
-                })
-                .join(';');
-        })
-        .join('\n');
-}
-
 function getMetadataCsvRows(selector) {
     var rows = [];
     var $table = $(selector);
@@ -218,6 +206,46 @@ function getMetadataCsvRows(selector) {
     return rows;
 }
 
+function convertSourceCsvForExcel(sourceCsv) {
+    var valueColumnIndex = -1;
+
+    return sourceCsv
+        .trim()
+        .split(/\r?\n/)
+        .map(function (line, rowIndex) {
+            var columns = parseCsvLine(line);
+
+            if (rowIndex === 0) {
+                // Знаходимо колонку Value
+                valueColumnIndex = columns.findIndex(function (value, index) {
+                    return translateCsvHeading(value, index) === 'Value' ||
+                        translateCsvHeading(value, index) === 'Значення';
+                });
+
+                return columns
+                    .map(function (value, colIndex) {
+                        return formatExcelCsvValue(
+                            translateCsvHeading(value, colIndex),
+                            colIndex,
+                            valueColumnIndex
+                        );
+                    })
+                    .join(';');
+            }
+
+            return columns
+                .map(function (value, colIndex) {
+                    return formatExcelCsvValue(
+                        value,
+                        colIndex,
+                        valueColumnIndex
+                    );
+                })
+                .join(';');
+        })
+        .join('\n');
+}
+
 function downloadCsvWithMetadata(indicatorId) {
     var sourceUrl = opensdg.remoteDataBaseUrl + '/data/' + indicatorId + '.csv';
 
@@ -233,10 +261,12 @@ function downloadCsvWithMetadata(indicatorId) {
                 var lang = getLang();
 
                 lines.push('');
-                lines.push([
-                    formatExcelCsvValue(lang === 'uk' ? 'Поле метаданих' : 'Metadata field'),
-                    formatExcelCsvValue(lang === 'uk' ? 'Значення метаданих' : 'Metadata value')
-                ].join(','));
+
+                if (lang === 'uk') {
+                    lines.push(formatCsvValue('Поле метаданих Значення метаданих', false));
+                } else {
+                    lines.push(formatCsvValue('Metadata field Metadata value', false));
+                }
 
                 lines = lines.concat(metadataRows);
             }
