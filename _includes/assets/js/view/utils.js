@@ -127,8 +127,12 @@ function translateCsvHeading(value, index) {
     return translations && translations.t ? translations.t(str) : str;
 }
 
-function formatExcelCsvValue(value) {
+function formatExcelCsvValue(value, isEmptyColumn) {
     var lang = getLang();
+
+    if (isEmptyColumn) {
+        return '""';
+    }
 
     if (
         value === null ||
@@ -192,7 +196,7 @@ function getMetadataCsvRows(selector, columnCount) {
             cells[columnCount - 1] = key + ': ' + value;
 
             rows.push(cells.map(function (cell, colIndex) {
-                return formatExcelCsvValue(cell, colIndex, -1);
+                return formatExcelCsvValue(cell, true);
             }).join(';'));
         }
     });
