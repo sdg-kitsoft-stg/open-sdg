@@ -52,7 +52,7 @@ function getMetadataCsvRows(selector, columnCount) {
         if (key || value) {
             var cells = new Array(columnCount).fill('');
 
-            cells[columnCount - 1] = key + ', ' + value;
+            cells[columnCount - 1] = key + ': ' + value;
 
             rows.push(cells.map(function (cell) {
                 return formatCsvValue(cell, false);
@@ -104,7 +104,7 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
         metaHeadings.push(formatCsvValue(translations.indicator.unit, false));
     }
 
-    var noteHeading = lang === 'uk' ? 'Примітка' : 'Notes';
+    var noteHeading = lang === 'uk' ? 'Національні метадані' : 'National Metadata';
     var totalColumnCount = dataHeadings.length + metaHeadings.length + 1;
 
     lines.push(

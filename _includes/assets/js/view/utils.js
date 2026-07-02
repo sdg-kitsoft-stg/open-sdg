@@ -198,7 +198,7 @@ function getMetadataCsvRows(selector, columnCount) {
         if (key || value) {
             var cells = new Array(columnCount).fill('');
 
-            cells[columnCount - 1] = key + ', ' + value;
+            cells[columnCount - 1] = key + ': ' + value;
 
             rows.push(cells.map(function (cell, colIndex) {
                 return formatExcelCsvValue(cell, colIndex, -1);
@@ -212,7 +212,7 @@ function getMetadataCsvRows(selector, columnCount) {
 function convertSourceCsvForExcel(sourceCsv) {
     var valueColumnIndex = -1;
     var lang = getLang();
-    var noteHeading = lang === 'uk' ? 'Примітка' : 'Notes';
+    var noteHeading = lang === 'uk' ? 'Національні метадані' : 'National Metadata';
 
     return sourceCsv
         .trim()
