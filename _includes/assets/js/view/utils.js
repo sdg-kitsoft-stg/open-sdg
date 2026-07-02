@@ -116,15 +116,15 @@ function translateCsvHeading(value, index) {
         return lang === 'uk' ? 'Рік' : 'Year';
     }
 
-    if (index > 0) {
-        if (str && str !== 'undefined') {
-            return translations && translations.t ? translations.t(str) : str;
-        }
-
+    if (str === 'Value' || str === 'Значення') {
         return lang === 'uk' ? 'Значення' : 'Value';
     }
 
-    return translations && translations.t ? translations.t(str) : str;
+    if (str && str !== 'undefined') {
+        return translations && translations.t ? translations.t(str) : str;
+    }
+
+    return lang === 'uk' ? 'Значення' : 'Value';
 }
 
 function formatExcelCsvValue(value, allowEmpty) {
