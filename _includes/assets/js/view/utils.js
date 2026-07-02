@@ -218,9 +218,50 @@ function getMetadataCsvRows(selector, columnCount) {
 }
 
 function convertSourceCsvForExcel(sourceCsv) {
-    var valueColumnIndex = -1;
     var lang = getLang();
     var noteHeading = lang === 'uk' ? 'Національні метадані' : 'National Metadata';
+    var $renderedTable = $('#selectionsTable table');
+
+    if ($renderedTable.length) {
+        var lines = [];
+
+        var headings = [];
+
+        $renderedTable.find('thead th').each(function () {
+            headings.push($(this).clone().children().remove().end().text().trim());
+        });
+
+        headings.push(noteHeading);
+
+        lines.push(
+            headings.map(function (value) {
+                return formatExcelCsvValue(value, false);
+            }).join(';')
+        );
+
+        $renderedTable.find('tbody tr').each(function () {
+            var row = [];
+
+            $(this).find('th, td').each(function () {
+                row.push($(this).text().trim());
+            });
+
+            row.push('');
+
+            var noteColumnIndex = row.length - 1;
+
+            lines.push(
+                row.map(function (value, colIndex) {
+                    return formatExcelCsvValue(
+                        value,
+                        colIndex === noteColumnIndex
+                    );
+                }).join(';')
+            );
+        });
+
+        return lines.join('\n');
+    }
 
     return sourceCsv
         .trim()
@@ -229,19 +270,13 @@ function convertSourceCsvForExcel(sourceCsv) {
             var columns = parseCsvLine(line);
 
             if (rowIndex === 0) {
-                valueColumnIndex = columns.findIndex(function (value, index) {
-                    return translateCsvHeading(value, index) === 'Value' ||
-                        translateCsvHeading(value, index) === 'Значення';
-                });
-
                 columns.push(noteHeading);
 
                 return columns
                     .map(function (value, colIndex) {
                         return formatExcelCsvValue(
                             translateCsvHeading(value, colIndex),
-                            colIndex,
-                            valueColumnIndex
+                            false
                         );
                     })
                     .join(';');
