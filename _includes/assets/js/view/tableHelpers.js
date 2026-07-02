@@ -114,7 +114,13 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
             var line = [];
 
             $(this).find('th, td').each(function () {
-                line.push(formatCsvValue($(this).text().trim(), false));
+                var value = $(this).text().trim();
+
+                if (value === '-') {
+                    value = '';
+                }
+
+                line.push(formatCsvValue(value, false));
             });
 
             if (selectedSeries) {
