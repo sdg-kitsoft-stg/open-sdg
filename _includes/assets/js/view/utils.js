@@ -228,7 +228,13 @@ function convertSourceCsvForExcel(sourceCsv) {
         var headings = [];
 
         $renderedTable.find('thead th').each(function () {
-            headings.push($(this).clone().children().remove().end().text().trim());
+            var headingText = $(this).find('span[role="button"]').first().text().trim();
+
+            if (!headingText) {
+                headingText = $(this).text().replace(/\s+/g, ' ').trim();
+            }
+
+            headings.push(headingText);
         });
 
         headings.push(noteHeading);
