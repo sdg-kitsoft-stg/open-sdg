@@ -249,7 +249,13 @@ function convertSourceCsvForExcel(sourceCsv) {
             var row = [];
 
             $(this).find('th, td').each(function () {
-                row.push($(this).text().trim());
+                var value = $(this).text().trim();
+
+                if (value === '-') {
+                    value = '';
+                }
+
+                row.push(value);
             });
 
             row.push('');
