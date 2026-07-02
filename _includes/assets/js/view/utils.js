@@ -127,10 +127,17 @@ function translateCsvHeading(value, index) {
     return translations && translations.t ? translations.t(str) : str;
 }
 
-function formatExcelCsvValue(value, isEmptyColumn) {
+function formatExcelCsvValue(value, allowEmpty) {
     var lang = getLang();
 
-    if (isEmptyColumn) {
+    if (
+        allowEmpty &&
+        (
+            value === null ||
+            typeof value === 'undefined' ||
+            String(value).trim() === ''
+        )
+    ) {
         return '""';
     }
 
@@ -181,6 +188,7 @@ function parseCsvLine(line) {
 function getMetadataCsvRows(selector, columnCount) {
     var rows = [];
     var $table = $(selector);
+    var noteColumnIndex = columnCount - 1;
 
     if (!$table.length) {
         return rows;
@@ -195,9 +203,14 @@ function getMetadataCsvRows(selector, columnCount) {
 
             cells[columnCount - 1] = key + ': ' + value;
 
-            rows.push(cells.map(function (cell, colIndex) {
-                return formatExcelCsvValue(cell, true);
-            }).join(';'));
+            rows.push(
+                cells.map(function (cell, colIndex) {
+                    return formatExcelCsvValue(
+                        cell,
+                        colIndex !== noteColumnIndex
+                    );
+                }).join(';')
+            );
         }
     });
 
@@ -236,12 +249,13 @@ function convertSourceCsvForExcel(sourceCsv) {
 
             columns.push('');
 
+            var noteColumnIndex = columns.length - 1;
+
             return columns
                 .map(function (value, colIndex) {
                     return formatExcelCsvValue(
                         value,
-                        colIndex,
-                        valueColumnIndex
+                        colIndex === noteColumnIndex
                     );
                 })
                 .join(';');
