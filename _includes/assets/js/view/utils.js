@@ -220,60 +220,6 @@ function getMetadataCsvRows(selector, columnCount) {
 function convertSourceCsvForExcel(sourceCsv) {
     var lang = getLang();
     var noteHeading = lang === 'uk' ? 'Національні метадані' : 'National Metadata';
-    var $renderedTable = $('#selectionsTable table');
-
-    if ($renderedTable.length) {
-        var lines = [];
-
-        var headings = [];
-
-        $renderedTable.find('thead th').each(function () {
-            var headingText = $(this).find('span[role="button"]').first().text().trim();
-
-            if (!headingText) {
-                headingText = $(this).text().replace(/\s+/g, ' ').trim();
-            }
-
-            headings.push(headingText);
-        });
-
-        headings.push(noteHeading);
-
-        lines.push(
-            headings.map(function (value) {
-                return formatExcelCsvValue(value, false);
-            }).join(';')
-        );
-
-        $renderedTable.find('tbody tr').each(function () {
-            var row = [];
-
-            $(this).find('th, td').each(function () {
-                var value = $(this).text().trim();
-
-                if (value === '-') {
-                    value = '';
-                }
-
-                row.push(value);
-            });
-
-            row.push('');
-
-            var noteColumnIndex = row.length - 1;
-
-            lines.push(
-                row.map(function (value, colIndex) {
-                    return formatExcelCsvValue(
-                        value,
-                        colIndex === noteColumnIndex
-                    );
-                }).join(';')
-            );
-        });
-
-        return lines.join('\n');
-    }
 
     return sourceCsv
         .trim()
