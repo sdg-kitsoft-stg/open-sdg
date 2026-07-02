@@ -75,89 +75,68 @@ function toCsv(tableData, selectedSeries, selectedUnit) {
     var delimiter = ';';
     var lines = [];
     var lang = document.documentElement.lang || 'uk';
-    var valueColumnIndex = -1;
+    var $renderedTable = $('#selectionsTable table');
 
-    var dataHeadings = _.map(tableData.headings, function (heading, index) {
-        var translatedHeading = translations.t(heading);
+    if ($renderedTable.length) {
+        var renderedHeadings = [];
 
-        if (
-            !translatedHeading ||
-            translatedHeading === '' ||
-            translatedHeading === 'undefined'
-        ) {
-            if (
-                heading &&
-                heading !== '' &&
-                heading !== 'undefined'
-            ) {
-                translatedHeading = heading;
-            } else {
-                translatedHeading = lang === 'uk'
-                    ? 'Значення'
-                    : 'Value';
-            }
-        }
-
-        var normalizedHeading = String(translatedHeading || heading).trim();
-
-        if (
-            normalizedHeading === 'Value' ||
-            normalizedHeading === 'Значення'
-        ) {
-            valueColumnIndex = index;
-        }
-
-        return formatCsvValue(translatedHeading, false);
-    });
-
-    var metaHeadings = [];
-
-    if (selectedSeries) {
-        metaHeadings.push(formatCsvValue(translations.indicator.series, false));
-    }
-
-    if (selectedUnit) {
-        metaHeadings.push(formatCsvValue(translations.indicator.unit, false));
-    }
-
-    var noteHeading = lang === 'uk' ? 'Національні метадані' : 'National Metadata';
-    var totalColumnCount = dataHeadings.length + metaHeadings.length + 1;
-
-    lines.push(
-        dataHeadings
-            .concat(metaHeadings)
-            .concat([formatCsvValue(noteHeading, false)])
-            .join(delimiter)
-    );
-
-    _.each(tableData.data, function (dataValues) {
-        var line = [];
-
-        _.each(tableData.headings, function (heading, index) {
-            line.push(formatCsvValue(dataValues[index], index === valueColumnIndex));
+        $renderedTable.find('thead th').each(function () {
+            renderedHeadings.push(
+                formatCsvValue($(this).clone().children().remove().end().text().trim(), false)
+            );
         });
 
+        var metaHeadings = [];
+
         if (selectedSeries) {
-            line.push(formatCsvValue(translations.t(selectedSeries), false));
+            metaHeadings.push(formatCsvValue(translations.indicator.series, false));
         }
 
         if (selectedUnit) {
-            line.push(formatCsvValue(translations.t(selectedUnit), false));
+            metaHeadings.push(formatCsvValue(translations.indicator.unit, false));
         }
 
-        line.push(formatCsvValue('', false, true));
+        var noteHeading = lang === 'uk' ? 'Національні метадані' : 'National Metadata';
+        var totalColumnCount = renderedHeadings.length + metaHeadings.length + 1;
 
-        lines.push(line.join(delimiter));
-    });
+        lines.push(
+            renderedHeadings
+                .concat(metaHeadings)
+                .concat([formatCsvValue(noteHeading, false)])
+                .join(delimiter)
+        );
 
-    var metadataRows = getMetadataCsvRows(
-        '#national .metadata-content',
-        totalColumnCount
-    );
+        $renderedTable.find('tbody tr').each(function () {
+            var line = [];
 
-    if (metadataRows.length) {
-        lines.push('');
-        lines = lines.concat(metadataRows);
+            $(this).find('th, td').each(function () {
+                line.push(formatCsvValue($(this).text().trim(), false));
+            });
+
+            if (selectedSeries) {
+                line.push(formatCsvValue(translations.t(selectedSeries), false));
+            }
+
+            if (selectedUnit) {
+                line.push(formatCsvValue(translations.t(selectedUnit), false));
+            }
+
+            line.push(formatCsvValue('', false, true));
+
+            lines.push(line.join(delimiter));
+        });
+
+        var metadataRows = getMetadataCsvRows(
+            '#national .metadata-content',
+            totalColumnCount
+        );
+
+        if (metadataRows.length) {
+            lines.push('');
+            lines = lines.concat(metadataRows);
+        }
+
+        return '\ufeff' + lines.join('\n');
     }
 
     return '\ufeff' + lines.join('\n');
