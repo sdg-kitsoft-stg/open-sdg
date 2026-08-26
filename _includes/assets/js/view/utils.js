@@ -310,14 +310,17 @@ function downloadCsvWithMetadata(indicatorId) {
  */
 function createSourceButton(indicatorId, el) {
     var gaLabel = 'Download Source CSV: ' + indicatorId;
+    var sourceUrl = opensdg.remoteDataBaseUrl + '/data/' + indicatorId + '.csv';
 
-    var $button = $('<button />').text(translations.indicator.download_source)
+    var $button = $('<a />').text(translations.indicator.download_source)
         .attr(opensdg.autotrack('download_data_source', 'Downloads', 'Download CSV', gaLabel))
         .attr({
-            'type': 'button',
+            'href': sourceUrl,
             'title': translations.indicator.download_source_title,
             'aria-label': translations.indicator.download_source_title,
             'class': 'btn btn-primary btn-download',
+            'tabindex': 0,
+            'role': 'button',
         });
 
     $button.on('click.openSdgDownloadSource', function (e) {
