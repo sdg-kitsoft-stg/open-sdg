@@ -66,6 +66,12 @@ var indicatorView = function (model, options) {
 
         VIEW._precision = args.precision;
 
+        // Build the selections table before the chart, so that the chart's
+        // download-CSV button (built in setPlotEvents) can read real data
+        // from #selectionsTable on the very first render instead of an
+        // empty table.
+        helpers.createSelectionsTable(args);
+
         if (MODEL.showData) {
             // $('#dataset-size-warning')[args.datasetCountExceedsMax ? 'show' : 'hide']();
             if (!VIEW._chartInstance) {
@@ -76,7 +82,6 @@ var indicatorView = function (model, options) {
             }
         }
 
-        helpers.createSelectionsTable(args);
         helpers.updateChartTitle(args.chartTitle, args.isProxy);
         helpers.updateSeriesAndUnitElements(args.selectedSeries, args.selectedUnit);
         helpers.updateUnitElements(args.selectedUnit);
