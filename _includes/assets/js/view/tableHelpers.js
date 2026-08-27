@@ -436,19 +436,19 @@ function setDataTableWidth(table) {
 function updateChartDownloadButton(table, selectedSeries, selectedUnit) {
     if (typeof VIEW._chartDownloadButton !== 'undefined') {
         var tableCsv = toCsv(table, selectedSeries, selectedUnit);
+        var blob = new Blob([tableCsv], {
+            type: 'text/csv'
+        });
         var fileName = VIEW._chartDownloadButton.attr('download');
         if (window.navigator && window.navigator.msSaveBlob) {
             // Special behavior for IE.
-            var blob = new Blob([tableCsv], {
-                type: 'text/csv'
-            });
             VIEW._chartDownloadButton.off('click.openSdgDownload')
             VIEW._chartDownloadButton.on('click.openSdgDownload', function (event) {
                 window.navigator.msSaveBlob(blob, fileName);
             });
         } else {
             VIEW._chartDownloadButton
-                .attr('href', csvToDataUri(tableCsv))
+                .attr('href', URL.createObjectURL(blob))
                 .data('csvdata', tableCsv);
         }
     }
