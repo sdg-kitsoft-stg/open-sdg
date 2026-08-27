@@ -40,6 +40,14 @@ function isHighContrast(contrast) {
 }
 
 /**
+ * @param {String} csv
+ * @return {String}
+ */
+function csvToDataUri(csv) {
+    return 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+}
+
+/**
  * @param {Object} table
  * @param {String} name
  * @param {String} indicatorId
@@ -68,18 +76,18 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
                 'tabindex': 0,
                 'role': 'button',
             });
-        var blob = new Blob([tableCsv], {
-            type: 'text/csv'
-        });
         if (window.navigator && window.navigator.msSaveBlob) {
             // Special behavior for IE.
+            var blob = new Blob([tableCsv], {
+                type: 'text/csv'
+            });
             downloadButton.on('click.openSdgDownload', function (event) {
                 window.navigator.msSaveBlob(blob, fileName);
             });
         }
         else {
             downloadButton
-                .attr('href', URL.createObjectURL(blob))
+                .attr('href', csvToDataUri(tableCsv))
                 .data('csvdata', tableCsv);
         }
         if (name == 'Chart') {
