@@ -40,14 +40,6 @@ function isHighContrast(contrast) {
 }
 
 /**
- * @param {String} csv
- * @return {String}
- */
-function csvToDataUri(csv) {
-    return 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-}
-
-/**
  * @param {Object} table
  * @param {String} name
  * @param {String} indicatorId
@@ -76,18 +68,18 @@ function createDownloadButton(table, name, indicatorId, el, selectedSeries, sele
                 'tabindex': 0,
                 'role': 'button',
             });
+        var blob = new Blob([tableCsv], {
+            type: 'text/csv'
+        });
         if (window.navigator && window.navigator.msSaveBlob) {
             // Special behavior for IE.
-            var blob = new Blob([tableCsv], {
-                type: 'text/csv'
-            });
             downloadButton.on('click.openSdgDownload', function (event) {
                 window.navigator.msSaveBlob(blob, fileName);
             });
         }
         else {
             downloadButton
-                .attr('href', csvToDataUri(tableCsv))
+                .attr('href', URL.createObjectURL(blob))
                 .data('csvdata', tableCsv);
         }
         if (name == 'Chart') {
@@ -299,21 +291,25 @@ function downloadCsvWithMetadata(indicatorId) {
     var fileName = indicatorId + '.csv';
 
     buildSourceCsvWithMetadata(indicatorId).done(function (csv) {
+        var blob = new Blob([csv], {
+            type: 'text/csv;charset=utf-8'
+        });
+
         if (window.navigator && window.navigator.msSaveBlob) {
-            var blob = new Blob([csv], {
-                type: 'text/csv;charset=utf-8'
-            });
             window.navigator.msSaveBlob(blob, fileName);
             return;
         }
 
+        var url = URL.createObjectURL(blob);
         var link = document.createElement('a');
 
-        link.href = csvToDataUri(csv);
+        link.href = url;
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
     });
 }
 
@@ -348,7 +344,10 @@ function createSourceButton(indicatorId, el) {
 
     if (!(window.navigator && window.navigator.msSaveBlob)) {
         buildSourceCsvWithMetadata(indicatorId).done(function (csv) {
-            $button.attr('href', csvToDataUri(csv));
+            var blob = new Blob([csv], {
+                type: 'text/csv;charset=utf-8'
+            });
+            $button.attr('href', URL.createObjectURL(blob));
         });
     }
 
